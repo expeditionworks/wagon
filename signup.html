@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Join the Trail – Conestoga Wagon</title>
+</head>
+<body>
+  <h1>Join the Trail</h1>
+  <form action="handlers/signup.php" method="POST">
+    <label for="phone">Phone Number:</label><br />
+    <input type="text" id="phone" name="phone" required /><br /><br />
+
+    <label for="email">Email:</label><br />
+    <input type="email" id="email" name="email" required /><br /><br />
+
+    <label for="difficulty">Choose Your Difficulty:</label><br />
+    <select id="difficulty" name="difficulty" required>
+      <option value="easy">Easy (Banker)</option>
+      <option value="medium" selected>Medium (Farmer/Carpenter)</option>
+      <option value="hard">Hard (Laborer)</option>
+    </select><br /><br />
+
+    <input type="submit" value="Begin Your Journey" />
+  </form>
+</body>
+</html>
