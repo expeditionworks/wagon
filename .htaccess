@@ -1,0 +1,7 @@
+# Disable directory listings (good security)
+Options -Indexes
+
+# Set environment variables for Twilio
+SetEnv TWILIO_SID USbd36964d9f9e11e0d1da3b41d6656ab9
+SetEnv TWILIO_TOKEN df38c564163dd709d72e84c3f8562c95
+SetEnv TWILIO_FROM +18885703324
