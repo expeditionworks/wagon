@@ -1,0 +1,16 @@
+{
+  "easy": [
+    { "title": "Banker", "money": 400 },
+    { "title": "Merchant", "money": 380 }
+  ],
+  "medium": [
+    { "title": "Farmer", "money": 300 },
+    { "title": "Teacher", "money": 250 },
+    { "title": "Carpenter", "money": 260 }
+  ],
+  "hard": [
+    { "title": "Laborer", "money": 180 },
+    { "title": "Trapmaker", "money": 160 },
+    { "title": "Wagon Repairman", "money": 170 }
+  ]
+}
