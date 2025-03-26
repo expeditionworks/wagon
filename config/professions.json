@@ -1,16 +1,85 @@
 {
   "easy": [
-    { "title": "Banker", "money": 400 },
-    { "title": "Merchant", "money": 380 }
+    {
+      "title": "Banker",
+      "money": 400,
+      "bonus": "barter",
+      "description": "Wealthy, well-connected, but clueless in wilderness survival.",
+      "starting_supplies": {
+        "gold": 50
+      }
+    },
+    {
+      "title": "Merchant",
+      "money": 380,
+      "bonus": "trade",
+      "description": "Skilled at negotiation and supply estimation.",
+      "starting_supplies": {
+        "food": 100,
+        "ammo": 10
+      }
+    }
   ],
   "medium": [
-    { "title": "Farmer", "money": 300 },
-    { "title": "Teacher", "money": 250 },
-    { "title": "Carpenter", "money": 260 }
+    {
+      "title": "Farmer",
+      "money": 300,
+      "bonus": "foraging",
+      "description": "Knows the land, plants, and how to make things stretch.",
+      "starting_supplies": {
+        "food": 150
+      }
+    },
+    {
+      "title": "Teacher",
+      "money": 250,
+      "bonus": "morale",
+      "description": "Educated and respected\u2014keeps the group's spirits high.",
+      "starting_supplies": {
+        "books": 1,
+        "food": 80
+      }
+    },
+    {
+      "title": "Carpenter",
+      "money": 260,
+      "bonus": "repair",
+      "description": "Wagon breaks? Not a problem.",
+      "starting_supplies": {
+        "wood": 20,
+        "tools": 1
+      }
+    }
   ],
   "hard": [
-    { "title": "Laborer", "money": 180 },
-    { "title": "Trapmaker", "money": 160 },
-    { "title": "Wagon Repairman", "money": 170 }
+    {
+      "title": "Laborer",
+      "money": 180,
+      "bonus": "endurance",
+      "description": "Tough, but poor. Starts with little and works hard.",
+      "starting_supplies": {
+        "food": 50
+      }
+    },
+    {
+      "title": "Trapmaker",
+      "money": 160,
+      "bonus": "hunting",
+      "description": "Skilled with snares, though distrusted by others.",
+      "starting_supplies": {
+        "traps": 3,
+        "ammo": 15
+      }
+    },
+    {
+      "title": "Wagon Repairman",
+      "money": 170,
+      "bonus": "repair",
+      "description": "Fixes wheels, axles, and even spirits\u2014sometimes.",
+      "starting_supplies": {
+        "tools": 2,
+        "grease": 1
+      }
+    }
   ]
 }
