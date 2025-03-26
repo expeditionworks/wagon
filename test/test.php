@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-include_once(__DIR__ . '/../db_connection.php');
+include_once(__DIR__ . '/db_connection.php');
 
 // Include the game engine modules
 include_once(__DIR__ . '/../engine/modules/getPlayerState.php');
