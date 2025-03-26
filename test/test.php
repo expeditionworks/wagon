@@ -67,6 +67,16 @@ function savePlayerState($player_id, $player_state) {
     $conn->query($sql);
 }
 
+// Load milestones from JSON
+function loadMilestones() {
+    $milestonesFile = __DIR__ . '/../config/milestones.json';
+    if (file_exists($milestonesFile)) {
+        $milestones = json_decode(file_get_contents($milestonesFile), true);
+        return $milestones;
+    }
+    return [];  // Return an empty array if the file does not exist
+}
+
 // Example: Retrieve the current player state (this could be from a database or session)
 $player_id = 1;  // Set to the current player's ID
 $playerRow = getPlayerState($player_id);
@@ -76,6 +86,9 @@ if (!$playerRow) {
     echo "No player data found for ID $player_id. Please ensure that player exists in the database.";
     exit;
 }
+
+// Load full milestones from the JSON file
+$full_milestones = loadMilestones();
 
 // Handle button click to simulate a new day
 if (isset($_POST['continue_day'])) {
