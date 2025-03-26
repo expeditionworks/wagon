@@ -2,8 +2,8 @@
 // test.php
 
 // Include the game engine and functions
-include_once(__DIR__ . '/../../wagon/engine/game_engine.php');
-include_once(__DIR__ . '/../../wagon/engine/game_functions.php');
+include_once(__DIR__ . '/../engine/game_engine.php');
+include_once(__DIR__ . '/../engine/game_functions.php');
 
 // Database connection setup
 $servername = "localhost";
