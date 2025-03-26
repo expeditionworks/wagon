@@ -18,12 +18,20 @@ if (!$playerRow) {
 // Display the player state
 echo "<h3>Current Game State</h3>";
 echo "<p><strong>Trail Name:</strong> " . $playerRow['trail_name'] . "</p>";
-echo "<p><strong>Family:</strong> " . implode(", ", $playerRow['family']) . "</p>";
+
+// Check if family exists and is an array before using implode
+if (isset($playerRow['family']) && is_array($playerRow['family'])) {
+    echo "<p><strong>Family:</strong> " . implode(", ", $playerRow['family']) . "</p>";
+} else {
+    echo "<p><strong>Family:</strong> No family data available.</p>";
+}
+
 echo "<p><strong>Days on Trail:</strong> " . $playerRow['player_state']['day'] . "</p>";
 echo "<p><strong>Miles Traveled:</strong> " . $playerRow['player_state']['mile'] . " miles</p>";
 echo "<p><strong>Inventory:</strong> Food: " . $playerRow['player_state']['inventory']['food_lbs'] . " lbs</p>";
 echo "<p><strong>Conditions:</strong> " . implode(", ", $playerRow['player_state']['conditions']) . "</p>";
 echo "<p><strong>Log:</strong> " . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
+
 
 if (isset($_POST['continue_day'])) {
     // Simulate the passing of a day
