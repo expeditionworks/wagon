@@ -31,24 +31,20 @@ function getPlayerState($player_id) {
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        // Decode JSON fields into PHP arrays
+        
+        // Initialize player_state
+        $playerState = [
+            'day' => $row['day'] ?? 1, // Default to day 1 if not set
+            'mile' => $row['mile'] ?? 0, // Default to 0 miles if not set
+            'inventory' => json_decode($row['inventory'], true) ?? [],
+            'conditions' => json_decode($row['conditions'], true) ?? [],
+            'log' => json_decode($row['log'], true) ?? [],
+        ];
+
+        // Add player_state to row
+        $row['player_state'] = $playerState;
         $row['family'] = json_decode($row['family'], true); // Decode family field
-        $row['inventory'] = json_decode($row['inventory'], true);
-        $row['conditions'] = json_decode($row['conditions'], true);
-        $row['log'] = json_decode($row['log'], true);
-
-        // Initialize missing fields with default values if not present
-        if (!isset($row['morale'])) {
-            $row['morale'] = 100;  // Default morale value
-        }
-        if (!isset($row['day'])) {
-            $row['day'] = 1;  // Default to day 1
-        }
-        if (!isset($row['mile'])) {
-            $row['mile'] = 0;  // Default to 0 miles
-        }
-
-        return $row;  // Return the player's state
+        return $row;  // Return the player data including player_state
     } else {
         return null;  // No player found
     }
@@ -67,20 +63,6 @@ function savePlayerState($player_id, $player_state) {
     $conn->query($sql);
 }
 
-// Load milestones from JSON
-function loadMilestones() {
-    $milestonesFile = __DIR__ . '/../config/milestones.json';
-    if (file_exists($milestonesFile)) {
-        $milestones = json_decode(file_get_contents($milestonesFile), true);
-        if ($milestones === null) {
-            echo "Error: Invalid JSON in milestones file.";
-        }
-        return $milestones;
-    }
-    echo "Error: milestones.json file not found.";
-    return [];  // Return an empty array if the file does not exist or is invalid
-}
-
 // Example: Retrieve the current player state (this could be from a database or session)
 $player_id = 1;  // Set to the current player's ID
 $playerRow = getPlayerState($player_id);
@@ -88,15 +70,6 @@ $playerRow = getPlayerState($player_id);
 if (!$playerRow) {
     // Handle case where no player data is found
     echo "No player data found for ID $player_id. Please ensure that player exists in the database.";
-    exit;
-}
-
-// Load full milestones from the JSON file
-$full_milestones = loadMilestones();
-
-// Check if the milestones are loaded properly
-if (empty($full_milestones)) {
-    echo "No milestones found.";
     exit;
 }
 
@@ -108,7 +81,7 @@ if (isset($_POST['continue_day'])) {
 
 // Function to output the player's current state
 function displayState($playerRow) {
-    $state = $playerRow; // player_row now includes player_state data as flat
+    $state = $playerRow['player_state']; // player_row now includes player_state data as flat
     echo "<h3>Current Game State</h3>";
     echo "<p><strong>Trail Name:</strong> " . $state['trail_name'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $state['day'] . "</p>";
