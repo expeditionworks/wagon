@@ -20,49 +20,51 @@ Template Variables:
 */
 
 function generateWeeklyDigest($playerRow, $milestones, $weekNumber, $tipOfTheWeek) {
-  $state = $playerRow['player_state'];
-  $inventory = $state['inventory'];
+    $state = $playerRow['player_state'];
+    $inventory = $state['inventory'];
 
-  $template = file_get_contents(__DIR__ . '/../templates/weekly_digest_template.html');
+    // Load the weekly digest template
+    $template = file_get_contents(__DIR__ . '/../templates/weekly_digest_template.html');
 
-  $familySummary = "Your group includes: " . implode(", ", $state['family']) . ".";
+    // Family summary
+    $familySummary = "Your group includes: " . implode(", ", $state['family']) . ".";
 
-  // Milestone section (with extended descriptions)
-  $milestoneHtml = "";
-  foreach ($state['log'] as $entry) {
-    if (!empty($entry['milestone'])) {
-      $milestoneData = array_filter($milestones, fn($m) => $m['title'] === $entry['milestone']);
-      $milestone = array_shift($milestoneData);
-      if ($milestone) {
-        $milestoneHtml .= "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
-        $milestoneHtml .= "{$milestone['extended_description']}<br><br>";
-      }
+    // Milestone section (with extended descriptions)
+    $milestoneHtml = "";
+    foreach ($state['log'] as $entry) {
+        if (!empty($entry['milestone'])) {
+            $milestoneData = array_filter($milestones, fn($m) => $m['title'] === $entry['milestone']);
+            $milestone = array_shift($milestoneData);
+            if ($milestone) {
+                $milestoneHtml .= "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
+                $milestoneHtml .= "{$milestone['extended_description']}<br><br>";
+            }
+        }
     }
-  }
 
-  // Crossing section
-  $crossingHtml = "";
-  foreach ($state['log'] as $entry) {
-    if (!empty($entry['crossing_result'])) {
-      $crossingHtml .= "<strong>{$entry['milestone']}:</strong> {$entry['crossing_result']}<br>";
+    // Crossing section (river crossings)
+    $crossingHtml = "";
+    foreach ($state['log'] as $entry) {
+        if (!empty($entry['crossing_result'])) {
+            $crossingHtml .= "<strong>{$entry['milestone']}:</strong> {$entry['crossing_result']}<br>";
+        }
     }
-  }
 
-  // Token substitution
-  $template = str_replace('{{trail_name}}', $playerRow['trail_name'], $template);
-  $template = str_replace('{{week_number}}', $weekNumber, $template);
-  $template = str_replace('{{start_date}}', $state['start_date'], $template);
-  $template = str_replace('{{days_on_trail}}', $state['day'], $template);
-  $template = str_replace('{{food_lbs}}', $inventory['food_lbs'], $template);
-  $template = str_replace('{{morale}}', $state['morale'] ?? 100, $template);
-  $template = str_replace('{{oxen}}', $inventory['oxen'], $template);
-  $template = str_replace('{{clothing}}', $inventory['clothing'], $template);
-  $template = str_replace('{{ammunition}}', $inventory['ammunition'], $template);
-  $template = str_replace('{{milestone_section}}', $milestoneHtml, $template);
-  $template = str_replace('{{crossing_section}}', $crossingHtml, $template);
-  $template = str_replace('{{tip_of_the_week}}', $tipOfTheWeek, $template);
-  $template = str_replace('{{family_summary}}', $familySummary, $template);
+    // Replacing the placeholders with actual data
+    $template = str_replace('{{trail_name}}', $playerRow['trail_name'], $template);
+    $template = str_replace('{{week_number}}', $weekNumber, $template);
+    $template = str_replace('{{start_date}}', $state['start_date'], $template);
+    $template = str_replace('{{days_on_trail}}', $state['day'], $template);
+    $template = str_replace('{{food_lbs}}', $inventory['food_lbs'], $template);
+    $template = str_replace('{{morale}}', $state['morale'] ?? 100, $template);
+    $template = str_replace('{{oxen}}', $inventory['oxen'], $template);
+    $template = str_replace('{{clothing}}', $inventory['clothing'], $template);
+    $template = str_replace('{{ammunition}}', $inventory['ammunition'], $template);
+    $template = str_replace('{{milestone_section}}', $milestoneHtml, $template);
+    $template = str_replace('{{crossing_section}}', $crossingHtml, $template);
+    $template = str_replace('{{tip_of_the_week}}', $tipOfTheWeek, $template);
+    $template = str_replace('{{family_summary}}', $familySummary, $template);
 
-  return $template;
+    return $template;
 }
 ?>
