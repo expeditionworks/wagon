@@ -7,7 +7,7 @@ function checkMilestones($player_id, $conn) {
     $mile = $playerRow['player_state']['mile'];
 
     // Retrieve the milestones (you can pull from a JSON or database)
-    $milestones = json_decode(file_get_contents(__DIR__ . '/../config/milestones.json'), true);
+    $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
     $milestoneHtml = '';
 
     // Iterate through milestones and check if the player has reached any
