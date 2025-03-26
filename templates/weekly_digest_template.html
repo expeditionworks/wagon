@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Your Weekly Trail Report</title>
+</head>
+<body style="font-family: sans-serif; line-height: 1.6;">
+  <h2>📩 Trail Dispatch: Week {{week_number}}</h2>
+
+  <p><strong>Greetings, {{trail_name}}!</strong><br>
+  You’ve now spent <strong>{{days_on_trail}}</strong> days on the trail since departing on <strong>{{start_date}}</strong>. Here's what happened this past week:</p>
+
+  <hr>
+  <h3>🛍️ Milestones Reached</h3>
+  {{milestone_section}}
+
+  <hr>
+  <h3>🛶 River Crossings</h3>
+  {{crossing_section}}
+
+  <hr>
+  <h3>🍽️ Supplies Update</h3>
+  <ul>
+    <li><strong>Food Remaining:</strong> {{food_lbs}} lbs</li>
+    <li><strong>Morale:</strong> {{morale}}</li>
+    <li><strong>Wagon Status:</strong> Oxen: {{oxen}}, Clothing: {{clothing}}, Ammo: {{ammunition}}</li>
+  </ul>
+
+  <hr>
+  <h3>💡 Tips n Tricks</h3>
+  <blockquote>
+    {{tip_of_the_week}}
+  </blockquote>
+
+  <hr>
+  <h3>📱 Available Commands</h3>
+  <ul>
+    <li><code>STATUS</code> – View your current trail status</li>
+    <li><code>RATIONS</code> – Change food ration size</li>
+    <li><code>HELP</code> – Get help with the game</li>
+    <li><code>QUIT</code> – Exit the game</li>
+    <li><code>CONTINUE</code> – (if paused)</li>
+  </ul>
+
+  <p style="font-size: 0.9em; color: #666;">Conestoga Wagon Game | This message was generated automatically.</p>
+</body>
+</html>
