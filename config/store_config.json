@@ -59,4 +59,354 @@
       }
     ]
   }
+},
+{
+  "fort_kearny": {
+    "location_name": "Fort Kearny",
+    "store_type": "fort",
+    "store_inflation": 1.1,
+    "items": [
+      {
+        "id": "food_bundle_m",
+        "name": "Medium Food Bundle (400 lbs)",
+        "price": 90,
+        "adds": {
+          "food_lbs": 400
+        }
+      },
+      {
+        "id": "food_bundle_l",
+        "name": "Large Food Bundle (600 lbs)",
+        "price": 120,
+        "adds": {
+          "food_lbs": 600
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (50 rounds)",
+        "price": 15,
+        "adds": {
+          "ammo": 50
+        }
+      },
+      {
+        "id": "clothing",
+        "name": "Clothing Set",
+        "price": 25,
+        "adds": {
+          "clothing": 1
+        }
+      },
+      {
+        "id": "oxen",
+        "name": "Oxen Pair",
+        "price": 60,
+        "adds": {
+          "oxen": 2
+        }
+      },
+      {
+        "id": "wagon_parts",
+        "name": "Wagon Repair Kit",
+        "price": 30,
+        "adds": {
+          "wagon_parts": 1
+        }
+      }
+    ]
+  },
+  "fort_laramie": {
+    "location_name": "Fort Laramie",
+    "store_type": "fort",
+    "store_inflation": 1.2,
+    "items": [
+      {
+        "id": "food_bundle_m",
+        "name": "Medium Food Bundle (400 lbs)",
+        "price": 120,
+        "adds": {
+          "food_lbs": 400
+        }
+      },
+      {
+        "id": "food_bundle_l",
+        "name": "Large Food Bundle (600 lbs)",
+        "price": 150,
+        "adds": {
+          "food_lbs": 600
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (50 rounds)",
+        "price": 18,
+        "adds": {
+          "ammo": 50
+        }
+      },
+      {
+        "id": "clothing",
+        "name": "Clothing Set",
+        "price": 30,
+        "adds": {
+          "clothing": 1
+        }
+      },
+      {
+        "id": "oxen",
+        "name": "Oxen Pair",
+        "price": 70,
+        "adds": {
+          "oxen": 2
+        }
+      },
+      {
+        "id": "wagon_parts",
+        "name": "Wagon Repair Kit",
+        "price": 35,
+        "adds": {
+          "wagon_parts": 1
+        }
+      },
+      {
+        "id": "medicine",
+        "name": "Basic Medicine Kit",
+        "price": 50,
+        "adds": {
+          "medicine": 1
+        }
+      },
+      {
+        "id": "coffee",
+        "name": "Coffee",
+        "price": 25,
+        "adds": {
+          "food_lbs": 2,
+          "morale": 2
+        }
+      }
+    ]
+  },
+  "fort_bridger": {
+    "location_name": "Fort Bridger",
+    "store_type": "fort",
+    "store_inflation": 1.3,
+    "items": [
+      {
+        "id": "food_bundle_s",
+        "name": "Small Food Bundle (200 lbs)",
+        "price": 65,
+        "adds": {
+          "food_lbs": 200
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (20 rounds)",
+        "price": 18,
+        "adds": {
+          "ammo": 20
+        }
+      },
+      {
+        "id": "clothing",
+        "name": "Clothing Set",
+        "price": 35,
+        "adds": {
+          "clothing": 1
+        }
+      },
+      {
+        "id": "oxen",
+        "name": "Oxen Pair",
+        "price": 90,
+        "adds": {
+          "oxen": 2
+        }
+      },
+      {
+        "id": "wagon_parts",
+        "name": "Wagon Repair Kit",
+        "price": 45,
+        "adds": {
+          "wagon_parts": 1
+        }
+      }
+    ]
+  },
+  "fort_hall": {
+    "location_name": "Fort Hall",
+    "store_type": "fort",
+    "store_inflation": 1.4,
+    "items": [
+      {
+        "id": "food_bundle_s",
+        "name": "Small Food Bundle (200 lbs)",
+        "price": 70,
+        "adds": {
+          "food_lbs": 200
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (20 rounds)",
+        "price": 20,
+        "adds": {
+          "ammo": 20
+        }
+      },
+      {
+        "id": "clothing",
+        "name": "Clothing Set",
+        "price": 40,
+        "adds": {
+          "clothing": 1
+        }
+      }
+    ]
+  },
+  "fort_churchill": {
+    "location_name": "Fort Churchill",
+    "store_type": "fort",
+    "store_inflation": 1.5,
+    "items": [
+      {
+        "id": "food_bundle_s",
+        "name": "Small Food Bundle (200 lbs)",
+        "price": 60,
+        "adds": {
+          "food_lbs": 200
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (20 rounds)",
+        "price": 16,
+        "adds": {
+          "ammo": 20
+        }
+      }
+    ]
+  },
+  "fort_boise": {
+    "location_name": "Fort Boise",
+    "store_type": "outpost",
+    "store_inflation": 1.2,
+    "items": [
+      {
+        "id": "food_bundle_s",
+        "name": "Small Food Bundle (200 lbs)",
+        "price": 55,
+        "adds": {
+          "food_lbs": 200
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (20 rounds)",
+        "price": 12,
+        "adds": {
+          "ammo": 20
+        }
+      }
+    ]
+  },
+  "sutters_fort": {
+    "location_name": "Sutter's Fort",
+    "store_type": "fort",
+    "store_inflation": 1.6,
+    "items": [
+      {
+        "id": "food_bundle_m",
+        "name": "Medium Food Bundle (400 lbs)",
+        "price": 150,
+        "adds": {
+          "food_lbs": 400
+        }
+      },
+      {
+        "id": "food_bundle_l",
+        "name": "Large Food Bundle (600 lbs)",
+        "price": 180,
+        "adds": {
+          "food_lbs": 600
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (50 rounds)",
+        "price": 30,
+        "adds": {
+          "ammo": 50
+        }
+      },
+      {
+        "id": "clothing",
+        "name": "Clothing Set",
+        "price": 60,
+        "adds": {
+          "clothing": 1
+        }
+      },
+      {
+        "id": "oxen",
+        "name": "Oxen Pair",
+        "price": 100,
+        "adds": {
+          "oxen": 2
+        }
+      },
+      {
+        "id": "wagon_parts",
+        "name": "Wagon Repair Kit",
+        "price": 60,
+        "adds": {
+          "wagon_parts": 1
+        }
+      },
+      {
+        "id": "gold_dust",
+        "name": "Gold Dust",
+        "price": 150,
+        "adds": {
+          "gold_dust": 1
+        }
+      }
+    ]
+  },
+  "fort_vancouver": {
+    "location_name": "Fort Vancouver",
+    "store_type": "trader",
+    "store_inflation": 1.3,
+    "items": [
+      {
+        "id": "dried_apples",
+        "name": "Dried Apples",
+        "price": 20,
+        "adds": {
+          "food_lbs": 5,
+          "morale": 1
+        }
+      },
+      {
+        "id": "coffee",
+        "name": "Coffee",
+        "price": 35,
+        "adds": {
+          "food_lbs": 2,
+          "morale": 2
+        }
+      },
+      {
+        "id": "hunting_kit",
+        "name": "Hunting Kit",
+        "price": 40,
+        "adds": {
+          "traps": 1,
+          "ammo": 10
+        }
+      }
+    ]
+  }
 }
