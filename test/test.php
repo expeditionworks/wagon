@@ -1,4 +1,6 @@
 <?php
+// test.php
+
 // Include the database connection file
 include_once(__DIR__ . '/db_connection.php'); // Same directory
 
@@ -32,7 +34,7 @@ echo "<p><strong>Inventory:</strong> Food: " . $playerRow['player_state']['inven
 echo "<p><strong>Conditions:</strong> " . implode(", ", $playerRow['player_state']['conditions']) . "</p>";
 echo "<p><strong>Log:</strong> " . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
 
-
+// Simulate the passing of a day when the button is clicked
 if (isset($_POST['continue_day'])) {
     // Simulate the passing of a day
     $playerState = $playerRow['player_state'];
