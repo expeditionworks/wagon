@@ -6,6 +6,8 @@ include_once(__DIR__ . '/db_connection.php'); // Same directory
 
 // Include the game engine modules
 include_once(__DIR__ . '/../engine/modules/getPlayerState.php');
+include_once(__DIR__ . '/../engine/modules/updatePlayerState.php');  // Include this file
+
 
 // Get player state (this will now use the database connection from db_connection.php)
 $player_id = 1;  // Set to the current player's ID
