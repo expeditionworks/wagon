@@ -27,10 +27,6 @@
     "altitude": "medium",
     "trail": ["oregon", "california"]
   },
-
-  // 🔀 Branches here at Fort Hall (mile 1300)
-
-  // 🟩 Oregon Trail continues
   {
     "start_mile": 1300,
     "end_mile": 1500,
@@ -39,14 +35,19 @@
     "trail": ["oregon"]
   },
   {
-    "start_mile": 1500,
-    "end_mile": 1900,
-    "terrain": "dense forest",
-    "altitude": "high",
-    "trail": ["oregon"]
-  },
-
-  // 🟨 California Trail branch
+  "start_mile": 1500,
+  "end_mile": 1700,
+  "terrain": "mountains",
+  "altitude": "high",
+  "trail": ["oregon"]
+},
+{
+  "start_mile": 1700,
+  "end_mile": 2000,
+  "terrain": "valleys",
+  "altitude": "low",
+  "trail": ["oregon"]
+},
   {
     "start_mile": 1300,
     "end_mile": 1450,
@@ -62,10 +63,24 @@
     "trail": ["california"]
   },
   {
-    "start_mile": 1600,
-    "end_mile": 1750,
-    "terrain": "foothills",
-    "altitude": "medium",
-    "trail": ["california"]
-  }
+  "start_mile": 1600,
+  "end_mile": 1700,
+  "terrain": "desert",
+  "altitude": "low",
+  "trail": ["california"]
+},
+{
+  "start_mile": 1700,
+  "end_mile": 1850,
+  "terrain": "mountains",
+  "altitude": "very high",
+  "trail": ["california"]
+},
+{
+  "start_mile": 1850,
+  "end_mile": 2000,
+  "terrain": "valleys",
+  "altitude": "low",
+  "trail": ["california"]
+}
 ]
