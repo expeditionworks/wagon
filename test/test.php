@@ -72,9 +72,13 @@ function loadMilestones() {
     $milestonesFile = __DIR__ . '/../config/milestones.json';
     if (file_exists($milestonesFile)) {
         $milestones = json_decode(file_get_contents($milestonesFile), true);
+        if ($milestones === null) {
+            echo "Error: Invalid JSON in milestones file.";
+        }
         return $milestones;
     }
-    return [];  // Return an empty array if the file does not exist
+    echo "Error: milestones.json file not found.";
+    return [];  // Return an empty array if the file does not exist or is invalid
 }
 
 // Example: Retrieve the current player state (this could be from a database or session)
@@ -89,6 +93,12 @@ if (!$playerRow) {
 
 // Load full milestones from the JSON file
 $full_milestones = loadMilestones();
+
+// Check if the milestones are loaded properly
+if (empty($full_milestones)) {
+    echo "No milestones found.";
+    exit;
+}
 
 // Handle button click to simulate a new day
 if (isset($_POST['continue_day'])) {
