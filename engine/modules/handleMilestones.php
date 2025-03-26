@@ -1,7 +1,7 @@
 <?php
 // handleMilestones.php
 
-// Include the updatePlayerState function from the correct module (same directory)
+// Include the updatePlayerState function from the correct module
 include_once(__DIR__ . '/updatePlayerState.php');  // Correct path to include the update function
 
 function checkMilestones($player_id, $conn) {
