@@ -6,12 +6,18 @@ function checkMilestones($player_id, $conn) {
     $playerRow = getPlayerState($player_id, $conn);
     $mile = $playerRow['player_state']['mile'];
 
-    // Retrieve the milestones (you can pull from a JSON or database)
+    // Correct the file path to load milestones.json from the /config directory
     $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
+
     $milestoneHtml = '';
 
     // Iterate through milestones and check if the player has reached any
-    foreach ($milestones as $milestone) {
+    foreach ($milestones as &$milestone) {
+        // Initialize 'reached' key if not set
+        if (!isset($milestone['reached'])) {
+            $milestone['reached'] = false;
+        }
+
         if ($mile >= $milestone['mile'] && !$milestone['reached']) {
             // Mark the milestone as reached
             $milestone['reached'] = true;
