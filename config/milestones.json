@@ -1,0 +1,106 @@
+[
+  {
+    "id": "independence",
+    "type": "start",
+    "title": "Independence, Missouri",
+    "mile": 0,
+    "force_stop": true,
+    "description": "The starting point of the Oregon Trail.",
+    "extended_description": "From the muddy banks of the Missouri River, the town of Independence bustled with emigrants gathering supplies and forming wagon trains. This was the last major stop before the long journey west. Oxen were hitched, families said their goodbyes, and the trail ahead beckoned with both promise and peril."
+  },
+  {
+    "id": "fort_kearny",
+    "type": "fort",
+    "title": "Fort Kearny",
+    "mile": 300,
+    "force_stop": true,
+    "description": "A frontier outpost offering basic supplies and military presence.",
+    "extended_description": "Fort Kearny stood as a critical waypoint for travelers heading west. Though not large, its wooden stockade provided a brief sense of safety and stability. Families camped nearby to barter for food and supplies, repair wagons, and hear the latest trail gossip from soldiers and other emigrants."
+  },
+  {
+    "id": "chimney_rock",
+    "type": "natural",
+    "title": "Chimney Rock",
+    "mile": 636,
+    "force_stop": false,
+    "natural": true,
+    "description": "Chimney Rock rises from the plains, a marker for emigrants for miles around.",
+    "extended_description": "Jutting high from the plains of the meandering Platte River, Chimney Rock has been visible for days above the grasslands. On this day, the full 4,000-foot spire came into view, marking a third of your journey complete. The family paused to rest and reflect, and a few members walked to its base to carve their initials among thousands of others."
+  },
+  {
+    "id": "fort_laramie",
+    "type": "fort",
+    "title": "Fort Laramie",
+    "mile": 670,
+    "force_stop": true,
+    "description": "A major resupply point and meeting place along the trail.",
+    "extended_description": "Fort Laramie was more than a military outpost — it was a bustling hub of commerce and reunion. Travelers traded with both soldiers and Native tribes, restocked crucial goods, and repaired wagons. Letters were posted, news exchanged, and alliances formed. The fort marked the end of the easy prairie stretch and the beginning of tougher terrain."
+  },
+  {
+    "id": "independence_rock",
+    "type": "natural",
+    "title": "Independence Rock",
+    "mile": 900,
+    "force_stop": false,
+    "natural": true,
+    "description": "A giant granite rock where travelers carved their names.",
+    "extended_description": "Known as the 'Great Register of the Desert,' Independence Rock was a place of pilgrimage for emigrants. Families carved their names into its flanks as a declaration: 'We made it this far.' Campfires lit its base each night as travelers recounted stories and prepared for the rugged road ahead."
+  },
+  {
+    "id": "south_pass",
+    "type": "natural",
+    "title": "South Pass",
+    "mile": 1100,
+    "force_stop": false,
+    "natural": true,
+    "description": "A gentle rise through the Rockies marking the Continental Divide.",
+    "extended_description": "Crossing the Rockies was a feared chapter of the journey — yet South Pass defied those fears. With barely noticeable elevation, the trail stretched wide across a plateau of sagebrush and cool winds. From here, all rivers would run west. Emigrants paused here to take in the moment and brace for the unknown."
+  },
+  {
+    "id": "fort_bridger",
+    "type": "fort",
+    "title": "Fort Bridger",
+    "mile": 1150,
+    "force_stop": true,
+    "description": "A key trading post founded by mountain men, offering supplies and repairs.",
+    "extended_description": "Nestled at the edge of mountain country, Fort Bridger was a rough-hewn fortification run by trappers and traders. Here, travelers bartered for livestock, tools, and vital information. Though its services were dear, the fort was a welcome sign of civilization before the desolate stretches ahead."
+  },
+  {
+    "id": "soda_springs",
+    "type": "natural",
+    "title": "Soda Springs",
+    "mile": 1250,
+    "force_stop": false,
+    "natural": true,
+    "description": "Naturally carbonated springs bubbling from the earth.",
+    "extended_description": "Soda Springs were both curiosity and blessing. The naturally fizzy waters offered travelers a rare treat, and some believed they held medicinal powers. Children splashed while adults filled bottles and debated the springs’ origins. It was a brief, joyful break from the rigors of travel."
+  },
+  {
+    "id": "fort_hall",
+    "branch": ["oregon", "california"],
+    "type": "fort",
+    "title": "Fort Hall",
+    "mile": 1350,
+    "force_stop": true,
+    "description": "An important fork in the trail—continue to Oregon or turn toward California.",
+    "extended_description": "At Fort Hall, the journey split: northward to Oregon, or southward to the gold fields of California. Many families paused here to debate their future, take on supplies, and listen to the wisdom of scouts and fellow travelers. It was a place of decisions, dreams, and divergence."
+  },
+  {
+    "id": "the_dalles",
+    "type": "river",
+    "title": "The Dalles",
+    "mile": 1800,
+    "force_stop": true,
+    "description": "Final major river crossing before reaching the Willamette Valley.",
+    "extended_description": "The Columbia River's powerful current and rocky terrain made The Dalles one of the most dangerous crossings on the trail. Families either built rafts or paid for passage through treacherous waters. Hope mingled with fear as the Willamette Valley waited just beyond the horizon."
+  },
+  {
+    "id": "oregon_city",
+    "type": "final",
+    "title": "Oregon City",
+    "mile": 2000,
+    "force_stop": true,
+    "description": "The end of the Oregon Trail.",
+    "extended_description": "After months of hardship, hope, and perseverance, Oregon City rose from the foggy forests of the Willamette Valley. Homesteads waited for claim, rivers for fishing, and land for farming. Emigrants arrived worn but triumphant, having completed one of the most challenging journeys of their lives."
+  }
+]
