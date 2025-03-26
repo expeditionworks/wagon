@@ -9,6 +9,39 @@
     "extended_description": "From the muddy banks of the Missouri River, the town of Independence bustled with emigrants gathering supplies and forming wagon trains. This was the last major stop before the long journey west. Oxen were hitched, families said their goodbyes, and the trail ahead beckoned with both promise and peril."
   },
   {
+    "id": "kansas_river",
+    "type": "river",
+    "title": "Kansas River Crossing",
+    "mile": 102,
+    "force_stop": true,
+    "description": "One of the first major river crossings on the trail.",
+    "extended_description": "The Kansas River marked the first major test of the journey. With spring meltwater running high, wagons either floated, ferried, or forded with caution.",
+    "crossing": {
+      "options": ["ford", "float", "ferry"],
+      "ferry_base_cost": 5,
+      "ford_risk": 0.25,
+      "ford_delay": 1,
+      "float_delay": 2,
+      "ferry_delay": 1
+    }
+  },
+  {
+    "id": "big_blue_river",
+    "type": "river",
+    "title": "Big Blue River",
+    "mile": 155,
+    "force_stop": true,
+    "description": "A narrow but tricky early river crossing.",
+    "extended_description": "Though not wide, the Big Blue River could be treacherous after rain. Fording here was a gamble, and many opted to wait out bad weather or seek a ferry.",
+    "crossing": {
+      "options": ["ford", "ferry"],
+      "ferry_base_cost": 3,
+      "ford_risk": 0.3,
+      "ford_delay": 1,
+      "ferry_delay": 1
+    }
+  },
+  {
     "id": "fort_kearny",
     "type": "fort",
     "title": "Fort Kearny",
@@ -23,7 +56,6 @@
     "title": "Chimney Rock",
     "mile": 636,
     "force_stop": false,
-    "natural": true,
     "description": "Chimney Rock rises from the plains, a marker for emigrants for miles around.",
     "extended_description": "Jutting high from the plains of the meandering Platte River, Chimney Rock has been visible for days above the grasslands. On this day, the full 4,000-foot spire came into view, marking a third of your journey complete. The family paused to rest and reflect, and a few members walked to its base to carve their initials among thousands of others."
   },
@@ -42,9 +74,25 @@
     "title": "Independence Rock",
     "mile": 900,
     "force_stop": false,
-    "natural": true,
     "description": "A giant granite rock where travelers carved their names.",
     "extended_description": "Known as the 'Great Register of the Desert,' Independence Rock was a place of pilgrimage for emigrants. Families carved their names into its flanks as a declaration: 'We made it this far.' Campfires lit its base each night as travelers recounted stories and prepared for the rugged road ahead."
+  },
+  {
+    "id": "green_river",
+    "type": "river",
+    "title": "Green River",
+    "mile": 1040,
+    "force_stop": true,
+    "description": "A swift, deep river that could be dangerous to ford.",
+    "extended_description": "The Green River cut a deep channel through the plains, forcing emigrants to make hard choices. Ferry services were often delayed by demand, while floating carried its own risks.",
+    "crossing": {
+      "options": ["ford", "float", "ferry"],
+      "ferry_base_cost": 10,
+      "ford_risk": 0.5,
+      "ford_delay": 2,
+      "float_delay": 3,
+      "ferry_delay": 1
+    }
   },
   {
     "id": "south_pass",
@@ -52,7 +100,6 @@
     "title": "South Pass",
     "mile": 1100,
     "force_stop": false,
-    "natural": true,
     "description": "A gentle rise through the Rockies marking the Continental Divide.",
     "extended_description": "Crossing the Rockies was a feared chapter of the journey — yet South Pass defied those fears. With barely noticeable elevation, the trail stretched wide across a plateau of sagebrush and cool winds. From here, all rivers would run west. Emigrants paused here to take in the moment and brace for the unknown."
   },
@@ -71,19 +118,35 @@
     "title": "Soda Springs",
     "mile": 1250,
     "force_stop": false,
-    "natural": true,
     "description": "Naturally carbonated springs bubbling from the earth.",
     "extended_description": "Soda Springs were both curiosity and blessing. The naturally fizzy waters offered travelers a rare treat, and some believed they held medicinal powers. Children splashed while adults filled bottles and debated the springs’ origins. It was a brief, joyful break from the rigors of travel."
   },
   {
     "id": "fort_hall",
-    "branch": ["oregon", "california"],
     "type": "fort",
     "title": "Fort Hall",
     "mile": 1350,
     "force_stop": true,
+    "branch": ["oregon", "california"],
     "description": "An important fork in the trail—continue to Oregon or turn toward California.",
     "extended_description": "At Fort Hall, the journey split: northward to Oregon, or southward to the gold fields of California. Many families paused here to debate their future, take on supplies, and listen to the wisdom of scouts and fellow travelers. It was a place of decisions, dreams, and divergence."
+  },
+  {
+    "id": "snake_river",
+    "type": "river",
+    "title": "Snake River",
+    "mile": 1450,
+    "force_stop": true,
+    "description": "One of the most dangerous rivers to cross on the trail.",
+    "extended_description": "The Snake River's icy, fast-moving waters spelled disaster for the unprepared. Here, every choice carried risk. Fording was near suicide, and many wagons capsized trying to float.",
+    "crossing": {
+      "options": ["float", "ferry"],
+      "ferry_base_cost": 12,
+      "ford_risk": 0.9,
+      "ford_delay": 3,
+      "float_delay": 4,
+      "ferry_delay": 2
+    }
   },
   {
     "id": "the_dalles",
@@ -92,7 +155,15 @@
     "mile": 1800,
     "force_stop": true,
     "description": "Final major river crossing before reaching the Willamette Valley.",
-    "extended_description": "The Columbia River's powerful current and rocky terrain made The Dalles one of the most dangerous crossings on the trail. Families either built rafts or paid for passage through treacherous waters. Hope mingled with fear as the Willamette Valley waited just beyond the horizon."
+    "extended_description": "The Columbia River's powerful current and rocky terrain made The Dalles one of the most dangerous crossings on the trail...",
+    "crossing": {
+      "options": ["ford", "float", "ferry"],
+      "ferry_base_cost": 15,
+      "ford_risk": 0.6,
+      "ford_delay": 2,
+      "float_delay": 3,
+      "ferry_delay": 1
+    }
   },
   {
     "id": "oregon_city",
