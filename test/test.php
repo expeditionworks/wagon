@@ -1,3 +1,9 @@
+
+<!-- HTML for the Continue button -->
+<form method="post">
+    <input type="submit" name="continue_day" value="Continue to Next Day">
+</form>
+
 <?php
 // test.php
 
@@ -76,7 +82,3 @@ if (isset($_POST['continue_day'])) {
 }
 ?>
 
-<!-- HTML for the Continue button -->
-<form method="post">
-    <input type="submit" name="continue_day" value="Continue to Next Day">
-</form>
