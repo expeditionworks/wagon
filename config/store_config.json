@@ -1,0 +1,62 @@
+{
+  "independence": {
+    "location_name": "Independence, MO",
+    "store_type": "initial_outfitting",
+    "items": [
+      {
+        "id": "food_bundle_s",
+        "name": "Small Food Bundle (200 lbs)",
+        "description": "Basic rations for a small group. Recommended if you're traveling light.",
+        "price": 40,
+        "adds": {
+          "food_lbs": 200
+        }
+      },
+      {
+        "id": "food_bundle_m",
+        "name": "Medium Food Bundle (400 lbs)",
+        "description": "A balanced supply for a typical family.",
+        "price": 75,
+        "adds": {
+          "food_lbs": 400
+        }
+      },
+      {
+        "id": "food_bundle_l",
+        "name": "Large Food Bundle (600 lbs)",
+        "description": "Enough food for a big group or a longer journey.",
+        "price": 100,
+        "adds": {
+          "food_lbs": 600
+        }
+      },
+      {
+        "id": "ammo",
+        "name": "Ammunition Box (20 rounds)",
+        "description": "Used for hunting and emergencies.",
+        "price": 10,
+        "adds": {
+          "ammo": 20
+        }
+      },
+      {
+        "id": "clothing",
+        "name": "Clothing Set",
+        "description": "Spare clothing for your group.",
+        "price": 15,
+        "adds": {
+          "clothing": 1
+        }
+      },
+      {
+        "id": "oxen",
+        "name": "Oxen Pair",
+        "description": "Two oxen strong enough to pull your wagon.",
+        "price": 50,
+        "adds": {
+          "oxen": 2
+        }
+      }
+    ]
+  }
+}
