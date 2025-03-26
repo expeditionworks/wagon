@@ -1,6 +1,10 @@
 <?php
 // test.php
 
+// Include the game engine and functions
+include_once(__DIR__ . '/../engine/game_engine.php');
+include_once(__DIR__ . '/../engine/game_functions.php');
+
 // Database connection setup
 $servername = "localhost";
 $username = "root";  // Default username in MAMP
@@ -75,7 +79,7 @@ if (!$playerRow) {
 
 // Handle button click to simulate a new day
 if (isset($_POST['continue_day'])) {
-    simulateDay($playerRow, $full_milestones);
+    simulateDay($playerRow, $full_milestones);  // Simulate the day using the game engine
     savePlayerState($player_id, $playerRow['player_state']);
 }
 
@@ -103,54 +107,5 @@ function displayState($playerRow) {
 
 // Display the state before the user continues
 displayState($playerRow);
-
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Game Interface</title>
-</head>
-<body>
-    <h1>Conestoga Wagon Test Interface</h1>
-
-    <form method="post">
-        <input type="submit" name="continue_day" value="Continue to Next Day">
-    </form>
-
-    <h3>Player Actions:</h3>
-    <!-- Example of available choices (you can modify as needed for your game logic) -->
-    <form method="post">
-        <label for="choice">Choose your action:</label>
-        <select name="choice" id="choice">
-            <option value="rest">Rest</option>
-            <option value="cross_river">Cross River</option>
-            <option value="trade">Trade Supplies</option>
-        </select>
-        <input type="submit" name="action" value="Take Action">
-    </form>
-
-    <?php
-    // Handle specific actions (e.g., resting, crossing river)
-    if (isset($_POST['action'])) {
-        $action = $_POST['choice'];
-        // Perform the action logic here (update state, log entries, etc.)
-        // Example: Resting action would update morale or health
-        if ($action == 'rest') {
-            $playerRow['morale'] += 10;
-            addLogEntry($playerRow, "Rested and morale increased.");
-        } elseif ($action == 'cross_river') {
-            $playerRow['mile'] += 15; // Advance mile after crossing the river
-            addLogEntry($playerRow, "Crossed the river and advanced 15 miles.");
-        }
-        // Other action logic can be added here (e.g., trade, fight, etc.)
-        savePlayerState($player_id, $playerRow);  // Save updated state
-    }
-    ?>
-
-    <hr>
-    <p><a href="/">Back to Main Game</a></p>
-</body>
-</html>
