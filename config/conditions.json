@@ -1,0 +1,87 @@
+{
+  "dysentery": {
+    "label": "Dysentery",
+    "description": "Severe diarrhea and dehydration. Can lead to death if untreated.",
+    "health_risk": 2,
+    "morale_penalty": 5,
+    "slows_travel": true,
+    "duration_days": 3,
+    "worsen_chance": 0.2,
+    "heal_chance": 0.4
+  },
+  "injured": {
+    "label": "Injured",
+    "description": "Minor injury sustained. Slows down the group.",
+    "health_risk": 1,
+    "morale_penalty": 3,
+    "slows_travel": true,
+    "duration_days": 2,
+    "worsen_chance": 0.1,
+    "heal_chance": 0.5
+  },
+  "exhausted": {
+    "label": "Exhausted",
+    "description": "Too much travel, not enough rest.",
+    "health_risk": 1,
+    "morale_penalty": 2,
+    "slows_travel": true,
+    "duration_days": 1,
+    "worsen_chance": 0.1,
+    "heal_chance": 0.6
+  },
+  "exposure": {
+    "label": "Exposure",
+    "description": "Cold, wet, or windy conditions caused a chill.",
+    "health_risk": 2,
+    "morale_penalty": 4,
+    "slows_travel": true,
+    "duration_days": 2,
+    "worsen_chance": 0.15,
+    "heal_chance": 0.3
+  },
+  "well_rested": {
+    "label": "Well Rested",
+    "description": "Everyone got a full night's sleep. Spirits are high.",
+    "morale_bonus": 5,
+    "slows_travel": false,
+    "duration_days": 2,
+    "persists_until_disrupted": true
+  },
+  "bonding": {
+    "label": "Bonding",
+    "description": "The group is getting along well, laughing and telling stories.",
+    "morale_bonus": 4,
+    "slows_travel": false,
+    "duration_days": 3,
+    "persists_until_disrupted": true
+  },
+  "found_spring": {
+    "label": "Found a Spring",
+    "description": "Discovered a clean freshwater spring. Spirits and health improve.",
+    "morale_bonus": 3,
+    "health_boost": 1,
+    "slows_travel": false,
+    "duration_days": 2
+  },
+  "windy_day": {
+    "label": "Windy Day",
+    "description": "A gusty but uneventful day on the trail.",
+    "morale_penalty": 0,
+    "slows_travel": false,
+    "duration_days": 1
+  },
+  "quiet_march": {
+    "label": "Quiet March",
+    "description": "Nothing unusual occurred today.",
+    "morale_penalty": 0,
+    "slows_travel": false,
+    "duration_days": 1
+  },
+  "saw_buffalo": {
+    "label": "Saw a Buffalo Herd",
+    "description": "A herd passed in the distance. A memorable sight, but no impact.",
+    "morale_penalty": 0,
+    "slows_travel": false,
+    "duration_days": 1
+  }
+}
