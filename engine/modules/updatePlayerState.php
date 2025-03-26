@@ -1,7 +1,7 @@
 <?php
 // updatePlayerState.php
 
-function savePlayerState($player_id, $playerState, $conn) {
+function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare SQL query to update player state in the database
     $sql = "UPDATE player_state SET 
             day = ?, 
