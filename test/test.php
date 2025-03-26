@@ -1,9 +1,3 @@
-
-<!-- HTML for the Continue button -->
-<form method="post">
-    <input type="submit" name="continue_day" value="Continue to Next Day">
-</form>
-
 <?php
 // test.php
 
@@ -13,7 +7,7 @@ include_once(__DIR__ . '/db_connection.php'); // Same directory
 // Include the game engine modules
 include_once(__DIR__ . '/../engine/modules/getPlayerState.php');
 include_once(__DIR__ . '/../engine/modules/updatePlayerState.php');  // Include this file
-
+include_once(__DIR__ . '/../engine/modules/handleMilestones.php'); // Include the milestones handling module
 
 // Get player state (this will now use the database connection from db_connection.php)
 $player_id = 1;  // Set to the current player's ID
@@ -52,12 +46,18 @@ if (isset($playerRow['player_state']['conditions']) && is_array($playerRow['play
 echo "<p><strong>Inventory:</strong> Food: " . $playerRow['player_state']['inventory']['food_lbs'] . " lbs</p>";
 echo "<p><strong>Log:</strong> " . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
 
+// Check if any milestones are reached
+$milestoneHtml = checkMilestones($player_id, $conn);
+
 // Simulate the passing of a day when the button is clicked
 if (isset($_POST['continue_day'])) {
     // Simulate the passing of a day
     $playerState = $playerRow['player_state'];
     $playerState['day'] += 1;  // Increment day by 1
     $playerState['mile'] += rand(10, 20);  // Randomly move the player forward by 10-20 miles
+
+    // Check if any milestones have been reached
+    $milestoneHtml = checkMilestones($player_id, $conn);
 
     // Simulate food consumption
     $foodConsumed = rand(10, 20);  // Random food consumption per day
@@ -75,10 +75,14 @@ if (isset($_POST['continue_day'])) {
     ];
 
     // Save the updated player state back to the database
-    savePlayerState($player_id, $playerState, $conn);
+    updatePlayerState($player_id, $playerState, $conn);
 
     // Re-fetch updated player data
     $playerRow = getPlayerState($player_id, $conn);
 }
 ?>
 
+<!-- HTML for the Continue button -->
+<form method="post">
+    <input type="submit" name="continue_day" value="Continue to Next Day">
+</form>
