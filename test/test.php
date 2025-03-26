@@ -1,71 +1,13 @@
 <?php
-// test.php
+// Include the database connection file
+include_once(__DIR__ . '/../db_connection.php');
 
-// Include the game engine and functions
-include_once(__DIR__ . '/../engine/game_engine.php');
-include_once(__DIR__ . '/../engine/game_functions.php');
+// Include the game engine modules
+include_once(__DIR__ . '/../engine/modules/getPlayerState.php');
 
-// Database connection setup
-$servername = "localhost";
-$username = "root";  // Default username in MAMP
-$password = "root";      // Default password for MAMP is usually empty
-$dbname = "conestoga_wagon";  // Replace with your database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch player data from database
-function getPlayerState($player_id) {
-    global $conn;
-    $sql = "
-        SELECT players.trail_name, players.family, player_state.*
-        FROM players
-        JOIN player_state ON players.id = player_state.player_id
-        WHERE players.id = $player_id
-    ";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        
-        // Initialize player_state
-        $playerState = [
-            'day' => $row['day'] ?? 1, // Default to day 1 if not set
-            'mile' => $row['mile'] ?? 0, // Default to 0 miles if not set
-            'inventory' => json_decode($row['inventory'], true) ?? [],
-            'conditions' => json_decode($row['conditions'], true) ?? [],
-            'log' => json_decode($row['log'], true) ?? [],
-        ];
-
-        // Add player_state to row
-        $row['player_state'] = $playerState;
-        $row['family'] = json_decode($row['family'], true); // Decode family field
-        return $row;  // Return the player data including player_state
-    } else {
-        return null;  // No player found
-    }
-}
-
-// Save player state to database
-function savePlayerState($player_id, $player_state) {
-    global $conn;
-    $day = $player_state['day'];
-    $mile = $player_state['mile'];
-    $inventory = json_encode($player_state['inventory']);
-    $conditions = json_encode($player_state['conditions']);
-    $log = json_encode($player_state['log']);
-    
-    $sql = "UPDATE player_state SET day = $day, mile = $mile, inventory = '$inventory', conditions = '$conditions', log = '$log' WHERE player_id = $player_id";
-    $conn->query($sql);
-}
-
-// Example: Retrieve the current player state (this could be from a database or session)
+// Get player state (this will now use the database connection from db_connection.php)
 $player_id = 1;  // Set to the current player's ID
-$playerRow = getPlayerState($player_id);
+$playerRow = getPlayerState($player_id, $conn);
 
 if (!$playerRow) {
     // Handle case where no player data is found
@@ -73,83 +15,46 @@ if (!$playerRow) {
     exit;
 }
 
-// Handle button click to simulate a new day
+// Display the player state
+echo "<h3>Current Game State</h3>";
+echo "<p><strong>Trail Name:</strong> " . $playerRow['trail_name'] . "</p>";
+echo "<p><strong>Family:</strong> " . implode(", ", $playerRow['family']) . "</p>";
+echo "<p><strong>Days on Trail:</strong> " . $playerRow['player_state']['day'] . "</p>";
+echo "<p><strong>Miles Traveled:</strong> " . $playerRow['player_state']['mile'] . " miles</p>";
+echo "<p><strong>Inventory:</strong> Food: " . $playerRow['player_state']['inventory']['food_lbs'] . " lbs</p>";
+echo "<p><strong>Conditions:</strong> " . implode(", ", $playerRow['player_state']['conditions']) . "</p>";
+echo "<p><strong>Log:</strong> " . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
+
 if (isset($_POST['continue_day'])) {
-    simulateDay($playerRow, $full_milestones);  // Simulate the day using the game engine
-    savePlayerState($player_id, $playerRow['player_state']);
-}
+    // Simulate the passing of a day
+    $playerState = $playerRow['player_state'];
+    $playerState['day'] += 1;  // Increment day by 1
+    $playerState['mile'] += rand(10, 20);  // Randomly move the player forward by 10-20 miles
 
-// Function to output the player's current state
-function displayState($playerRow) {
-    $state = $playerRow['player_state']; // player_row now includes player_state data as flat
-    echo "<h3>Current Game State</h3>";
-    echo "<p><strong>Trail Name:</strong> " . $state['trail_name'] . "</p>";
-    echo "<p><strong>Days on Trail:</strong> " . $state['day'] . "</p>";
-    echo "<p><strong>Miles Traveled:</strong> " . $state['mile'] . " miles</p>";
-    echo "<p><strong>Morale:</strong> " . $state['morale'] . "</p>";
-    echo "<p><strong>Food Remaining:</strong> " . $state['inventory']['food_lbs'] . " lbs</p>";
-    echo "<p><strong>Oxen:</strong> " . $state['inventory']['oxen'] . "</p>";
-    echo "<p><strong>Clothing:</strong> " . $state['inventory']['clothing'] . "</p>";
-    echo "<p><strong>Ammunition:</strong> " . $state['inventory']['ammunition'] . "</p>";
-    echo "<p><strong>Family:</strong> " . implode(", ", $state['family']) . "</p>";
+    // Simulate food consumption
+    $foodConsumed = rand(10, 20);  // Random food consumption per day
+    $playerState['inventory']['food_lbs'] -= $foodConsumed;
 
-    // Display the latest log entry
-    $latestLog = end($state['log']);
-    if ($latestLog) {
-        echo "<h4>Latest Log Entry</h4>";
-        echo "<p>" . $latestLog['notes'] . "</p>";
+    // Ensure food doesn't go below zero
+    if ($playerState['inventory']['food_lbs'] < 0) {
+        $playerState['inventory']['food_lbs'] = 0;
     }
-}
 
-// Display the state before the user continues
-displayState($playerRow);
+    // Log the daily events (food consumed, miles traveled)
+    $playerState['log'][] = [
+        'day' => $playerState['day'],
+        'notes' => "Traveled {$playerState['mile']} miles, consumed $foodConsumed lbs of food."
+    ];
+
+    // Save the updated player state back to the database
+    savePlayerState($player_id, $playerState, $conn);
+
+    // Re-fetch updated player data
+    $playerRow = getPlayerState($player_id, $conn);
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Game Interface</title>
-</head>
-<body>
-    <h1>Conestoga Wagon Test Interface</h1>
-
-    <form method="post">
-        <input type="submit" name="continue_day" value="Continue to Next Day">
-    </form>
-
-    <h3>Player Actions:</h3>
-    <!-- Example of available choices (you can modify as needed for your game logic) -->
-    <form method="post">
-        <label for="choice">Choose your action:</label>
-        <select name="choice" id="choice">
-            <option value="rest">Rest</option>
-            <option value="cross_river">Cross River</option>
-            <option value="trade">Trade Supplies</option>
-        </select>
-        <input type="submit" name="action" value="Take Action">
-    </form>
-
-    <?php
-    // Handle specific actions (e.g., resting, crossing river)
-    if (isset($_POST['action'])) {
-        $action = $_POST['choice'];
-        // Perform the action logic here (update state, log entries, etc.)
-        // Example: Resting action would update morale or health
-        if ($action == 'rest') {
-            $playerRow['morale'] += 10;
-            addLogEntry($playerRow, "Rested and morale increased.");
-        } elseif ($action == 'cross_river') {
-            $playerRow['mile'] += 15; // Advance mile after crossing the river
-            addLogEntry($playerRow, "Crossed the river and advanced 15 miles.");
-        }
-        // Other action logic can be added here (e.g., trade, fight, etc.)
-        savePlayerState($player_id, $playerRow);  // Save updated state
-    }
-    ?>
-
-    <hr>
-    <p><a href="/">Back to Main Game</a></p>
-</body>
-</html>
+<!-- HTML for the Continue button -->
+<form method="post">
+    <input type="submit" name="continue_day" value="Continue to Next Day">
+</form>
