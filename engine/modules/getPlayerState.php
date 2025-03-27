@@ -16,7 +16,7 @@ function getPlayerState($player_id, $conn) {
         $terrain = json_decode(file_get_contents(__DIR__ . '/../../config/terrain.json'), true);
         $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
 
-        // Populate player state or set default values if missing
+        // Populate player state with 'current_trail' and other data, set default values if missing
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
@@ -24,7 +24,8 @@ function getPlayerState($player_id, $conn) {
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
             'log' => json_decode($playerRow['log'], true) ?? [],
             'terrain' => $terrain,
-            'milestones' => $milestones
+            'milestones' => $milestones,
+            'current_trail' => $playerRow['current_trail'] ?? 'Oregon'  // Use 'current_trail' from DB, default to 'Oregon'
         ];
 
         return $playerState;  // Return the populated player state
