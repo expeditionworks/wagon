@@ -1,54 +1,47 @@
 <?php
 // test.php
 
-// Include the database connection file
+// Include the database connection and modules
 include_once(__DIR__ . '/db_connection.php'); // Same directory
-
-// Include the game engine
-include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine
+include_once(__DIR__ . '/../engine/modules/getPlayerState.php'); // Include the getPlayerState module
+include_once(__DIR__ . '/../engine/modules/updatePlayerState.php'); // Include the updatePlayerState module
 
 // Test with a specific player ID (for testing purposes)
 $player_id = 1;  // Change this to an existing player ID in your database
 
-// Step 1: Check if the "Run Daily Turn" button is pressed
-if (isset($_POST['run_daily_turn'])) {
-    // Run the game logic for the player (simulating one turn)
-    runDailyTurn($player_id, $conn);
+// Step 1: Fetch the player state from the database
+$playerRow = getPlayerState($player_id, $conn);
 
-    // Fetch the updated player state to confirm the changes
-    $playerRow = getPlayerState($player_id, $conn);
+// Check if player data is retrieved successfully
+if ($playerRow) {
+    echo "<h3>Initial Game State for Player ID: $player_id</h3>";
+    echo "<p><strong>Trail Name:</strong> " . $playerRow['trail_name'] . "</p>";
+    echo "<p><strong>Days on Trail:</strong> " . $playerRow['player_state']['day'] . "</p>";
+    echo "<p><strong>Miles Traveled:</strong> " . $playerRow['player_state']['mile'] . "</p>";
+    echo "<p><strong>Inventory:</strong> " . json_encode($playerRow['player_state']['inventory']) . "</p>";
 
-    // Check if player data is retrieved successfully
-    if ($playerRow) {
-        echo "<h3>Updated Game State for Player ID: $player_id</h3>";
+    // Step 2: Modify the player state for testing (update some fields)
+    $playerRow['player_state']['day'] += 1; // Increment the day
+    $playerRow['player_state']['mile'] += 10; // Increment miles by 10
+    $playerRow['player_state']['morale'] = 80; // Set morale to 80
 
-        // Display the player's state (basic info)
-        echo "<p><strong>Trail Name:</strong> " . $playerRow['trail_name'] . "</p>";
-        echo "<p><strong>Days on Trail:</strong> " . $playerRow['player_state']['day'] . "</p>";
-        echo "<p><strong>Miles Traveled:</strong> " . $playerRow['player_state']['mile'] . "</p>";
+    // Modify the inventory to add 5 units of food for testing
+    $inventory = $playerRow['player_state']['inventory'];
+    $inventory['food_lbs'] = (isset($inventory['food_lbs']) ? $inventory['food_lbs'] : 0) + 5;
+    $playerRow['player_state']['inventory'] = $inventory;
 
-        // Display inventory (if any)
-        if (isset($playerRow['player_state']['inventory'])) {
-            echo "<p><strong>Inventory:</strong> " . json_encode($playerRow['player_state']['inventory']) . "</p>";
-        }
+    // Step 3: Update the player state back to the database using updatePlayerState
+    updatePlayerState($player_id, $playerRow['player_state'], $conn);
 
-        // Display conditions (if any)
-        if (isset($playerRow['player_state']['conditions'])) {
-            echo "<p><strong>Conditions:</strong> " . json_encode($playerRow['player_state']['conditions']) . "</p>";
-        }
+    // Step 4: Fetch the updated player state from the database to confirm changes
+    $updatedPlayerRow = getPlayerState($player_id, $conn);
 
-        // Display log (if any)
-        if (isset($playerRow['player_state']['log'])) {
-            echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
-        }
-    } else {
-        echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
-    }
+    echo "<h3>Updated Game State for Player ID: $player_id</h3>";
+    echo "<p><strong>Trail Name:</strong> " . $updatedPlayerRow['trail_name'] . "</p>";
+    echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerRow['player_state']['day'] . "</p>";
+    echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerRow['player_state']['mile'] . "</p>";
+    echo "<p><strong>Inventory:</strong> " . json_encode($updatedPlayerRow['player_state']['inventory']) . "</p>";
+} else {
+    echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
 }
-
 ?>
-
-<!-- Button to trigger the daily turn -->
-<form method="post">
-    <input type="submit" name="run_daily_turn" value="Run Daily Turn">
-</form>
