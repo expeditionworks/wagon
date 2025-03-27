@@ -2,6 +2,11 @@
 // updatePlayerState.php
 
 function updatePlayerState($player_id, $playerState, $conn) {
+    // Debugging: Log the entire playerState to make sure it's being passed correctly
+    echo "<pre>";
+    print_r($playerState);
+    echo "</pre>";
+
     // Prepare the updated player state for storage
     $inventoryJson = json_encode($playerState['inventory']);  // Assign json_encode() result to a variable
     $logJson = json_encode($playerState['log']);  // Assign json_encode() result to a variable
