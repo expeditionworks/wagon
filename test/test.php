@@ -14,7 +14,7 @@ $playerState = getPlayerState($player_id, $conn);
 // If player state is retrieved successfully
 if ($playerState) {
     // Step 2: Process the player's movement and check milestones
-    $playerState = moveAndCheckMilestones($playerState);  // No $conn needed here
+    $playerState = moveAndCheckMilestones($playerState, $player_id, $conn);
 
     // Step 3: Fetch the updated player state after running the game logic
     $updatedPlayerState = getPlayerState($player_id, $conn);
