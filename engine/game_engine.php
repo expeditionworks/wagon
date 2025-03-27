@@ -96,10 +96,11 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); // Default message if no logs
 
     $currentTrail = $playerState['current_trail'];
+    $delayDays = $playerState['delay_days']; // Get the current delay_days value from player state
 
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ? 
+              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ? 
               WHERE player_id = ?";
 
     $stmt = $conn->prepare($query);
@@ -110,7 +111,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
 
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iisssssi', 
+        'iissssssi', 
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
@@ -118,6 +119,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $logJson,        
         $currentTrail,   
         $lastLogItem,    // Pass the last log item
+        $delayDays,      // Pass the delay_days value
         $player_id
     );
 
@@ -127,25 +129,5 @@ function updatePlayerState($player_id, $playerState, $conn) {
     } else {
         echo "<p>Error executing query: " . $stmt->error . "</p>";
     }
-}
-
-
-// Main game logic starts here
-$player_id = 1;  // The player ID for testing
-
-// Get player state from the database
-$playerState = getPlayerState($player_id, $conn);
-
-// If player state is retrieved successfully
-if ($playerState) {
-    // Process the player's movement and check milestones
-    $playerState = moveAndCheckMilestones($playerState, $player_id, $conn);
-
-    // Finally, update the player state in the database
-    updatePlayerState($player_id, $playerState, $conn);
-
-
-} else {
-    echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
 }
 ?>
