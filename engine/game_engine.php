@@ -55,42 +55,45 @@ function getPlayerState($player_id, $conn) {
 
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
-    // If delay days > 0, handle the delay logic first
+    // Check if delay_days is greater than 0
     if ($playerState['delay_days'] > 0) {
-        $playerState['delay_days'] -= 1;  // Decrease delay_days
+        // Decrease the delay_days and log the delay message
+        $playerState['delay_days'] -= 1;
+
         $playerState['log'][] = [
             'day' => $playerState['day'],
             'miles_traveled' => 0,
             'total_miles' => $playerState['mile'],
             'notes' => "Paused at a milestone (delay in progress)."
         ];
-        $playerState['day'] += 1;  // Increment the day even when paused
-        return $playerState;  // Skip the rest of the day's movement
+
+        $playerState['day'] += 1; // Increment the day even when paused
+        updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
+        return $playerState;  // Skip further movement and milestone checks
     }
 
-    // Player movement logic (this runs if delay_days is 0)
-    $miles_traveled = 10;  // Example: 10 miles traveled in this turn
+    // If no delay, proceed with regular movement logic:
+    $miles_traveled = 10;  // Example miles traveled
     $playerState['mile'] += $miles_traveled;
-    $playerState['day'] += 1;  // Increment the day by 1 (each turn represents a day)
+    $playerState['day'] += 1;  // Increment day by 1
 
-    // Check milestones: see if the player has reached any milestones
+    // Check milestones and log milestone
     $mile = $playerState['mile'];
     $milestones = $playerState['milestones'];
 
-    // Iterate through milestones and check if player has reached any
     foreach ($milestones as &$milestone) {
         if ($mile >= $milestone['mile'] && !isset($milestone['reached'])) {
             $milestone['reached'] = true;
-
-            // Log milestone in player state
             $playerState['log'][] = [
                 'notes' => "You reached the milestone: " . $milestone['title'] . ". " . $milestone['extended_description']
             ];
         }
     }
 
+    updatePlayerState($player_id, $playerState, $conn);  // Update the player state in the DB
     return $playerState;
 }
+
 
 
 
@@ -104,12 +107,10 @@ function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
     $inventoryJson = json_encode($playerState['inventory']);
     $logJson = json_encode($playerState['log']);
-    
-    // Ensure the last_log_item is properly set, even if the log is empty
-    $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); // Default message if no logs
+    $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); 
 
     $currentTrail = $playerState['current_trail'];
-    $delayDays = $playerState['delay_days']; // Get the current delay_days value from player state
+    $delayDays = $playerState['delay_days']; // Ensure the delay_days is passed
 
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
@@ -131,8 +132,8 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $inventoryJson,  
         $logJson,        
         $currentTrail,   
-        $lastLogItem,    // Pass the last log item
-        $playerState['delay_days'],      // Pass the delay_days value
+        $lastLogItem,    
+        $delayDays,      // Pass the delay_days value
         $player_id
     );
 
@@ -143,4 +144,5 @@ function updatePlayerState($player_id, $playerState, $conn) {
         echo "<p>Error executing query: " . $stmt->error . "</p>";
     }
 }
+
 ?>
