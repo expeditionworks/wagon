@@ -24,7 +24,7 @@ if (file_exists($terrainPath)) {
 } else {
     echo "File not found or not accessible.";
 }
-        $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
+        $milestones = json_decode(file_get_contents(__DIR__ . '/../config/milestones.json'), true);
 
         // Populate player state or set default values if missing
         $playerState = [
