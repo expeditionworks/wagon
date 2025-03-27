@@ -7,6 +7,13 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $logJson = json_encode($playerState['log']);  // Assign json_encode() result to a variable
     $currentTrail = $playerState['current_trail'];  // Get the player's current trail (e.g., 'oregon' or 'california')
 
+    // Debugging: Log player state before updating
+    echo "<p>Updating Player State:</p>";
+    echo "<p>Day: " . $playerState['day'] . "</p>";
+    echo "<p>Mile: " . $playerState['mile'] . "</p>";
+    echo "<p>Morale: " . $playerState['morale'] . "</p>";
+    echo "<p>Trail: " . $currentTrail . "</p>";
+
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
               day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ? 
