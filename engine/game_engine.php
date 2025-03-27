@@ -41,7 +41,6 @@ function getPlayerState($player_id, $conn) {
             'log' => json_decode($playerRow['log'], true) ?? [],
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
-            'delay_days' => $playerRow['delay_days'] ?? 0, // Handle delay days
             'terrain' => $terrain,  // Ensure terrain is always set
             'milestones' => $milestones,  // Ensure milestones is always set
         ];
@@ -50,6 +49,34 @@ function getPlayerState($player_id, $conn) {
     }
 
     return null;  // Return null if player not found
+}
+
+
+
+function moveAndCheckMilestones($playerState, $player_id, $conn) {
+    // Player movement: increment miles and days
+    $miles_traveled = 10;  // Example: 10 miles traveled in this turn
+    $playerState['mile'] += $miles_traveled;
+    $playerState['day'] += 1;  // Increment day by 1 (each turn represents a day)
+
+    // Check milestones: see if the player has reached any milestones
+    $mile = $playerState['mile'];
+    $milestones = $playerState['milestones'];
+
+    // Iterate through milestones and check if player has reached any
+    foreach ($milestones as &$milestone) {
+        if ($mile >= $milestone['mile'] && !isset($milestone['reached'])) {
+            $milestone['reached'] = true;
+
+            // Log milestone in player state
+            $playerState['log'][] = [
+                'notes' => "You reached the milestone: " . $milestone['title'] . ". " . $milestone['extended_description']
+            ];
+        }
+    }
+
+    // Return the updated player state
+    return $playerState;
 }
 
 
@@ -154,6 +181,9 @@ function runDailyTurn($playerRow, $milestones, $terrain) {
   return $playerRow;
 }
 
+
+
+
 function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
     $inventoryJson = json_encode($playerState['inventory']);
@@ -166,7 +196,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
 
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ? 
+              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ? 
               WHERE player_id = ?";
 
     $stmt = $conn->prepare($query);
@@ -177,7 +207,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
 
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iisssssii', 
+        'iisssssi', 
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
@@ -185,7 +215,6 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $logJson,        
         $currentTrail,   
         $lastLogItem,    // Pass the last log item
-        $playerState['delay_days'],  // Bind the delay_days
         $player_id
     );
 
@@ -206,8 +235,8 @@ $playerState = getPlayerState($player_id, $conn);
 
 // If player state is retrieved successfully
 if ($playerState) {
-    // Process the player's movement and check milestones using the runDailyTurn function
-    $playerState = runDailyTurn($playerState, $playerState['milestones'], $playerState['terrain']);
+    // Process the player's movement and check milestones
+    $playerState = moveAndCheckMilestones($playerState, $player_id, $conn);
 
     // Finally, update the player state in the database
     updatePlayerState($player_id, $playerState, $conn);
