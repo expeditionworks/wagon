@@ -16,7 +16,7 @@ $playerRow = getPlayerState($player_id, $conn);
 // If player state is retrieved successfully
 if ($playerRow) {
     // Step 2: Process the player's movement (e.g., 10 miles traveled in one turn)
-    movePlayer($player_id, 10, $conn);  // Adjust this value to simulate different movement amounts
+    $playerRow = movePlayer($player_id, 10, $playerRow);  // Pass the player state here, not the connection
 
     // Step 3: Check if the player has reached any milestones
     $milestoneHtml = checkMilestones($player_id, $conn);
