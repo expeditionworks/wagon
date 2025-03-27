@@ -19,13 +19,7 @@ if ($playerState) {
     $updatedPlayerState = getPlayerState($player_id, $conn);
 
 
-        // Get the current terrain based on the player's mile
-    $currentTerrain = 'Unknown';
-    foreach ($playerState['terrain'] as $terrainSegment) {
-        if ($playerState['mile'] >= $terrainSegment['start_mile'] && $playerState['mile'] <= $terrainSegment['end_mile']) {
-            $currentTerrain = $terrainSegment['terrain'];
-            break;
-        }
+
 
     // Display the updated player state and milestones
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
@@ -34,7 +28,6 @@ if ($playerState) {
     echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
-    echo "<p><strong>Current Terrain:</strong> " . $currentTerrain . "</p>";
 
 
 
