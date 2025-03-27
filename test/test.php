@@ -25,7 +25,7 @@ if ($playerState) {
     echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
-    echo "<p><strong>Terrain:</strong> " . $updatedPlayerState['terrain'] . "</p>";
+    echo "<p><strong>Terrain:</strong> " . $playerState['terrain'] . "</p>";
 
 
     // Display morale only if it exists
