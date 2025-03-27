@@ -16,7 +16,14 @@ function getPlayerState($player_id, $conn) {
     // If player data exists, populate the player state
     if ($playerRow) {
         // Load JSON configurations for terrain and milestones
-        $terrain = json_decode(file_get_contents(__DIR__ . '/../../config/terrain.json'), true);
+$terrainPath = __DIR__ . '/../../config/terrain.json';
+echo "Trying to open: " . $terrainPath . "<br>";
+
+if (file_exists($terrainPath)) {
+    $terrain = json_decode(file_get_contents($terrainPath), true);
+} else {
+    echo "File not found or not accessible.";
+}
         $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
 
         // Populate player state or set default values if missing
