@@ -103,6 +103,12 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     // Calculate initial miles traveled with adjustments
     $milesTraveled = round($baseMiles * $difficultyMultiplier * $terrainMod);
+    
+    // Debug: Output the miles traveled calculation
+echo "<p>Base Miles: $baseMiles</p>";
+echo "<p>Terrain Modifier: $terrainMod</p>";
+echo "<p>Difficulty Modifier: $difficultyMultiplier</p>";
+echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
 
     // Adjust for player conditions (e.g., morale, oxen)
     if ($playerState['morale'] < 50) {
