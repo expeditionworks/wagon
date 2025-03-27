@@ -26,7 +26,7 @@ if ($playerState) {
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
     // Show basic info
-    echo "<p><strong>Trail Name:</strong> " . $updatedPlayerState['trail_name'] . "</p>";
+    echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";  // Display the current_trail instead of trail_name
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
 
