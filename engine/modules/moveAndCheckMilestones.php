@@ -7,9 +7,14 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $playerState['mile'] += $miles_traveled;
     $playerState['day'] += 1;  // Increment day by 1 (each turn represents a day)
 
+    // Debugging: Log miles and days incremented
+    echo "<p>Before incrementing:</p>";
+    echo "<p>Day: " . $playerState['day'] . "</p>";
+    echo "<p>Mile: " . $playerState['mile'] . "</p>";
+
     // Check milestones: see if the player has reached any milestones
     $mile = $playerState['mile'];
-    $current_trail = $playerState['current_trail'];  // Get the player's current trail (e.g., 'oregon' or 'california')
+    $current_trail = $playerState['current_trail'];  // Get the player's current trail
     $milestones = $playerState['milestones'];
 
     $milestoneHtml = '';
@@ -33,6 +38,11 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             updatePlayerState($player_id, $playerState, $conn);
         }
     }
+
+    // Debugging: Log after processing milestones
+    echo "<p>After processing milestones:</p>";
+    echo "<p>Day: " . $playerState['day'] . "</p>";
+    echo "<p>Mile: " . $playerState['mile'] . "</p>";
 
     return $playerState;  // Return updated player state
 }
