@@ -78,19 +78,9 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Player movement: increment miles and days
     $previousMile = $playerState['mile'];
     $baseMiles = 15;  // Default miles traveled without adjustments
-
+    
     // Adjust based on terrain type
-    $terrainType = 'plains'; // Default terrain type
-
-    // Iterate through the terrain file to find the correct terrain for the current mile
-    foreach ($playerState['terrain'] as $terrain) {
-        if ($previousMile >= $terrain['start_mile'] && $previousMile <= $terrain['end_mile']) {
-            $terrainType = $terrain['terrain'];  // Set terrain type if within range
-            break;
-        }
-    }
-
-    // Define terrain modifiers based on terrain type
+    $terrainType = $playerState['terrain'][$previousMile] ?? 'plains';  // Assuming terrain is indexed by mile for simplicity
     $terrainModifiers = [
         'plains' => 1.2,
         'rolling hills' => 1.0,
@@ -120,6 +110,9 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         $milesTraveled *= 0.7;  // Reduce miles if not enough oxen
     }
 
+    // Store miles traveled in playerState
+    $playerState['miles_traveled'] = $milesTraveled;  // Save miles traveled in playerState
+
     // Calculate new mile
     $newMile = $previousMile + $milesTraveled;
 
@@ -145,7 +138,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $playerState['day'] += 1;
     $playerState['log'][] = [
         'day' => $playerState['day'],
-        'miles_traveled' => $newMile - $previousMile,
+        'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
         'total_miles' => $newMile,
         'milestone' => $milestoneToday['title'] ?? null,
         'notes' => $milestoneToday ? "Today, you reached " . $milestoneToday['title'] . "." : null
@@ -154,6 +147,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with new values
     return $playerState;
 }
+
 
 
 
