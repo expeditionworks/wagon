@@ -46,6 +46,7 @@ function getPlayerState($player_id, $conn) {
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
+            'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
         ];
 
         return $playerState;  // Return the populated player state
@@ -53,6 +54,7 @@ function getPlayerState($player_id, $conn) {
 
     return null;  // Return null if player not found
 }
+
 
 
 
