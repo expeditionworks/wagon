@@ -16,13 +16,13 @@ function getPlayerState($player_id, $conn) {
     // If player data exists, populate the player state
     if ($playerRow) {
         // Load JSON configurations for terrain and milestones
-$terrainPath = __DIR__ . '/../config/terrain.json';
+        $terrainPath = __DIR__ . '/../config/terrain.json';
 
-if (file_exists($terrainPath)) {
-    $terrain = json_decode(file_get_contents($terrainPath), true);
-} else {
-    echo "File not found or not accessible.";
-}
+        if (file_exists($terrainPath)) {
+            $terrain = json_decode(file_get_contents($terrainPath), true);
+        } else {
+            echo "File not found or not accessible.";
+        }
         $milestones = json_decode(file_get_contents(__DIR__ . '/../config/milestones.json'), true);
 
         // Populate player state or set default values if missing
@@ -32,9 +32,8 @@ if (file_exists($terrainPath)) {
             'morale' => $playerRow['morale'] ?? 100,
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
             'log' => json_decode($playerRow['log'], true) ?? [],
-            'terrain' => $terrain,
-            'milestones' => $milestones,
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
+            'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? []  // Assuming empty array if NULL
         ];
 
         return $playerState;  // Return the populated player state
@@ -73,11 +72,12 @@ function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
     $inventoryJson = json_encode($playerState['inventory']);
     $logJson = json_encode($playerState['log']);
+    $lastLogItem = json_encode(end($playerState['log'])); // Get the last log item
     $currentTrail = $playerState['current_trail'];
 
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ? 
+              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ? 
               WHERE player_id = ?";
 
     $stmt = $conn->prepare($query);
@@ -88,13 +88,14 @@ function updatePlayerState($player_id, $playerState, $conn) {
 
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iissssi', 
+        'iisssssi', 
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
         $inventoryJson,  
         $logJson,        
         $currentTrail,   
+        $lastLogItem,    // Pass the last log item
         $player_id
     );
 
