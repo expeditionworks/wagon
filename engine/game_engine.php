@@ -72,27 +72,76 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         return $playerState;  // Skip further movement and milestone checks
     }
 
-    // If no delay, proceed with regular movement logic:
-    $miles_traveled = 10;  // Example miles traveled
-    $playerState['mile'] += $miles_traveled;
-    $playerState['day'] += 1;  // Increment day by 1
+    // Player movement: increment miles and days
+    $previousMile = $playerState['mile'];
+    $baseMiles = 15;  // Default miles traveled without adjustments
+    
+    // Adjust based on terrain type
+    $terrainType = $playerState['terrain'][$previousMile] ?? 'plains';  // Assuming terrain is indexed by mile for simplicity
+    $terrainModifiers = [
+        'plains' => 1.2,
+        'rolling hills' => 1.0,
+        'mountains' => 0.8,
+        'valleys' => 1.0,
+        'river valley' => 1.0,
+        'desert' => 0.7
+    ];
+    $terrainMod = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1 if terrain is unknown
 
-    // Check milestones and log milestone
-    $mile = $playerState['mile'];
-    $milestones = $playerState['milestones'];
+    // Adjust based on difficulty setting
+    $difficultyMod = [
+        'easy' => 1.1,
+        'medium' => 1.0,
+        'hard' => 0.9
+    ];
+    $difficultyMultiplier = $difficultyMod[$playerState['difficulty']] ?? 1.0;  // Default to 1 if difficulty is unknown
 
-    foreach ($milestones as &$milestone) {
-        if ($mile >= $milestone['mile'] && !isset($milestone['reached'])) {
-            $milestone['reached'] = true;
-            $playerState['log'][] = [
-                'notes' => "You reached the milestone: " . $milestone['title'] . ". " . $milestone['extended_description']
-            ];
+    // Calculate initial miles traveled with adjustments
+    $milesTraveled = round($baseMiles * $difficultyMultiplier * $terrainMod);
+
+    // Adjust for player conditions (e.g., morale, oxen)
+    if ($playerState['morale'] < 50) {
+        $milesTraveled *= 0.8;  // Reduce miles if morale is low
+    }
+    if ($playerState['oxen'] < 2) {
+        $milesTraveled *= 0.7;  // Reduce miles if not enough oxen
+    }
+
+    // Calculate new mile
+    $newMile = $previousMile + $milesTraveled;
+
+    // Check milestones along the path
+    $milestoneToday = null;
+    foreach ($playerState['milestones'] as $milestone) {
+        if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
+            $milestoneToday = $milestone;
+            $newMile = $milestone['mile'];
+            break;
         }
     }
 
-    updatePlayerState($player_id, $playerState, $conn);  // Update the player state in the DB
+    // Log milestone if reached
+    if ($milestoneToday) {
+        $playerState['log'][] = [
+            'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
+        ];
+    }
+
+    // Update player state
+    $playerState['mile'] = $newMile;
+    $playerState['day'] += 1;
+    $playerState['log'][] = [
+        'day' => $playerState['day'],
+        'miles_traveled' => $newMile - $previousMile,
+        'total_miles' => $newMile,
+        'milestone' => $milestoneToday['title'] ?? null,
+        'notes' => $milestoneToday ? "Today, you reached " . $milestoneToday['title'] . "." : null
+    ];
+
+    updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with new values
     return $playerState;
 }
+
 
 
 
