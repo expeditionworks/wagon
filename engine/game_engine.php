@@ -131,7 +131,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $logJson,        
         $currentTrail,   
         $lastLogItem,    // Pass the last log item
-        $delayDays,      // Pass the delay_days value
+        $playerState['delay_days'],      // Pass the delay_days value
         $player_id
     );
 
