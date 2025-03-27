@@ -1,12 +1,9 @@
 <?php
 // test.php
 
-// Include the database connection and the game engine modules
+// Include the database connection and the game engine module
 include_once(__DIR__ . '/db_connection.php'); // Database connection
-include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine
-include_once(__DIR__ . '/../engine/modules/getPlayerState.php'); // Get player state module
-include_once(__DIR__ . '/../engine/modules/moveAndCheckMilestones.php'); // Combined move and milestone check module
-include_once(__DIR__ . '/../engine/modules/updatePlayerState.php'); // Update player state module
+include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
 
 // Test with a specific player ID (for testing purposes)
 $player_id = 1;  // Make sure this player exists in your database
@@ -17,7 +14,7 @@ $playerState = getPlayerState($player_id, $conn);
 // If player state is retrieved successfully
 if ($playerState) {
     // Step 2: Process the player's movement and check milestones
-    $playerState = moveAndCheckMilestones($playerState, $player_id, $conn);
+    $playerState = moveAndCheckMilestones($playerState);  // No $conn needed here
 
     // Step 3: Fetch the updated player state after running the game logic
     $updatedPlayerState = getPlayerState($player_id, $conn);
@@ -26,7 +23,7 @@ if ($playerState) {
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
     // Show basic info
-    echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";  // Display the current_trail instead of trail_name
+    echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
 
