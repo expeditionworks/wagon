@@ -72,7 +72,10 @@ function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
     $inventoryJson = json_encode($playerState['inventory']);
     $logJson = json_encode($playerState['log']);
-    $lastLogItem = json_encode(end($playerState['log'])); // Get the last log item
+    
+    // Ensure the last_log_item is properly set, even if the log is empty
+    $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); // Default message if no logs
+
     $currentTrail = $playerState['current_trail'];
 
     // Query to update the player state in the database
@@ -106,6 +109,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
         echo "<p>Error executing query: " . $stmt->error . "</p>";
     }
 }
+
 
 // Main game logic starts here
 $player_id = 1;  // The player ID for testing
