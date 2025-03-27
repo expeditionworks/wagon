@@ -1,8 +1,8 @@
 <?php
 // moveAndCheckMilestones.php
 
-function moveAndCheckMilestones($playerState, $player_id, $conn) {
-    // Player movement: increment miles and days
+function moveAndCheckMilestones($playerState) {
+    // Player movement: increment miles and days (only in-memory)
     $miles_traveled = 10;  // Example: 10 miles traveled in this turn
     $playerState['mile'] += $miles_traveled;
     $playerState['day'] += 1;  // Increment day by 1 (each turn represents a day)
@@ -33,9 +33,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             // Append milestone details to HTML for reporting purposes
             $milestoneHtml .= "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
             $milestoneHtml .= "{$milestone['extended_description']}<br><br>";
-
-            // Save updated player state to the database
-            updatePlayerState($player_id, $playerState, $conn);
         }
     }
 
