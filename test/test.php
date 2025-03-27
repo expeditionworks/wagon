@@ -33,6 +33,12 @@ if ($playerState) {
     if (isset($updatedPlayerState['inventory'])) {
         echo "<p><strong>Inventory:</strong> " . json_encode($updatedPlayerState['inventory']) . "</p>"; // Encode the array to a string
     }
+    
+    // Display Delay Days
+    if (isset($updatedPlayerState['delay_days'])) {
+        echo "<p><strong>Delay Days:</strong> " . json_encode($updatedPlayerState['delay_days']) . "</p>"; // Encode the array to a string
+    }
+    
 
     // Display the last log item
     if (isset($updatedPlayerState['last_log_item'])) {
