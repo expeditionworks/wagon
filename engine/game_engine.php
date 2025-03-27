@@ -136,31 +136,6 @@ if ($playerState) {
     // Finally, update the player state in the database
     updatePlayerState($player_id, $playerState, $conn);
 
-    // Display the updated player state for verification
-    echo "<h3>Updated Game State for Player ID: $player_id</h3>";
-
-    echo "<p><strong>Current Trail:</strong> " . $playerState['current_trail'] . "</p>";
-    echo "<p><strong>Days on Trail:</strong> " . $playerState['day'] . "</p>";
-    echo "<p><strong>Miles Traveled:</strong> " . $playerState['mile'] . "</p>";
-
-    // Display morale only if it exists
-    echo "<p><strong>Morale:</strong> " . $playerState['morale'] . "</p>";
-
-    // Display log if any milestones are reached
-    if (!empty($playerState['log'])) {
-        echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $playerState['log'])) . "</p>";
-    }
-
-    // Display milestone-specific information
-    if (!empty($playerState['milestones'])) {
-        echo "<p><strong>Milestones Reached:</strong><br>";
-        foreach ($playerState['milestones'] as $milestone) {
-            if (isset($milestone['reached']) && $milestone['reached']) {
-                echo "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
-                echo "{$milestone['extended_description']}<br><br>";
-            }
-        }
-    }
 
 } else {
     echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
