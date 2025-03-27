@@ -34,6 +34,11 @@ if ($playerState) {
         echo "<p><strong>Inventory:</strong> " . json_encode($updatedPlayerState['inventory']) . "</p>"; // Encode the array to a string
     }
 
+    // Display the last log item
+    if (isset($updatedPlayerState['last_log_item'])) {
+        echo "<p><strong>Last Log Item:</strong><br>" . json_encode($updatedPlayerState['last_log_item']) . "</p>";
+    }
+
     // Display log if any milestones are reached
     if (!empty($updatedPlayerState['log'])) {
         echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $updatedPlayerState['log'])) . "</p>"; // Convert array to string for display
