@@ -55,21 +55,23 @@ function getPlayerState($player_id, $conn) {
 
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
-    // If delay_days > 0, handle the delay and do nothing for this turn
+    // If delay days > 0, handle the delay logic first
     if ($playerState['delay_days'] > 0) {
-        $playerState['delay_days'] -= 1;  // Decrease the delay by 1
-        $playerState['day'] += 1;  // Increment the day even during delay
+        $playerState['delay_days'] -= 1;  // Decrease delay_days
         $playerState['log'][] = [
-            'notes' => "You are delayed at a milestone, progressing tomorrow."
+            'day' => $playerState['day'],
+            'miles_traveled' => 0,
+            'total_miles' => $playerState['mile'],
+            'notes' => "Paused at a milestone (delay in progress)."
         ];
-        // Return the updated player state without changing mile
-        return $playerState;
+        $playerState['day'] += 1;  // Increment the day even when paused
+        return $playerState;  // Skip the rest of the day's movement
     }
 
-    // Normal game logic starts here when delay_days is 0
+    // Player movement logic (this runs if delay_days is 0)
     $miles_traveled = 10;  // Example: 10 miles traveled in this turn
     $playerState['mile'] += $miles_traveled;
-    $playerState['day'] += 1;  // Increment day by 1 (each turn represents a day)
+    $playerState['day'] += 1;  // Increment the day by 1 (each turn represents a day)
 
     // Check milestones: see if the player has reached any milestones
     $mile = $playerState['mile'];
@@ -87,7 +89,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         }
     }
 
-    // Return the updated player state
     return $playerState;
 }
 
