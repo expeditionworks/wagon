@@ -20,6 +20,13 @@ function updatePlayerState($player_id, $playerState, $conn) {
               WHERE player_id = ?";
 
     $stmt = $conn->prepare($query);
+    if ($stmt === false) {
+        // Check for errors in the prepared statement
+        echo "<p>Error preparing statement: " . $conn->error . "</p>";
+        return;
+    }
+
+    // Bind the parameters to the statement
     $stmt->bind_param(
         'iissssi', 
         $playerState['day'], 
@@ -32,6 +39,11 @@ function updatePlayerState($player_id, $playerState, $conn) {
     );
 
     // Execute the query to update the player state in the database
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo "<p>Player state updated successfully!</p>";
+    } else {
+        // If the execution fails, show an error
+        echo "<p>Error executing query: " . $stmt->error . "</p>";
+    }
 }
 ?>
