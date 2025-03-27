@@ -27,25 +27,17 @@ if ($playerState) {
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
 
     // Display morale only if it exists
-    if (isset($updatedPlayerState['morale'])) {
-        echo "<p><strong>Morale:</strong> " . $updatedPlayerState['morale'] . "</p>";
-    } else {
-        echo "<p><strong>Morale:</strong> Not set</p>";
-    }
+    echo "<p><strong>Morale:</strong> " . $updatedPlayerState['morale'] . "</p>";
 
     // Display inventory if available
     if (isset($updatedPlayerState['inventory'])) {
-        echo "<p><strong>Inventory:</strong> " . json_encode($updatedPlayerState['inventory']) . "</p>";
+        echo "<p><strong>Inventory:</strong> " . json_encode($updatedPlayerState['inventory']) . "</p>"; // Encode the array to a string
     }
 
     // Display log if any milestones are reached
     if (!empty($updatedPlayerState['log'])) {
-        echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $updatedPlayerState['log'])) . "</p>";
+        echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $updatedPlayerState['log'])) . "</p>"; // Convert array to string for display
     }
-
-    // Display the last log item (new feature)
-    $lastLogItem = isset($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : 'No last log item available';
-    echo "<p><strong>Last Log Item:</strong> " . $lastLogItem . "</p>";
 
     // Display milestone-specific information
     if (!empty($updatedPlayerState['milestones'])) {
