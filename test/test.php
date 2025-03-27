@@ -27,7 +27,7 @@ if ($playerState) {
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
     // Retrieve the terrain type for the current mile
     $currentMile = $updatedPlayerState['mile'];  // Get the current mile
-    $terrainType = $updatedPlayerState['terrain'][$currentMile] ?? 'plains';  // Default to 'plains' if no terrain data
+    $terrainType = $updatedPlayerState['terrain'][$currentMile];  // Default to 'plains' if no terrain data
 
     // Display terrain for the current mile
     echo "<p><strong>Terrain at Mile {$currentMile}:</strong> {$terrainType}</p>";
