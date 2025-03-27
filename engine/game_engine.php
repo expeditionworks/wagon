@@ -78,9 +78,19 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Player movement: increment miles and days
     $previousMile = $playerState['mile'];
     $baseMiles = 15;  // Default miles traveled without adjustments
-    
+
     // Adjust based on terrain type
-    $terrainType = $playerState['terrain'][$previousMile] ?? 'plains';  // Assuming terrain is indexed by mile for simplicity
+    $terrainType = 'plains'; // Default terrain type
+
+    // Iterate through the terrain file to find the correct terrain for the current mile
+    foreach ($playerState['terrain'] as $terrain) {
+        if ($previousMile >= $terrain['start_mile'] && $previousMile <= $terrain['end_mile']) {
+            $terrainType = $terrain['terrain'];  // Set terrain type if within range
+            break;
+        }
+    }
+
+    // Define terrain modifiers based on terrain type
     $terrainModifiers = [
         'plains' => 1.2,
         'rolling hills' => 1.0,
@@ -144,6 +154,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with new values
     return $playerState;
 }
+
 
 
 
