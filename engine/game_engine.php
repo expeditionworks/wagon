@@ -53,107 +53,34 @@ function getPlayerState($player_id, $conn) {
 
 
 
-function moveAndCheckMilestones($playerState, $player_id, $conn, $milestones, $terrain) {
-    // Handle any delay days from a previous milestone (e.g., river crossing delay)
-    if (isset($playerState['delay_days']) && $playerState['delay_days'] > 0) {
-        $playerState['delay_days'] -= 1;
-        $playerState['day'] += 1;
-        $playerState['log'][] = [
-            'day' => $playerState['day'],
-            'miles_traveled' => 0,
-            'total_miles' => $playerState['mile'],
-            'notes' => "Paused at a milestone (delay in progress)."
-        ];
-        // Update player state in database
-        updatePlayerState($player_id, $playerState, $conn);
-        return $playerState; // Return player state if paused
-    }
+function moveAndCheckMilestones($playerState, $player_id, $conn) {
+    // Player movement: increment miles and days
+    $miles_traveled = 10;  // Example: 10 miles traveled in this turn
+    $playerState['mile'] += $miles_traveled;
+    $playerState['day'] += 1;  // Increment day by 1 (each turn represents a day)
 
-    // Movement logic (increment miles and days)
-    $previousMile = $playerState['mile'];
-    $baseMiles = 15;
+    // Check milestones: see if the player has reached any milestones
+    $mile = $playerState['mile'];
+    $milestones = $playerState['milestones'];
 
-    // Modify baseMiles according to the terrain type
-    $terrainType = $terrain[$playerState['mile']] ?? 'plains'; // Assuming terrain is indexed by mile for simplicity
-    $terrainModifiers = [
-        'plains' => 1.2,
-        'rolling hills' => 1.0,
-        'mountains' => 0.8,
-        'valleys' => 1.0,
-        'river valley' => 1.0,
-        'desert' => 0.7
-    ];
-    $terrainMod = $terrainModifiers[$terrainType] ?? 1.0;
+    // Iterate through milestones and check if player has reached any
+    foreach ($milestones as &$milestone) {
+        if ($mile >= $milestone['mile'] && !isset($milestone['reached'])) {
+            $milestone['reached'] = true;
 
-    // Modify miles based on terrain and player difficulty
-    $difficultyMod = [
-        'easy' => 1.1,
-        'medium' => 1.0,
-        'hard' => 0.9
-    ];
-    $mod = $difficultyMod[$playerState['difficulty']] ?? 1.0;
-    $milesTraveled = round($baseMiles * $mod * $terrainMod);
-
-    // Adjust for player conditions (e.g., morale, oxen, health)
-    if ($playerState['morale'] < 50) {
-        $milesTraveled *= 0.8; // Decrease miles if morale is low
-    }
-    if ($playerState['oxen'] < 2) {
-        $milesTraveled *= 0.7; // Decrease miles if not enough oxen
-    }
-
-    $newMile = $previousMile + $milesTraveled;
-
-    // Check milestones along the path
-    $milestoneToday = null;
-    foreach ($milestones as $milestone) {
-        if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
-            $milestoneToday = $milestone;
-            $newMile = $milestone['mile'];
-            break;
+            // Log milestone in player state
+            $playerState['log'][] = [
+                'notes' => "You reached the milestone: " . $milestone['title'] . ". " . $milestone['extended_description']
+            ];
         }
     }
 
-    // If the milestone forces a stop (e.g., river crossing), apply the stop logic
-    if ($milestoneToday && ($milestoneToday['force_stop'] ?? false)) {
-        $crossing = $milestoneToday['crossing'] ?? null;
-        $choice = $playerState['last_choice'] ?? null;
-
-        if ($crossing && $choice) {
-            if ($choice === "ford") {
-                $playerState['delay_days'] = $crossing['ford_delay'] ?? 0;
-            } elseif ($choice === "float") {
-                $playerState['delay_days'] = $crossing['float_delay'] ?? 0;
-            } elseif ($choice === "ferry") {
-                $playerState['delay_days'] = $crossing['ferry_delay'] ?? 0;
-            }
-            $playerState['paused'] = true;
-
-            // After delay, apply crossing outcome
-            if ($playerState['delay_days'] === 0) {
-                applyCrossingOutcome($playerState, $milestoneToday);
-            }
-        } else {
-            unset($playerState['paused']);
-        }
-    }
-
-    // Update player state and log for the day
-    $playerState['mile'] = $newMile;
-    $playerState['day'] += 1;
-    $playerState['log'][] = [
-        'day' => $playerState['day'],
-        'miles_traveled' => $newMile - $previousMile,
-        'total_miles' => $newMile,
-        'milestone' => $milestoneToday['title'] ?? null,
-        'notes' => $milestoneToday ? ("Today, you reached " . $milestoneToday['title'] . ".") : null
-    ];
-
-    // Update player state in the database
-    updatePlayerState($player_id, $playerState, $conn);
-
+    // Return the updated player state
     return $playerState;
 }
+
+
+
 
 
 
