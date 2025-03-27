@@ -1,9 +1,6 @@
 <?php
 // handleMilestones.php
 
-// Include the updatePlayerState function from the correct module
-include_once(__DIR__ . '/updatePlayerState.php');  // Correct path to include the update function
-
 function checkMilestones($player_id, $conn) {
     // Get player state
     $playerRow = getPlayerState($player_id, $conn);
@@ -12,6 +9,7 @@ function checkMilestones($player_id, $conn) {
     // Correct the file path to load milestones.json from the /config directory
     $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
 
+    // Initialize milestone HTML output for the weekly digest
     $milestoneHtml = '';
 
     // Iterate through milestones and check if the player has reached any
@@ -25,17 +23,29 @@ function checkMilestones($player_id, $conn) {
             // Mark the milestone as reached
             $milestone['reached'] = true;
 
-            // Log the milestone
-            $playerRow['player_state']['log'][] = [
-                'notes' => "You reached the milestone: " . $milestone['title'] . ". " . $milestone['extended_description']
-            ];
+            // Check if milestone has already been logged to avoid duplicates
+            $milestoneLogged = false;
+            foreach ($playerRow['player_state']['log'] as $log) {
+                if (strpos($log['notes'], $milestone['title']) !== false) {
+                    $milestoneLogged = true;
+                    break;
+                }
+            }
 
-            // Update milestone section HTML (for the weekly digest)
-            $milestoneHtml .= "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
-            $milestoneHtml .= "{$milestone['extended_description']}<br><br>";
+            // Only add to the log if it's not already logged
+            if (!$milestoneLogged) {
+                // Log the milestone
+                $playerRow['player_state']['log'][] = [
+                    'notes' => "You reached the milestone: " . $milestone['title'] . ". " . $milestone['extended_description']
+                ];
 
-            // Save the updated player state
-            updatePlayerState($player_id, $playerRow['player_state'], $conn);
+                // Update milestone section HTML (for the weekly digest)
+                $milestoneHtml .= "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
+                $milestoneHtml .= "{$milestone['extended_description']}<br><br>";
+
+                // Save the updated player state
+                updatePlayerState($player_id, $playerRow['player_state'], $conn);
+            }
         }
     }
 
