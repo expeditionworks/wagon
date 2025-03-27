@@ -31,7 +31,13 @@ if ($playerRow) {
     echo "<p><strong>Trail Name:</strong> " . $updatedPlayerRow['trail_name'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerRow['player_state']['day'] . "</p>";
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerRow['player_state']['mile'] . "</p>";
-    echo "<p><strong>Morale:</strong> " . $updatedPlayerRow['player_state']['morale'] . "</p>";
+
+    // Display morale only if it exists
+    if (isset($updatedPlayerRow['player_state']['morale'])) {
+        echo "<p><strong>Morale:</strong> " . $updatedPlayerRow['player_state']['morale'] . "</p>";
+    } else {
+        echo "<p><strong>Morale:</strong> Not set</p>";
+    }
 
     // Display inventory if available
     if (isset($updatedPlayerRow['player_state']['inventory'])) {
