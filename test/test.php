@@ -43,6 +43,10 @@ if ($playerState) {
         echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $updatedPlayerState['log'])) . "</p>";
     }
 
+    // Display the last log item (new feature)
+    $lastLogItem = isset($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : 'No last log item available';
+    echo "<p><strong>Last Log Item:</strong> " . $lastLogItem . "</p>";
+
     // Display milestone-specific information
     if (!empty($updatedPlayerState['milestones'])) {
         echo "<p><strong>Milestones Reached:</strong><br>";
