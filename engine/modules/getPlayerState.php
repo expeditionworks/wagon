@@ -2,7 +2,7 @@
 // getPlayerState.php
 
 function getPlayerState($player_id, $conn) {
-    // Query the database to get player state
+    // Query to fetch player state from the database
     $query = "SELECT * FROM player_state WHERE player_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $player_id);
@@ -10,13 +10,13 @@ function getPlayerState($player_id, $conn) {
     $result = $stmt->get_result();
     $playerRow = $result->fetch_assoc();
 
-    // If player data is found, populate variables
+    // If player data exists, populate the player state
     if ($playerRow) {
         // Load JSON configurations for terrain and milestones
         $terrain = json_decode(file_get_contents(__DIR__ . '/../../config/terrain.json'), true);
         $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
 
-        // Initialize player state with values or defaults if missing
+        // Populate player state or set default values if missing
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
