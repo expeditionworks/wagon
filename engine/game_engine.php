@@ -16,7 +16,7 @@ function getPlayerState($player_id, $conn) {
     // If player data exists, populate the player state
     if ($playerRow) {
         // Load JSON configurations for terrain and milestones
-$terrainPath = __DIR__ . '/../config/terrain.json';
+$terrainPath = __DIR__ . '/../../config/terrain.json';
 echo "Trying to open: " . $terrainPath . "<br>";
 
 if (file_exists($terrainPath)) {
