@@ -4,28 +4,28 @@
     "end_mile": 300,
     "terrain": "plains",
     "altitude": "low",
-    "trail": ["oregon", "california"]
+    "trail": ["oregon"]
   },
   {
     "start_mile": 300,
     "end_mile": 560,
     "terrain": "rolling hills",
     "altitude": "medium",
-    "trail": ["oregon", "california"]
+    "trail": ["oregon"]
   },
   {
     "start_mile": 560,
     "end_mile": 1000,
     "terrain": "mountains",
     "altitude": "high",
-    "trail": ["oregon", "california"]
+    "trail": ["oregon"]
   },
   {
     "start_mile": 1000,
     "end_mile": 1300,
     "terrain": "valleys",
     "altitude": "medium",
-    "trail": ["oregon", "california"]
+    "trail": ["oregon"]
   },
   {
     "start_mile": 1300,
