@@ -18,9 +18,6 @@ if ($playerState) {
     // Step 3: Fetch the updated player state after running the game logic
     $updatedPlayerState = getPlayerState($player_id, $conn);
 
-
-
-
     // Display the updated player state and milestones
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
@@ -29,8 +26,17 @@ if ($playerState) {
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
 
+    // Get the terrain type based on the current mile
+    $currentTerrain = 'Unknown';  // Default value if terrain is not found
+    foreach ($updatedPlayerState['terrain'] as $terrainSegment) {
+        if ($updatedPlayerState['mile'] >= $terrainSegment['start_mile'] && $updatedPlayerState['mile'] <= $terrainSegment['end_mile']) {
+            $currentTerrain = $terrainSegment['terrain'];  // Assign the terrain if the mile is within the segment
+            break;
+        }
+    }
 
-
+    // Display the current terrain
+    echo "<p><strong>Current Terrain:</strong> " . $currentTerrain . "</p>";
 
     // Display morale only if it exists
     echo "<p><strong>Morale:</strong> " . $updatedPlayerState['morale'] . "</p>";
@@ -52,8 +58,6 @@ if ($playerState) {
         $lastLogItem = is_array($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : json_decode($updatedPlayerState['last_log_item'], true);
         echo "<p><strong>Last Log Item:</strong><br>" . $lastLogItem['notes'] . "</p>";
     }
-
-
 
     // Display log if any milestones are reached
     if (!empty($updatedPlayerState['log'])) {
