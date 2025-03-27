@@ -92,6 +92,13 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         }
     }
 
+    foreach ($updatedPlayerState['terrain'] as $terrainSegment) {
+        if ($updatedPlayerState['mile'] >= $terrainSegment['start_mile'] && $updatedPlayerState['mile'] <= $terrainSegment['end_mile']) {
+            $currentTerrain = $terrainSegment['terrain'];  // Assign the terrain if the mile is within the segment
+            break;
+        }
+    }
+
     // Adjust based on terrain type
     $terrainModifiers = [
         'plains' => 1.2,
@@ -102,7 +109,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'desert' => 0.7
     ];
 
-    $terrainMod = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1 if terrain is unknown
+    $terrainMod = $terrainModifiers[$currentTerrain] ?? 1.0;  // Default to 1 if terrain is unknown
 
     // Adjust based on difficulty setting
     $difficultyMod = [
