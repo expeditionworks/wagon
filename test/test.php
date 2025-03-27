@@ -25,9 +25,9 @@ if ($playerState) {
     echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
     
-    echo "<p><strong>Miles Traveled:</strong> " . $milesTraveled . "</p>";
+    echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['miles_traveled'] . "</p>";
 
-    echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['mile'] . "</p>";
+    echo "<p><strong>Miles Marker:</strong> " . $updatedPlayerState['mile'] . "</p>";
 
     // Get the terrain type based on the current mile
     $currentTerrain = 'Unknown';  // Default value if terrain is not found
