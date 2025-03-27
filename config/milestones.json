@@ -4,10 +4,7 @@
     "type": "start",
     "title": "Independence, Missouri",
     "mile": 0,
-    "trail": [
-      "oregon",
-      "california"
-    ],
+    "trail": [       "oregon"     ],
     "force_stop": true,
     "description": "The starting point of the Oregon Trail.",
     "extended_description": "From the muddy banks of the Missouri River, the town of Independence bustled with emigrants gathering supplies and forming wagon trains. This was the last major stop before the long journey west. Oxen were hitched, families said their goodbyes, and the trail ahead beckoned with both promise and peril."
@@ -17,10 +14,7 @@
     "type": "river",
     "title": "Kansas River Crossing",
     "mile": 102,
-    "trail": [
-      "oregon",
-      "california"
-    ],
+    "trail": [       "oregon"     ],
     "force_stop": true,
     "description": "One of the first major river crossings on the trail.",
     "extended_description": "The Kansas River marked the first major test of the journey. With spring meltwater running high, wagons either floated, ferried, or forded with caution.",
@@ -42,10 +36,7 @@
     "type": "river",
     "title": "Big Blue River",
     "mile": 155,
-    "trail": [
-      "oregon",
-      "california"
-    ],
+    "trail": [       "oregon"     ],
     "force_stop": true,
     "description": "A narrow but tricky early river crossing.",
     "extended_description": "Though not wide, the Big Blue River could be treacherous after rain. Fording here was a gamble, and many opted to wait out bad weather or seek a ferry.",
@@ -65,10 +56,7 @@
     "type": "fort",
     "title": "Fort Kearny",
     "mile": 300,
-    "trail": [
-      "oregon",
-      "california"
-    ],
+    "trail": [       "oregon"     ],
     "force_stop": true,
     "description": "A frontier outpost offering basic supplies and military presence.",
     "extended_description": "Fort Kearny stood as a critical waypoint for travelers heading west. Though not large, its wooden stockade provided a brief sense of safety and stability. Families camped nearby to barter for food and supplies, repair wagons, and hear the latest trail gossip from soldiers and other emigrants."
@@ -88,10 +76,7 @@
     "type": "natural",
     "title": "Chimney Rock",
     "mile": 636,
-    "trail": [
-      "oregon",
-      "california"
-    ],
+    "trail": [       "oregon"     ],
     "force_stop": false,
     "description": "Chimney Rock rises from the plains, a marker for emigrants for miles around.",
     "extended_description": "Jutting high from the plains of the meandering Platte River, Chimney Rock has been visible for days above the grasslands. On this day, the full 4,000-foot spire came into view, marking a third of your journey complete. The family paused to rest and reflect, and a few members walked to its base to carve their initials among thousands of others."
@@ -205,10 +190,7 @@
     "type": "fort",
     "title": "Fort Hall",
     "mile": 1350,
-    "trail": [
-      "oregon",
-      "california"
-    ],
+    "trail": [       "oregon"     ],
     "force_stop": true,
     "branch": [
       "oregon",
