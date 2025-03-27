@@ -1,50 +1,35 @@
 <?php
-// modules/getPlayerState.php
+// getPlayerState.php
 
-/**
- * Fetch player state from the database based on the player's ID.
- *
- * @param int $player_id The ID of the player whose state is to be fetched.
- * @param mysqli $conn The MySQL connection object.
- * @return array|null The player data, including player state, or null if the player does not exist.
- */
 function getPlayerState($player_id, $conn) {
-    // SQL query to join players and player_state tables to retrieve player data
-    $sql = "
-        SELECT players.trail_name, players.family, player_state.*
-        FROM players
-        JOIN player_state ON players.id = player_state.player_id
-        WHERE players.id = $player_id
-    ";
-    
-    // Execute the query
-    $result = $conn->query($sql);
-    
-    // Check if player data exists
-    if ($result->num_rows > 0) {
-        // Fetch the data from the result
-        $row = $result->fetch_assoc();
+    // Query the database to get player state
+    $query = "SELECT * FROM player_state WHERE player_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $player_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $playerRow = $result->fetch_assoc();
 
-        // Decode JSON fields (family, inventory, conditions, log) into PHP arrays
-        $row['family'] = json_decode($row['family'], true); // Decode family field
-        $row['inventory'] = json_decode($row['inventory'], true); // Decode inventory field
-        $row['conditions'] = json_decode($row['conditions'], true); // Decode conditions field
-        $row['log'] = json_decode($row['log'], true); // Decode log field
+    // If player data is found, populate variables
+    if ($playerRow) {
+        // Load JSON configurations for terrain and milestones
+        $terrain = json_decode(file_get_contents(__DIR__ . '/../../config/terrain.json'), true);
+        $milestones = json_decode(file_get_contents(__DIR__ . '/../../config/milestones.json'), true);
 
-        // Initialize player_state array if not set in the row
-        $row['player_state'] = [
-            'day' => $row['day'] ?? 1, // Default to day 1 if not set
-            'mile' => $row['mile'] ?? 0, // Default to 0 miles if not set
-            'inventory' => $row['inventory'],
-            'conditions' => $row['conditions'],
-            'log' => $row['log']
+        // Initialize player state with values or defaults if missing
+        $playerState = [
+            'day' => $playerRow['day'] ?? 1,
+            'mile' => $playerRow['mile'] ?? 0,
+            'morale' => $playerRow['morale'] ?? 100,
+            'inventory' => json_decode($playerRow['inventory'], true) ?? [],
+            'log' => json_decode($playerRow['log'], true) ?? [],
+            'terrain' => $terrain,
+            'milestones' => $milestones
         ];
 
-        // Return the full player data including player state
-        return $row;
-    } else {
-        // Return null if no player data is found
-        return null;
+        return $playerState;  // Return the populated player state
     }
+
+    return null;  // Return null if player not found
 }
 ?>
