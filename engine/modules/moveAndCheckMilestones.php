@@ -9,13 +9,15 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     // Check milestones: see if the player has reached any milestones
     $mile = $playerState['mile'];
+    $current_trail = $playerState['current_trail'];  // Get the player's current trail (e.g., 'oregon' or 'california')
     $milestones = $playerState['milestones'];
 
     $milestoneHtml = '';
 
     // Iterate through milestones and check if player has reached any
     foreach ($milestones as &$milestone) {
-        if ($mile >= $milestone['mile'] && !isset($milestone['reached'])) {
+        // Only check milestones that match the player's current trail
+        if ($milestone['trail'] === $current_trail && $mile >= $milestone['mile'] && !isset($milestone['reached'])) {
             $milestone['reached'] = true;
 
             // Log milestone in player state
