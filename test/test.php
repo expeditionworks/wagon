@@ -4,85 +4,42 @@
 // Include the database connection file
 include_once(__DIR__ . '/db_connection.php'); // Same directory
 
-// Include the game engine modules
-include_once(__DIR__ . '/../engine/modules/getPlayerState.php');
-include_once(__DIR__ . '/../engine/modules/updatePlayerState.php');  // Include this file
-include_once(__DIR__ . '/../engine/modules/handleMilestones.php'); // Include the milestones handling module
+// Include the game engine
+include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine
 
-// Get player state (this will now use the database connection from db_connection.php)
-$player_id = 1;  // Set to the current player's ID
+// Test with a specific player ID (for testing purposes)
+$player_id = 1;  // Change this to an existing player ID in your database
+
+// Step 1: Run the game logic for the player (simulating one turn)
+runDailyTurn($player_id, $conn);
+
+// Step 2: Fetch the updated player state to confirm the changes
 $playerRow = getPlayerState($player_id, $conn);
 
-if (!$playerRow) {
-    // Handle case where no player data is found
-    echo "No player data found for ID $player_id. Please ensure that player exists in the database.";
-    exit;
-}
+// Check if player data is retrieved successfully
+if ($playerRow) {
+    echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
-// Display the player state
-echo "<h3>Current Game State</h3>";
-echo "<p><strong>Trail Name:</strong> " . $playerRow['trail_name'] . "</p>";
+    // Display the player's state (basic info)
+    echo "<p><strong>Trail Name:</strong> " . $playerRow['trail_name'] . "</p>";
+    echo "<p><strong>Days on Trail:</strong> " . $playerRow['player_state']['day'] . "</p>";
+    echo "<p><strong>Miles Traveled:</strong> " . $playerRow['player_state']['mile'] . "</p>";
 
-// Check if family exists and is an array before using implode
-if (isset($playerRow['family']) && is_array($playerRow['family'])) {
-    echo "<p><strong>Family:</strong> " . implode(", ", $playerRow['family']) . "</p>";
-} else {
-    echo "<p><strong>Family:</strong> No family data available.</p>";
-}
-
-// Check if mile is set, if not, default to 0
-$milesTraveled = isset($playerRow['player_state']['mile']) ? $playerRow['player_state']['mile'] : 0;
-
-echo "<p><strong>Days on Trail:</strong> " . $playerRow['player_state']['day'] . "</p>";
-echo "<p><strong>Miles Traveled:</strong> " . $milesTraveled . " miles</p>";  // Updated line
-
-// Check if conditions is set and is an array before using implode
-if (isset($playerRow['player_state']['conditions']) && is_array($playerRow['player_state']['conditions'])) {
-    echo "<p><strong>Conditions:</strong> " . implode(", ", $playerRow['player_state']['conditions']) . "</p>";
-} else {
-    echo "<p><strong>Conditions:</strong> No conditions data available.</p>";
-}
-
-echo "<p><strong>Inventory:</strong> Food: " . $playerRow['player_state']['inventory']['food_lbs'] . " lbs</p>";
-echo "<p><strong>Log:</strong> " . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
-
-// Check if any milestones are reached
-$milestoneHtml = checkMilestones($player_id, $conn);
-
-// Simulate the passing of a day when the button is clicked
-if (isset($_POST['continue_day'])) {
-    // Simulate the passing of a day
-    $playerState = $playerRow['player_state'];
-    $playerState['day'] += 1;  // Increment day by 1
-    $playerState['mile'] += rand(10, 20);  // Randomly move the player forward by 10-20 miles
-
-    // Check if any milestones have been reached
-    $milestoneHtml = checkMilestones($player_id, $conn);
-
-    // Simulate food consumption
-    $foodConsumed = rand(10, 20);  // Random food consumption per day
-    $playerState['inventory']['food_lbs'] -= $foodConsumed;
-
-    // Ensure food doesn't go below zero
-    if ($playerState['inventory']['food_lbs'] < 0) {
-        $playerState['inventory']['food_lbs'] = 0;
+    // Display inventory (if any)
+    if (isset($playerRow['player_state']['inventory'])) {
+        echo "<p><strong>Inventory:</strong> " . json_encode($playerRow['player_state']['inventory']) . "</p>";
     }
 
-    // Log the daily events (food consumed, miles traveled)
-    $playerState['log'][] = [
-        'day' => $playerState['day'],
-        'notes' => "Traveled {$playerState['mile']} miles, consumed $foodConsumed lbs of food."
-    ];
+    // Display conditions (if any)
+    if (isset($playerRow['player_state']['conditions'])) {
+        echo "<p><strong>Conditions:</strong> " . json_encode($playerRow['player_state']['conditions']) . "</p>";
+    }
 
-    // Save the updated player state back to the database
-    updatePlayerState($player_id, $playerState, $conn);
-
-    // Re-fetch updated player data
-    $playerRow = getPlayerState($player_id, $conn);
+    // Display log (if any)
+    if (isset($playerRow['player_state']['log'])) {
+        echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $playerRow['player_state']['log'])) . "</p>";
+    }
+} else {
+    echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
 }
 ?>
-
-<!-- HTML for the Continue button -->
-<form method="post">
-    <input type="submit" name="continue_day" value="Continue to Next Day">
-</form>
