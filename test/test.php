@@ -44,21 +44,4 @@ if ($playerState) {
 
     // Display log if any milestones are reached
     if (!empty($updatedPlayerState['log'])) {
-        echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $updatedPlayerState['log'])) . "</p>";
-    }
-
-    // Display milestone-specific information
-    if (!empty($updatedPlayerState['milestones'])) {
-        echo "<p><strong>Milestones Reached:</strong><br>";
-        foreach ($updatedPlayerState['milestones'] as $milestone) {
-            if (isset($milestone['reached']) && $milestone['reached']) {
-                echo "<strong>📍 {$milestone['title']}</strong> (Mile {$milestone['mile']})<br>";
-                echo "{$milestone['extended_description']}<br><br>";
-            }
-        }
-    }
-
-} else {
-    echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
-}
-?>
+        echo "<p
