@@ -17,13 +17,20 @@ function getPlayerState($player_id, $conn) {
     if ($playerRow) {
         // Load JSON configurations for terrain and milestones
         $terrainPath = __DIR__ . '/../config/terrain.json';
-
         if (file_exists($terrainPath)) {
             $terrain = json_decode(file_get_contents($terrainPath), true);
         } else {
-            echo "File not found or not accessible.";
+            echo "Terrain file not found or not accessible.";
+            $terrain = []; // Default empty array
         }
-        $milestones = json_decode(file_get_contents(__DIR__ . '/../config/milestones.json'), true);
+
+        $milestonesPath = __DIR__ . '/../config/milestones.json';
+        if (file_exists($milestonesPath)) {
+            $milestones = json_decode(file_get_contents($milestonesPath), true);
+        } else {
+            echo "Milestones file not found or not accessible.";
+            $milestones = []; // Default empty array
+        }
 
         // Populate player state or set default values if missing
         $playerState = [
@@ -33,7 +40,9 @@ function getPlayerState($player_id, $conn) {
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
             'log' => json_decode($playerRow['log'], true) ?? [],
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
-            'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? []  // Assuming empty array if NULL
+            'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
+            'terrain' => $terrain,  // Ensure terrain is always set
+            'milestones' => $milestones,  // Ensure milestones is always set
         ];
 
         return $playerState;  // Return the populated player state
@@ -41,6 +50,8 @@ function getPlayerState($player_id, $conn) {
 
     return null;  // Return null if player not found
 }
+
+
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Player movement: increment miles and days
