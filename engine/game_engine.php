@@ -15,9 +15,6 @@ function getPlayerState($player_id, $conn) {
 
     // If player data exists, populate the player state
     if ($playerRow) {
-        // Ensure 'player_state' exists in the row and decode it if needed
-        $playerState = json_decode($playerRow['player_state'], true) ?? [];  // Decode player_state JSON or set an empty array if it's null
-
         // Load JSON configurations for terrain and milestones
         $terrainPath = __DIR__ . '/../config/terrain.json';
         if (file_exists($terrainPath)) {
@@ -35,29 +32,25 @@ function getPlayerState($player_id, $conn) {
             $milestones = []; // Default empty array
         }
 
-        // Ensure the player state has the necessary properties
+        // Populate player state or set default values if missing
         $playerState = [
-            'day' => $playerState['day'] ?? 1,
-            'mile' => $playerState['mile'] ?? 0,
-            'morale' => $playerState['morale'] ?? 100,
-            'inventory' => json_decode($playerState['inventory'], true) ?? [],
-            'log' => json_decode($playerState['log'], true) ?? [],
-            'current_trail' => $playerState['current_trail'] ?? 'oregon',
-            'last_log_item' => json_decode($playerState['last_log_item'], true) ?? [],  // Assuming empty array if NULL
-            'delay_days' => $playerState['delay_days'] ?? 0, // Handle delay days
+            'day' => $playerRow['day'] ?? 1,
+            'mile' => $playerRow['mile'] ?? 0,
+            'morale' => $playerRow['morale'] ?? 100,
+            'inventory' => json_decode($playerRow['inventory'], true) ?? [],
+            'log' => json_decode($playerRow['log'], true) ?? [],
+            'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
+            'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
+            'delay_days' => $playerRow['delay_days'] ?? 0, // Handle delay days
             'terrain' => $terrain,  // Ensure terrain is always set
             'milestones' => $milestones,  // Ensure milestones is always set
         ];
 
-        // Add player_state back into playerRow for returning
-        $playerRow['player_state'] = $playerState;
-
-        return $playerRow;  // Return the updated player state in the playerRow
+        return $playerState;  // Return the populated player state
     }
 
     return null;  // Return null if player not found
 }
-
 
 
 
