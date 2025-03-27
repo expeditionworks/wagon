@@ -36,9 +36,11 @@ if ($playerState) {
 
     // Display the last log item
     if (isset($updatedPlayerState['last_log_item'])) {
-        $lastLogItem = json_decode($updatedPlayerState['last_log_item'], true);
+        // Check if the last_log_item is already an array or a JSON string
+        $lastLogItem = is_array($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : json_decode($updatedPlayerState['last_log_item'], true);
         echo "<p><strong>Last Log Item:</strong><br>" . $lastLogItem['notes'] . "</p>";
     }
+
 
 
     // Display log if any milestones are reached
