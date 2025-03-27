@@ -2,7 +2,6 @@
 // test.php
 
 // Include the database connection and the game engine module
-include_once(__DIR__ . '/db_connection.php'); // Database connection
 include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
 
 // Test with a specific player ID (for testing purposes)
