@@ -43,6 +43,7 @@ function getPlayerState($player_id, $conn) {
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
             'terrain' => $terrain,  // Ensure terrain is always set
             'milestones' => $milestones,  // Ensure milestones is always set
+            'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
         ];
 
         return $playerState;  // Return the populated player state
