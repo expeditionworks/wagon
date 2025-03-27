@@ -44,6 +44,8 @@ function getPlayerState($player_id, $conn) {
             'terrain' => $terrain,  // Ensure terrain is always set
             'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
+            'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
+            'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
         ];
 
         return $playerState;  // Return the populated player state
@@ -51,6 +53,7 @@ function getPlayerState($player_id, $conn) {
 
     return null;  // Return null if player not found
 }
+
 
 
 
