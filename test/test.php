@@ -27,6 +27,29 @@ if ($playerState) {
     echo "<p><strong>Month</strong> " . $updatedPlayerState['month'] . "</p>";
     echo "<p><strong>Month</strong> " . $updatedPlayerState['weatherThisTurn'] . "</p>";
 
+    if (isset($updatedPlayerState['weatherThisTurn'])) {
+    $weatherData = $updatedPlayerState['weatherThisTurn'];
+
+    // Format the weather data into a readable string
+    $weatherString = "Today's weather is " . ucfirst($weatherData['weather_type']) . ". ";
+    $weatherString .= "The temperature is between " . $weatherData['temperature'] . "°F. ";
+
+    // Add precipitation info if available
+    if ($weatherData['precipitation'] !== 'none') {
+        $weatherString .= "Expect " . $weatherData['precipitation'] . ". ";
+    } else {
+        $weatherString .= "No precipitation today. ";
+    }
+
+    // Add wind speed info
+    $weatherString .= "Wind speeds are between " . $weatherData['wind_speed'] . " mph. ";
+
+    // Display the formatted weather string
+    echo "<p><strong>Weather for Today:</strong> " . $weatherString . "</p>";
+} else {
+    echo "<p>Weather data is not available for today.</p>";
+}
+
     
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['miles_traveled'] . "</p>";
 
