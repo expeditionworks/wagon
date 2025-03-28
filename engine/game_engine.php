@@ -153,22 +153,9 @@ function simulateWeather($playerState, $weatherMonths) {
     // Get weather data for the current month based on the player's month
     $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
     
-    // Debugging: Check what $monthData and $weatherTypes are
-    echo "<p><strong>Month Data:</strong></p>";
-    echo "<pre>";
-    print_r($monthData);
-    echo "</pre>";
-
     // Determine the weather type for the day
-    $weatherTypes = $monthData['weather_types'];  // Array of weather types
-    echo "<p><strong>Weather Types:</strong></p>";
-    echo "<pre>";
-    print_r($weatherTypes);
-    echo "</pre>";
-
-    // Randomly select a weather type
-    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type
-    echo "<p><strong>Selected Weather Type:</strong> $weatherType</p>";
+    $weatherTypes = $monthData['weather_types'];
+    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
 
     // Get the temperature range for the chosen weather type
     $temperatureRange = $monthData['temperature_range'][$weatherType];
@@ -190,9 +177,9 @@ function simulateWeather($playerState, $weatherMonths) {
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
     $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
 
-    // Get the wind speed range for the current month and weather type
+    // Get wind speed range for the current month and weather type
     $windSpeedRange = $monthData['wind_speed_range'];
-    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
+    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;
 
     // Construct the weather data to return
     $weatherData = [
@@ -201,10 +188,13 @@ function simulateWeather($playerState, $weatherMonths) {
         'precipitation' => $precipitation,
         'wind_speed' => $windSpeed,
         'date' => date('Y-m-d'), // Store the current date of the weather
-    ];
+    ];    
+    
+    $playerState['weatherThisTurn'] = $weatherData;
 
-    return $weatherData;
+    return $weatherData;    
 }
+
 
 
 
