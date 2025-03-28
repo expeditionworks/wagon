@@ -5,7 +5,7 @@
 include_once(__DIR__ . '/db_connection.php'); // Database connection
 
 function getPlayerState($player_id, $conn) {
-    // Query to fetch player state from the database
+    // Modify the query to fetch start_date from the players table
     $query = "SELECT ps.*, p.id AS player_id FROM player_state ps
               LEFT JOIN players p ON p.id = ps.player_id
               WHERE ps.player_id = ?";
@@ -87,107 +87,36 @@ function getPlayerState($player_id, $conn) {
             ];
         }
 
+        // Now you can access $weatherMonths and $weatherTypes as needed
+
         // Check if 'weather' exists in the player row and is a valid JSON string
         $weather = null;
         if (!empty($playerRow['weather'])) {
+            // Attempt to decode the weather data, but check if it’s valid JSON
             $decodedWeather = json_decode($playerRow['weather'], true);
         
+            // If json_decode returns null, that means the data isn't valid JSON
             if ($decodedWeather !== null) {
                 $weather = $decodedWeather;
             }
         }
         
+        // If the weather is still null (invalid or missing), use the default weather
         if ($weather === null) {
             $weather = $defaultWeather;
         }
 
         // Assuming $playerRow['start_date'] is the value fetched from the database
         $startDate = $playerRow['start_date'] ?? '1849-05-01'; // Default to '1849-05-01' if start_date is NULL
+        // Create DateTime object from start date
         $startDateObj = new DateTime($startDate);
+        // Add the days passed (from $playerState['day'])
         $startDateObj->modify('+' . ($playerRow['day'] - 1) . ' days'); // Subtract 1 to avoid adding an extra day at the beginning
+        // Get the month after adding days
         $month = $startDateObj->format('F');  // This will give the current month based on the updated date
 
 
-function simulateWeather($playerState, $weatherMonths) {
-    // Retrieve the current month based on the player's start date and day
-    $currentMonth = $playerState['month']; // The month should have been set in getPlayerState
-
-    // Get weather data for the current month
-    $monthData = $weatherMonths[$currentMonth] ?? $weatherMonths['May'];  // Default to May if month not found
-
-    // Determine the weather type for the day
-    $weatherTypes = $monthData['weather_types'];
-    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
-
-    // Get the temperature range for the chosen weather type
-    $temperatureRange = $monthData['temperature_range'][$weatherType];
-    $temperature = rand($temperatureRange[0], $temperatureRange[1]);
-
-    // Chance of snow and rain (based on weather month data)
-    $chanceOfSnow = $monthData['chance_of_snow'];
-    $chanceOfRain = $monthData['chance_of_rain'];
-
-    // Determine precipitation (snow or rain) based on weather type and probabilities
-    $precipitation = 'none';
-    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
-        $precipitation = 'snow';
-    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
-        $precipitation = 'rain';
-    }
-
-    // Calculate the wind speed using terrain and altitude modifiers
-    $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // We'll implement getWindModifier
-
-    // Get wind speed range for the current month and weather type
-    $windSpeedRange = $monthData['wind_speed_range'];
-    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
-
-    // Construct the weather data to return
-    $weatherData = [
-        'weather_type' => $weatherType,
-        'temperature' => $temperature,
-        'precipitation' => $precipitation,
-        'wind_speed' => $windSpeed,
-        'date' => date('Y-m-d'), // Store the current date of the weather
-    ];
-
-    // Debug: Output the weather data (you can remove this later)
-    echo "<p><strong>Final Weather Data:</strong></p>";
-    echo "<pre>";
-    print_r($weatherData);
-    echo "</pre>";
-
-    return $weatherData;
-}
-
-function getWindModifier($terrainType, $altitude) {
-    // Define wind modifiers based on terrain type
-    $terrainModifiers = [
-        'plains' => 1.2,
-        'mountains' => 1.5,
-        'forests' => 0.7,
-        'river' => 1.0,
-    ];
-
-    // Define altitude-based wind modifiers
-    $altitudeModifiers = [
-        'low' => 0.9,
-        'medium' => 1.0,
-        'high' => 1.2,
-    ];
-
-    // Get the wind modifier for terrain
-    $terrainWindModifier = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1.0 if terrain not found
-
-    // Get the wind modifier for altitude
-    $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;  // Default to 1.0 if altitude not found
-
-    // Calculate the total wind modifier
-    return $terrainWindModifier * $altitudeWindModifier;
-}
-
-
+        
         // Add month to playerState
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
@@ -208,18 +137,12 @@ function getWindModifier($terrainType, $altitude) {
             'month' => $month // Adding month to player state
         ];
 
-        // Simulate the weather and add it to playerState
-        $weatherData = simulateWeather($playerState, $weatherMonths);  // Run the weather simulation
-        
-        // Add the simulated weather data to playerState
-        $playerState['weather'] = $weatherData;
-
         return $playerState;  // Return the populated player state
     }
 
+    
     return null;  // Return null if player not found
 }
-
 
 
 
