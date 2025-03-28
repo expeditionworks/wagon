@@ -139,13 +139,14 @@ function getPlayerState($player_id, $conn) {
 
         return $playerState;  // Return the populated player state
     }
-
-    return null;  // Return null if player not found
-}
-
 echo "<pre>";
 print_r($playerState);  // Debug: See the contents of playerState
 echo "</pre>";
+    
+    return null;  // Return null if player not found
+}
+
+
 
 
 function simulateWeather($playerState, $weatherMonths) {
