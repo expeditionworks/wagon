@@ -168,35 +168,6 @@ if (file_exists($terrainPath)) {
 
 
 
-function getWindModifier($terrainType, $altitude) {
-    // Define terrain wind modifiers (can be adjusted as needed)
-    $terrainModifiers = [
-        'plains' => 1.2,
-        'mountains' => 1.5,
-        'forests' => 0.7,
-        'river' => 1.0,
-        'desert' => 1.1  // Example of adding another terrain type
-    ];
-
-    // Define altitude wind modifiers (can be adjusted as needed)
-    $altitudeModifiers = [
-        'low' => 0.9,
-        'medium' => 1.0,
-        'high' => 1.2
-    ];
-    
-
-    // Get the wind modifier for the terrain type (default to 1.0 if terrain type not found)
-    $terrainWindModifier = $terrainModifiers[$playerState['terrainCurrent']]; // Default to 1.0 if not found
-
-    // Get the wind modifier for altitude (default to 1.0 if altitude type not found)
-    $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;
-
-    // Calculate and return the total wind modifier by multiplying both terrain and altitude modifiers
-    return $terrainWindModifier * $altitudeWindModifier;
-}
-
-
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Player movement: increment miles and days
@@ -278,9 +249,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
 
 
-
-
-
     
     // Check if delay_days is greater than 0
     if ($playerState['delay_days'] > 0) {
@@ -302,10 +270,13 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     $baseMiles = 15;  // Default miles traveled without adjustments
     
-
-
-
-    
+    // Define altitude wind modifiers (can be adjusted as needed)
+    $altitudeModifiers = [
+        'low' => 0.9,
+        'medium' => 1.0,
+        'high' => 1.2
+    ];
+   
     // Adjust based on terrain type
     $terrainModifiers = [
         'plains' => 1.2,
@@ -315,6 +286,14 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'river valley' => 1.0,
         'desert' => 0.7
     ];
+
+
+    // Get the wind modifier for the terrain type (default to 1.0 if terrain type not found)
+    $terrainWindModifier = $terrainModifiers[$playerState['terrainCurrent']] ?? 1; // Default to 1.0 if not found
+
+    // Get the wind modifier for altitude (default to 1.0 if altitude type not found)
+    $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;
+    
     // Introduce some randomness (e.g., between 0.95 and 1.05)
     $randomFactor = mt_rand(95, 105) / 100;  // Random value between 0.95 and 1.05
 
