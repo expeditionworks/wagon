@@ -4,6 +4,7 @@
         "temperature_range": {"sunny": [20, 40], "cloudy": [15, 35], "snowy": [10, 25]},
         "chance_of_snow": 50,
         "chance_of_rain": 10,
+        "wind_speed_range": {"min": 5, "max": 25},
         "description": "Winter is in full swing, with heavy snowfalls and cold temperatures. The trail is difficult, and travel is especially challenging in the mountains."
     },
     "February": {
@@ -11,6 +12,7 @@
         "temperature_range": {"sunny": [25, 45], "cloudy": [20, 40], "snowy": [15, 30]},
         "chance_of_snow": 45,
         "chance_of_rain": 15,
+        "wind_speed_range": {"min": 5, "max": 20},
         "description": "The winter chill persists, and snow is common. Snowstorms can disrupt travel, and the cold can be biting."
     },
     "March": {
@@ -18,6 +20,7 @@
         "temperature_range": {"sunny": [40, 55], "cloudy": [35, 50], "rainy": [40, 55]},
         "chance_of_snow": 10,
         "chance_of_rain": 40,
+        "wind_speed_range": {"min": 10, "max": 30},
         "description": "Spring begins to stir, but rain and occasional snowstorms still slow progress. The weather is unpredictable, with chilly mornings and milder afternoons."
     },
     "April": {
@@ -25,6 +28,7 @@
         "temperature_range": {"sunny": [45, 60], "cloudy": [40, 55], "rainy": [45, 55], "stormy": [40, 50]},
         "chance_of_snow": 5,
         "chance_of_rain": 50,
+        "wind_speed_range": {"min": 15, "max": 40},
         "description": "April showers bring plenty of rain, and thunderstorms become more common. Temperatures are rising, and the trail becomes muddier."
     },
     "May": {
@@ -32,6 +36,7 @@
         "temperature_range": {"sunny": [55, 70], "cloudy": [50, 65], "rainy": [55, 65], "windy": [50, 65]},
         "chance_of_snow": 0,
         "chance_of_rain": 30,
+        "wind_speed_range": {"min": 10, "max": 30},
         "description": "May brings more stable weather, though rain still comes in bursts. Winds are common, and it’s a good time to move, though the days are warm and sunny."
     },
     "June": {
@@ -39,6 +44,7 @@
         "temperature_range": {"sunny": [65, 85], "cloudy": [60, 75], "windy": [55, 70]},
         "chance_of_snow": 0,
         "chance_of_rain": 20,
+        "wind_speed_range": {"min": 15, "max": 35},
         "description": "Early summer sees clear skies and rising temperatures. Some breezy days provide relief, but it’s a hot stretch of the journey."
     },
     "July": {
@@ -46,6 +52,7 @@
         "temperature_range": {"sunny": [75, 95], "cloudy": [70, 85], "windy": [65, 80]},
         "chance_of_snow": 0,
         "chance_of_rain": 10,
+        "wind_speed_range": {"min": 10, "max": 30},
         "description": "The peak of summer arrives with sweltering heat. The sun beats down relentlessly, and while the winds help, it’s a grueling time to travel."
     },
     "August": {
@@ -53,6 +60,7 @@
         "temperature_range": {"sunny": [75, 95], "cloudy": [70, 85], "windy": [65, 80]},
         "chance_of_snow": 0,
         "chance_of_rain": 10,
+        "wind_speed_range": {"min": 10, "max": 30},
         "description": "Hot summer days persist. The heat continues, but the nights provide some relief as the temperature drops slightly."
     },
     "September": {
@@ -60,6 +68,7 @@
         "temperature_range": {"sunny": [60, 80], "cloudy": [55, 70], "rainy": [60, 75]},
         "chance_of_snow": 0,
         "chance_of_rain": 30,
+        "wind_speed_range": {"min": 10, "max": 25},
         "description": "The warmth of summer fades into early autumn. Days are still mild, but rain becomes more frequent as the trail progresses."
     },
     "October": {
@@ -67,6 +76,7 @@
         "temperature_range": {"sunny": [45, 65], "cloudy": [40, 55], "rainy": [45, 55], "windy": [40, 50]},
         "chance_of_snow": 20,
         "chance_of_rain": 40,
+        "wind_speed_range": {"min": 15, "max": 35},
         "description": "Autumn sets in with cooler temperatures and increasing rainfall. Snow may begin to appear in higher elevations."
     },
     "November": {
@@ -74,6 +84,7 @@
         "temperature_range": {"sunny": [30, 50], "cloudy": [25, 45], "snowy": [25, 35]},
         "chance_of_snow": 40,
         "chance_of_rain": 20,
+        "wind_speed_range": {"min": 15, "max": 35},
         "description": "Snow becomes more common, especially at higher elevations. The cold and storms make travel more difficult."
     },
     "December": {
@@ -81,6 +92,7 @@
         "temperature_range": {"sunny": [20, 40], "cloudy": [15, 35], "snowy": [10, 25]},
         "chance_of_snow": 50,
         "chance_of_rain": 10,
+        "wind_speed_range": {"min": 5, "max": 25},
         "description": "Winter sets in with heavy snowfalls and cold temperatures. Travel becomes especially challenging in the mountains."
     }
 }
