@@ -202,8 +202,24 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     // Get weather data for the current month based on the player's month
     $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
-
-
+    // Define the default value for wind speed if something goes wrong
+    $defaultWindSpeed = 20;  // You can set your default value here
+    
+    // Initialize wind speed range and randomly selected wind speed
+    $windSpeedRange = null;
+    $randomWindSpeed = $defaultWindSpeed;  // Default value in case we can't find a valid range
+    
+    // Check if the current month exists in the JSON data
+    if (isset($monthData['wind_speed_range'])) {
+        $windSpeedRange = $monthData['wind_speed_range'];
+    
+        // Check if min and max values exist and are valid numbers
+        if (isset($windSpeedRange['min'], $windSpeedRange['max']) &&
+            is_numeric($windSpeedRange['min']) && is_numeric($windSpeedRange['max'])) {
+            // Pick a random wind speed within the specified range
+            $randomWindSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']); // the random wind speed
+        }
+    }
    // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
     $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
@@ -230,16 +246,12 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Calculate the wind speed using terrain and altitude modifiers
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
 
-    // Get wind speed range for the current month and weather type
-       $windSpeedRange = $monthData['wind_speed_range'];
- //   $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
-        $windSpeed = 20;
     // Construct the weather data to return
     $weatherData = [
         'weather_type' => $weatherType,
         'temperature' => $temperature,
         'precipitation' => $precipitation,
-        'wind_speed' => $windSpeed,
+        'wind_speed' => $randomWindSpeed,
         'date' => date('Y-m-d'), // Store the current date of the weather
     ];    
 
