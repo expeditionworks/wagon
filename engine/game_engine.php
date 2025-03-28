@@ -87,8 +87,22 @@ function getPlayerState($player_id, $conn) {
 
         // Now you can access $weatherMonths and $weatherTypes as needed
 
-        // Check if weather exists in the player row, otherwise use the default
-        $weather = json_decode($playerRow['weather'], true) ?? $defaultWeather;
+        // Check if 'weather' exists in the player row and is a valid JSON string
+        $weather = null;
+        if (!empty($playerRow['weather'])) {
+            // Attempt to decode the weather data, but check if it’s valid JSON
+            $decodedWeather = json_decode($playerRow['weather'], true);
+        
+            // If json_decode returns null, that means the data isn't valid JSON
+            if ($decodedWeather !== null) {
+                $weather = $decodedWeather;
+            }
+        }
+        
+        // If the weather is still null (invalid or missing), use the default weather
+        if ($weather === null) {
+            $weather = $defaultWeather;
+        }
 
         // Populate player state or set default values if missing
         $playerState = [
