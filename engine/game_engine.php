@@ -193,7 +193,7 @@ function getPlayerState($player_id, $conn) {
     $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
 
 
-
+        return $playerState;  // Return the populated player state
 
 
         
