@@ -41,7 +41,8 @@ function getPlayerState($player_id, $conn) {
             "weather_type" => "sunny",
             "temperature" => ["min" => 20, "max" => 40],
             "precipitation" => "none",
-            "wind_speed" => ["min" => 5, "max" => 15]
+            "wind_speed" => ["min" => 5, "max" => 15],
+            "type" => "default"
         ];
 
         // Load weather_months.json
@@ -132,7 +133,7 @@ function getPlayerState($player_id, $conn) {
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
-            'weatherLastTurn' => $weather,  // Initialize weatherLastTurn
+            'weatherLastTurn' => $playerRow['weather'] ?? $defaultWeather,  // Initialize weatherLastTurn
             'weatherThisTurn' => $weather,  // Initialize weatherThisTurn
             'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
             'month' => $month // Adding month to player state
