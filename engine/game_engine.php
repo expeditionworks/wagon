@@ -233,7 +233,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Get wind speed range for the current month and weather type
  //   $windSpeedRange = $monthData['wind_speed_range'];
  //   $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
-
+        $windSpeed = 20;
     // Construct the weather data to return
     $weatherData = [
         'weather_type' => $weatherType,
