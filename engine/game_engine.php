@@ -91,20 +91,20 @@ function getPlayerState($player_id, $conn) {
         // Now you can access $weatherMonths and $weatherTypes as needed
 
         // Check if 'weather' exists in the player row and is a valid JSON string
-        $weather = null;
+        $weatherLastTurn = null;
         if (!empty($playerRow['weather'])) {
             // Attempt to decode the weather data, but check if it’s valid JSON
             $decodedWeather = json_decode($playerRow['weather'], true);
         
             // If json_decode returns null, that means the data isn't valid JSON
             if ($decodedWeather !== null) {
-                $weather = $decodedWeather;
+                $weatherLastTurn = $decodedWeather;
             }
         }
         
         // If the weather is still null (invalid or missing), use the default weather
-        if ($weather === null) {
-            $weather = $defaultWeather;
+        if ($weatherLastTurn === null) {
+            $weatherLastTurn = $defaultWeather;
         }
 
         // Assuming $playerRow['start_date'] is the value fetched from the database
@@ -133,7 +133,7 @@ function getPlayerState($player_id, $conn) {
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
-            'weatherLastTurn' => $playerRow['weather'] ?? $defaultWeather,  // Initialize weatherLastTurn
+            'weatherLastTurn' => $weatherLastTurn,  // Initialize weatherLastTurn
             'weatherThisTurn' => $weather,  // Initialize weatherThisTurn
             'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
             'month' => $month // Adding month to player state
