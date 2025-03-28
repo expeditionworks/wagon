@@ -208,7 +208,19 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
         $precipitation = 'rain';
     }
-        
+
+
+          // Retrieve the terrain for the current mile
+    $terrainType = 'plains';  // Default terrain if none found
+    
+        // Loop through the terrain array to find the correct terrain type for the current mile
+    foreach ($playerState['terrain'] as $section) {
+        if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
+            $terrainType = $section['terrain'];
+            break;  // Exit the loop once the correct terrain is found
+        }
+    }
+    
     // Calculate the wind speed using terrain and altitude modifiers
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
     $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
@@ -258,16 +270,9 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $currentMile = $playerState['mile'];
     $baseMiles = 15;  // Default miles traveled without adjustments
     
-      // Retrieve the terrain for the current mile
-    $terrainType = 'plains';  // Default terrain if none found
 
-    // Loop through the terrain array to find the correct terrain type for the current mile
-    foreach ($playerState['terrain'] as $section) {
-        if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
-            $terrainType = $section['terrain'];
-            break;  // Exit the loop once the correct terrain is found
-        }
-    }
+
+
     
     // Adjust based on terrain type
     $terrainModifiers = [
