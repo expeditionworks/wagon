@@ -45,11 +45,6 @@ if (file_exists($terrainPath)) {
             break;  // Exit the loop once the correct terrain is found
         }
     }
-
-    // Save the terrain and altitude values into the playerState
-    $playerState['terrainCurrent'] = $terrainType;
-    $playerState['altitude'] = $altitude;
-
 } else {
     echo "Terrain file not found or not accessible.";
     $terrain = []; // Default empty array
@@ -127,7 +122,7 @@ if (file_exists($terrainPath)) {
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
             'terrain' => $terrain,  // Ensure terrain is always set
             'terrainCurrent' => $terrainType, // current terrain is always set
-            'altitude' => $altitude ?? 'low', // set altitude
+            'altitude' => $altitude, // set altitude
             'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
@@ -189,7 +184,8 @@ function getWindModifier($terrainType, $altitude) {
         'medium' => 1.0,
         'high' => 1.2
     ];
-    $terrainWindModifier = 1;
+    
+
     // Get the wind modifier for the terrain type (default to 1.0 if terrain type not found)
     $terrainWindModifier = $terrainModifiers[$playerState['terrainCurrent']]; // Default to 1.0 if not found
 
