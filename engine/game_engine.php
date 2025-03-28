@@ -462,7 +462,7 @@ echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
 
 function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
-    $inventoryJson = json_encode($playerState['inventory']);
+    $inventoryJson = json_encode($inventory);
     $logJson = json_encode($playerState['log']);
     $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); 
 
@@ -471,6 +471,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $milesTraveled = $playerState['miles_traveled'] ?? 0;  // Get miles_traveled from playerState
     $weatherJson = json_encode($playerState['weatherThisTurn']);  // Convert weather to JSON string
 
+    
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
               day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ? 
