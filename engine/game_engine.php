@@ -17,6 +17,17 @@ function getPlayerState($player_id, $conn) {
 
     // If player data exists, populate the player state
     if ($playerRow) {
+
+        // Assuming $playerRow['start_date'] is the value fetched from the database
+        $startDate = $playerRow['start_date'] ?? '1849-05-01'; // Default to '1849-05-01' if start_date is NULL
+        // Create DateTime object from start date
+        $startDateObj = new DateTime($startDate);
+        // Add the days passed (from $playerState['day'])
+        $startDateObj->modify('+' . ($playerRow['day'] - 1) . ' days'); // Subtract 1 to avoid adding an extra day at the beginning
+        // Get the month after adding days
+        $month = $startDateObj->format('F');  // This will give the current month based on the updated date
+        
+        
         // Load JSON configurations for terrain and milestones
         $terrainPath = __DIR__ . '/../config/terrain.json';
         if (file_exists($terrainPath)) {
@@ -107,18 +118,13 @@ function getPlayerState($player_id, $conn) {
             $weatherLastTurn = $defaultWeather;
         }
 
-        // Assuming $playerRow['start_date'] is the value fetched from the database
-        $startDate = $playerRow['start_date'] ?? '1849-05-01'; // Default to '1849-05-01' if start_date is NULL
-        // Create DateTime object from start date
-        $startDateObj = new DateTime($startDate);
-        // Add the days passed (from $playerState['day'])
-        $startDateObj->modify('+' . ($playerRow['day'] - 1) . ' days'); // Subtract 1 to avoid adding an extra day at the beginning
-        // Get the month after adding days
-        $month = $startDateObj->format('F');  // This will give the current month based on the updated date
+
+    // Get weather data for the current month based on the player's month
+    $monthData = $weatherMonths[$month] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
 
 
-        
-        // Add month to playerState
+
+    
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
@@ -140,20 +146,9 @@ function getPlayerState($player_id, $conn) {
         ];
 
         return $playerState;  // Return the populated player state
-    }
-
-    
-    return null;  // Return null if player not found
-}
 
 
 
-
-
-function simulateWeather($playerState, $weatherMonths) {
-    // Get weather data for the current month based on the player's month
-    $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
-    
     // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
     $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
@@ -194,8 +189,21 @@ function simulateWeather($playerState, $weatherMonths) {
     // Optionally, add the weather to playerState directly
     $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
 
-    return $weatherData;    
+
+
+
+
+        
+    }
+
+    
+    return null;  // Return null if player not found
 }
+
+
+
+
+
 
 
 
