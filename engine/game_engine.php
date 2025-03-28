@@ -144,6 +144,78 @@ function getPlayerState($player_id, $conn) {
 }
 
 
+function simulateWeather($playerState, $weatherMonths) {
+    // Retrieve the current month based on the player's start date and day
+    $currentMonth = $playerState['month']; // The month should have been set in getPlayerState
+
+    // Get weather data for the current month
+    $monthData = $weatherMonths[$currentMonth] ?? $weatherMonths['May'];  // Default to May if month not found
+
+    // Determine the weather type for the day
+    $weatherTypes = $monthData['weather_types'];
+    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
+
+    // Get the temperature range for the chosen weather type
+    $temperatureRange = $monthData['temperature_range'][$weatherType];
+    $temperature = rand($temperatureRange[0], $temperatureRange[1]);
+
+    // Chance of snow and rain (based on weather month data)
+    $chanceOfSnow = $monthData['chance_of_snow'];
+    $chanceOfRain = $monthData['chance_of_rain'];
+
+    // Determine precipitation (snow or rain) based on weather type and probabilities
+    $precipitation = 'none';
+    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
+        $precipitation = 'snow';
+    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
+        $precipitation = 'rain';
+    }
+
+    // Calculate the wind speed using terrain and altitude modifiers
+    $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
+    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // We'll implement getWindModifier
+
+    // Get wind speed range for the current month and weather type
+    $windSpeedRange = $monthData['wind_speed_range'];
+    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
+
+    // Construct the weather data to return
+    $weatherData = [
+        'weather_type' => $weatherType,
+        'temperature' => $temperature,
+        'precipitation' => $precipitation,
+        'wind_speed' => $windSpeed,
+        'date' => date('Y-m-d'), // Store the current date of the weather
+    ];
+
+    return $weatherData;
+}
+
+function getWindModifier($terrainType, $altitude) {
+    // Define wind modifiers based on terrain type
+    $terrainModifiers = [
+        'plains' => 1.2,
+        'mountains' => 1.5,
+        'forests' => 0.7,
+        'river' => 1.0,
+    ];
+
+    // Define altitude-based wind modifiers
+    $altitudeModifiers = [
+        'low' => 0.9,
+        'medium' => 1.0,
+        'high' => 1.2,
+    ];
+
+    // Get the wind modifier for terrain
+    $terrainWindModifier = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1.0 if terrain not found
+
+    // Get the wind modifier for altitude
+    $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;  // Default to 1.0 if altitude not found
+
+    // Calculate the total wind modifier
+    return $terrainWindModifier * $altitudeWindModifier;
+}
 
 
 
