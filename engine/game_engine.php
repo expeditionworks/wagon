@@ -32,14 +32,6 @@ function getPlayerState($player_id, $conn) {
             $milestones = []; // Default empty array
         }
 
-        // Default weather if not set in the database
-        $defaultWeather = [
-            "weather_type" => "sunny",
-            "temperature" => ["min" => 20, "max" => 40],
-            "precipitation" => "none",
-            "wind_speed" => ["min" => 5, "max" => 15]
-        ];
-
         // Load weather_months.json
         $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
         if (file_exists($weatherMonthsPath)) {
