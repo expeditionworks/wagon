@@ -220,6 +220,22 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             $randomWindSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']); // the random wind speed
         }
     }
+    $wind_modifier = 1.0;  // Default to no effect (tailwind)
+   
+    $wind_types = ["headwind", "tailwind", "crosswind"];  // Define an array of possible wind types
+    $random_index = array_rand($wind_types); // Randomly select a wind type get the index
+    $wind_type = $wind_types[$random_index]; // Select the wind type based on the random index
+    
+    // Determine wind effect based on type
+    if ($wind_type == "headwind") {
+        $wind_modifier = 1 - ($wind_speed / 50);  // Example: max 40% reduction for very strong headwinds
+    } elseif ($wind_type == "tailwind") {
+        $wind_modifier = 1 + ($wind_speed / 100);  // Example: max 30% increase for very strong tailwinds
+    } elseif ($wind_type == "crosswind") {
+        $wind_modifier = 1 - ($wind_speed / 200);  // Minimal effect for crosswinds
+    }
+
+    
    // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
     $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
@@ -324,13 +340,16 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     $difficultyMultiplier = $difficultyMod[$playerState['difficulty']] ?? 1.0;  // Default to 1 if difficulty is unknown
 
     // Calculate initial miles traveled with adjustments
-    $milesTraveled = round($baseMiles * $difficultyMultiplier * $terrainMod);
+    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod);
+    $milesTraveled = max( $adjusted_distance * $wind_modifier, 0);
+
     
     // Debug: Output the miles traveled calculation
 echo "<p>Base Miles: $baseMiles</p>";
 echo "<p>Terrain Modifier: $terrainMod</p>";
 echo "<p>Difficulty Modifier: $difficultyMultiplier</p>";
 echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
+    echo "<p>Wind type (Before Adjustments): $wind_type</p>";
 
     // Adjust for player conditions (e.g., morale, oxen)
     if ($playerState['morale'] < 50) {
