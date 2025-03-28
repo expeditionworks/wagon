@@ -132,7 +132,8 @@ function getPlayerState($player_id, $conn) {
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
-            'weather' => $weather,  // Include weather data (either from DB or default)
+            'weatherLastTurn' => $weather,  // Initialize weatherLastTurn
+            'weatherThisTurn' => $weather,  // Initialize weatherThisTurn
             'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
             'month' => $month // Adding month to player state
         ];
