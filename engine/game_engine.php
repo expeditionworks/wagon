@@ -160,13 +160,13 @@ function simulateWeather($playerState, $weatherMonths) {
     if (!in_array($weatherType, $weatherTypes)) {
         $weatherType = 'sunny'; // Default to sunny if the weatherType is invalid
     }
-    
-    // Debug: Print the weather type to confirm it's valid
-    echo "<p><strong>Weather Type Selected:</strong> $weatherType</p>";
-    
-    // Get the temperature range for the chosen weather type
-    $temperatureRange = $monthData['temperature_range'][$weatherType];
-    $temperature = rand($temperatureRange[0], $temperatureRange[1]);
+
+    // Check if the temperature range is an array with two values (min and max)
+    if (is_array($temperatureRange) && count($temperatureRange) === 2) {
+        $temperature = rand($temperatureRange[0], $temperatureRange[1]);
+    } else {
+        $temperature = rand(40, 50); // Default fallback if something goes wrong
+    }
 
    // Chance of snow and rain (based on weather month data)
     $chanceOfSnow = $monthData['chance_of_snow'];
