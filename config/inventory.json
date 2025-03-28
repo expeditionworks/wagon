@@ -5,7 +5,8 @@
         "base_price": 50,
         "rarity": "low",
         "weight": 200,
-        "effect": "Used for pulling the wagon, increases travel speed."
+        "effect": "Used for pulling the wagon, increases travel speed.",
+        "durability": 100  // Oxen will wear out over time
     },
     "Food": {
         "name": "Food",
@@ -13,7 +14,8 @@
         "base_price": 5,
         "rarity": "medium",
         "weight": 1,
-        "effect": "Each lb of food supports 1 person for 1 day."
+        "effect": "Each lb of food supports 1 person for 1 day.",
+        "durability": null  // No durability for food
     },
     "Ammunition": {
         "name": "Ammunition",
@@ -21,7 +23,8 @@
         "base_price": 3,
         "rarity": "high",
         "weight": 0.2,
-        "effect": "Each bullet supports a hunting action or defense."
+        "effect": "Each bullet supports a hunting action or defense.",
+        "durability": null  // No durability for ammunition
     },
     "Clothes": {
         "name": "Clothes",
@@ -29,7 +32,17 @@
         "base_price": 10,
         "rarity": "medium",
         "weight": 5,
-        "effect": "Protects from the cold, impacts morale."
+        "effect": "Protects from the cold, impacts morale.",
+        "durability": 50  // Clothes will wear out over time
+    },
+    "Books": {
+        "name": "Books",
+        "description": "Books to read and improve knowledge or morale.",
+        "base_price": 15,
+        "rarity": "low",
+        "weight": 2,
+        "effect": "Increases morale over time.",
+        "durability": null  // No durability for books
     },
     "Gold": {
         "name": "Gold",
@@ -37,7 +50,8 @@
         "base_price": 10,
         "rarity": "high",
         "weight": 0,
-        "effect": "Can be used for trading and purchasing supplies."
+        "effect": "Can be used for trading and purchasing supplies.",
+        "durability": null  // Gold doesn't wear out
     },
     "Traps": {
         "name": "Traps",
@@ -45,7 +59,8 @@
         "base_price": 15,
         "rarity": "medium",
         "weight": 2,
-        "effect": "Each trap can catch one animal per day."
+        "effect": "Each trap can catch one animal per day.",
+        "durability": 10  // Traps wear out over time
     },
     "Tools": {
         "name": "Tools",
@@ -53,7 +68,8 @@
         "base_price": 8,
         "rarity": "low",
         "weight": 3,
-        "effect": "Used for repairs and other maintenance tasks."
+        "effect": "Used for repairs and other maintenance tasks.",
+        "durability": 20  // Tools wear out with use
     },
     "Wood": {
         "name": "Wood",
@@ -61,7 +77,8 @@
         "base_price": 2,
         "rarity": "low",
         "weight": 1,
-        "effect": "Can be used for fuel or building repairs."
+        "effect": "Can be used for fuel or building repairs.",
+        "durability": null  // Wood doesn't wear out
     },
     "WagonRepairKit": {
         "name": "Wagon Repair Kit",
@@ -69,6 +86,7 @@
         "base_price": 30,
         "rarity": "medium",
         "weight": 5,
-        "effect": "Used to repair the wagon, restoring durability."
+        "effect": "Used to repair the wagon, restoring durability.",
+        "durability": 5  // Wagon repair kits are consumed after use
     }
 }
