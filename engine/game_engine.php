@@ -300,7 +300,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $currentTrail = $playerState['current_trail'];
     $delayDays = $playerState['delay_days']; // Ensure the delay_days is passed
     $milesTraveled = $playerState['miles_traveled'] ?? 0;  // Get miles_traveled from playerState
-    $weatherJson = json_encode($playerState['weather']);  // Convert weather to JSON string
+    $weatherJson = json_encode($playerState['weatherThisTurn']);  // Convert weather to JSON string
 
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
