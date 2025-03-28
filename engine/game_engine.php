@@ -252,8 +252,10 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $precipitation = 'none';
     if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
         $precipitation = 'snow';
+        $precipitationPenalty = 0.5;
     } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
         $precipitation = 'rain';
+        $precipitationPenalty = 0.8;
     }
 
 
@@ -340,8 +342,8 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     $difficultyMultiplier = $difficultyMod[$playerState['difficulty']] ?? 1.0;  // Default to 1 if difficulty is unknown
 
     // Calculate initial miles traveled with adjustments
-    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod);
-    $milesTraveled = max( $adjusted_distance * $wind_modifier, 0); //add wind modifier
+    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty);
+    $milesTraveled = round(max( $adjusted_distance * $wind_modifier, 0)); //add wind modifier
 
     
     // Debug: Output the miles traveled calculation
