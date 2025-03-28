@@ -18,7 +18,8 @@ function getPlayerState($player_id, $conn) {
         // Load JSON configurations for terrain and milestones
         $terrainPath = __DIR__ . '/../config/terrain.json';
         if (file_exists($terrainPath)) {
-            $terrain = json_decode(file_get_contents($terrainPath), true);
+            $terrainContent = file_get_contents($terrainPath);
+            $terrain = $terrainContent !== false ? json_decode($terrainContent, true) : [];
         } else {
             echo "Terrain file not found or not accessible.";
             $terrain = []; // Default empty array
@@ -26,17 +27,26 @@ function getPlayerState($player_id, $conn) {
 
         $milestonesPath = __DIR__ . '/../config/milestones.json';
         if (file_exists($milestonesPath)) {
-            $milestones = json_decode(file_get_contents($milestonesPath), true);
+            $milestonesContent = file_get_contents($milestonesPath);
+            $milestones = $milestonesContent !== false ? json_decode($milestonesContent, true) : [];
         } else {
             echo "Milestones file not found or not accessible.";
             $milestones = []; // Default empty array
         }
 
+        // Default weather if not set in the database
+        $defaultWeather = [
+            "weather_type" => "sunny",
+            "temperature" => ["min" => 20, "max" => 40],
+            "precipitation" => "none",
+            "wind_speed" => ["min" => 5, "max" => 15]
+        ];
+
         // Load weather_months.json
         $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
         if (file_exists($weatherMonthsPath)) {
-            $fileContents = file_get_contents($weatherMonthsPath);
-            $weatherMonths = $fileContents !== false ? json_decode($fileContents, true) : [];
+            $weatherMonthsContent = file_get_contents($weatherMonthsPath);
+            $weatherMonths = $weatherMonthsContent !== false ? json_decode($weatherMonthsContent, true) : [];
         } else {
             echo "Weather Months file not found or not accessible.";
             // Default fallback to May if the file doesn't exist
@@ -55,12 +65,12 @@ function getPlayerState($player_id, $conn) {
                 ]
             ];
         }
-        
+
         // Load weather_types.json
         $weatherTypesPath = __DIR__ . '/../config/weather_types.json';
         if (file_exists($weatherTypesPath)) {
-            $fileContents = file_get_contents($weatherTypesPath);
-            $weatherTypes = $fileContents !== false ? json_decode($fileContents, true) : [];
+            $weatherTypesContent = file_get_contents($weatherTypesPath);
+            $weatherTypes = $weatherTypesContent !== false ? json_decode($weatherTypesContent, true) : [];
         } else {
             echo "Weather Types file not found or not accessible.";
             // Default fallback if the file doesn't exist
@@ -74,10 +84,8 @@ function getPlayerState($player_id, $conn) {
                 ]
             ];
         }
-        
+
         // Now you can access $weatherMonths and $weatherTypes as needed
-
-
 
         // Check if weather exists in the player row, otherwise use the default
         $weather = json_decode($playerRow['weather'], true) ?? $defaultWeather;
@@ -105,6 +113,7 @@ function getPlayerState($player_id, $conn) {
 
     return null;  // Return null if player not found
 }
+
 
 
 
