@@ -473,7 +473,7 @@ echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
 
 function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
-    $inventoryJson = json_encode($inventory);
+    $inventoryJson = json_encode($playerState['inventory']);
     $logJson = json_encode($playerState['log']);
     $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); 
 
