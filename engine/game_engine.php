@@ -107,14 +107,14 @@ function getPlayerState($player_id, $conn) {
         }
 
         // Assuming $playerRow['start_date'] is the value fetched from the database
-        
-        $startDate = $playerRow['start_date'] ?? '1849-05-01'; // Use default date if start_date is null
-        
-        // Create DateTime object
+        $startDate = $playerRow['start_date'] ?? '1849-05-01'; // Default to '1849-05-01' if start_date is NULL
+        // Create DateTime object from start date
         $startDateObj = new DateTime($startDate);
-        
-        // Now, calculate the month
-        $month = $startDateObj->format('F');  // This will give you the full month name (e.g., "January", "February", etc.)
+        // Add the days passed (from $playerState['day'])
+        $startDateObj->modify('+' . ($playerRow['day'] - 1) . ' days'); // Subtract 1 to avoid adding an extra day at the beginning
+        // Get the month after adding days
+        $month = $startDateObj->format('F');  // This will give the current month based on the updated date
+
 
         
         // Add month to playerState
