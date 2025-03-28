@@ -41,7 +41,7 @@ function getPlayerState($player_id, $conn) {
             // Loop through the terrain array to find the correct terrain type for the current mile
             foreach ($terrain as $section) {
                 if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
-                    $terrainType = $section['terrain' ?? 'plains']; // defailt to plains if not found
+                    $terrainType = $section['terrain'] ?? 'plains'; // defailt to plains if not found
                     $altitude = $section['altitude'] ?? 'low'; // Default to 'low' altitude if not specified
                     break;  // Exit the loop once the correct terrain is found
                 }
