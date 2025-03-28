@@ -291,7 +291,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $terrainWindModifier = $terrainModifiers[$playerState['terrainCurrent']] ?? 1; // Default to 1.0 if not found
 
     // Get the wind modifier for altitude (default to 1.0 if altitude type not found)
-    $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;
+    $altitudeWindModifier = $altitudeModifiers[$playerState['altitude']] ?? 1.0;
     
     // Introduce some randomness (e.g., between 0.95 and 1.05)
     $randomFactor = mt_rand(95, 105) / 100;  // Random value between 0.95 and 1.05
