@@ -119,7 +119,8 @@ function getPlayerState($player_id, $conn) {
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
-            'weather' => $weather  // Include weather data (either from DB or default)
+            'weather' => $weather,  // Include weather data (either from DB or default)
+            'start_date' => $playerRow['start_date'] ?? null,
         ];
 
         return $playerState;  // Return the populated player state
