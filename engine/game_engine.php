@@ -343,6 +343,7 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     $difficultyMultiplier = $difficultyMod[$playerState['difficulty']] ?? 1.0;  // Default to 1 if difficulty is unknown
     // Adjust the morale modifier based on morale value
     $morale = $playerRow['morale'] ?? 100;
+    $moraleMod = 1.0;
     if ($morale >= 90) {
         $moraleMod *= 1.1;  // Increase speed by 10% if morale is between 90-100
     } elseif ($morale >= 50) {
