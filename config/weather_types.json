@@ -1,0 +1,51 @@
+{
+    "sunny": {
+        "descriptions": [
+            "The sun is shining brightly in a clear sky.",
+            "A warm, sunny day with no clouds in sight.",
+            "Clear skies and radiant sunlight fill the air."
+        ]
+    },
+    "cloudy": {
+        "descriptions": [
+            "The sky is overcast with heavy clouds.",
+            "A dull, gray sky fills the horizon.",
+            "Clouds dominate the sky, but no rain is in sight."
+        ]
+    },
+    "rainy": {
+        "descriptions": [
+            "The rain falls steadily, soaking everything in sight.",
+            "Light rain taps on the ground, creating puddles along the trail.",
+            "Persistent rain soaks through clothes, but it's not a downpour."
+        ]
+    },
+    "stormy": {
+        "descriptions": [
+            "Thunder rumbles in the distance, and the storm picks up.",
+            "The wind howls as the storm grows stronger, with heavy rain and lightning.",
+            "A fierce storm strikes, with torrential rain and strong winds."
+        ]
+    },
+    "snowy": {
+        "descriptions": [
+            "The snow falls gently, covering everything in a soft blanket.",
+            "Heavy snowflakes swirl around, reducing visibility.",
+            "The landscape is a winter wonderland, but the cold is biting."
+        ]
+    },
+    "foggy": {
+        "descriptions": [
+            "A thick fog rolls in, making everything appear blurry.",
+            "Visibility is poor, with everything shrouded in a dense fog.",
+            "The air is damp, and the world is swallowed up by the fog."
+        ]
+    },
+    "windy": {
+        "descriptions": [
+            "The wind picks up, making the air feel colder than it is.",
+            "Strong gusts of wind blow through, rattling trees and tents.",
+            "The wind howls, making it difficult to hear anything else."
+        ]
+    }
+}
