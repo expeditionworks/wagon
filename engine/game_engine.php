@@ -152,12 +152,6 @@ function getPlayerState($player_id, $conn) {
 function simulateWeather($playerState, $weatherMonths) {
     // Get weather data for the current month based on the player's month
     $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
-
-    // Debug: Print out what $monthData is seeing
-    echo "<p><strong>Weather Data for Current Month:</strong></p>";
-    echo "<pre>";
-    print_r($monthData);
-    echo "</pre>";
 }
 
 
