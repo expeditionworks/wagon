@@ -120,7 +120,7 @@ function getPlayerState($player_id, $conn) {
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
             'terrain' => $terrain,  // Ensure terrain is always set
-            'terrainCurrent' => $terrainType; // current terrain is always set
+            'terrainCurrent' => $terrainType, // current terrain is always set
             'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
