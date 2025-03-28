@@ -6,8 +6,8 @@ include_once(__DIR__ . '/db_connection.php'); // Database connection
 
 function getPlayerState($player_id, $conn) {
     // Modify the query to fetch start_date from the players table
-    $query = "SELECT ps.*, p.start_date FROM player_state ps
-              LEFT JOIN players p ON p.player_id = ps.player_id
+    $query = "SELECT ps.*, p.id AS player_id FROM player_state ps
+              LEFT JOIN players p ON p.id = ps.player_id
               WHERE ps.player_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $player_id);
