@@ -1,0 +1,74 @@
+{
+    "Oxen": {
+        "name": "Oxen",
+        "description": "A sturdy animal used for pulling the wagon.",
+        "base_price": 50,
+        "rarity": "low",
+        "weight": 200,
+        "effect": "Used for pulling the wagon, increases travel speed."
+    },
+    "Food": {
+        "name": "Food",
+        "description": "Basic rations to sustain your family.",
+        "base_price": 5,
+        "rarity": "medium",
+        "weight": 1,
+        "effect": "Each lb of food supports 1 person for 1 day."
+    },
+    "Ammunition": {
+        "name": "Ammunition",
+        "description": "Used for hunting or defense.",
+        "base_price": 3,
+        "rarity": "high",
+        "weight": 0.2,
+        "effect": "Each bullet supports a hunting action or defense."
+    },
+    "Clothes": {
+        "name": "Clothes",
+        "description": "Basic clothing to protect against the elements.",
+        "base_price": 10,
+        "rarity": "medium",
+        "weight": 5,
+        "effect": "Protects from the cold, impacts morale."
+    },
+    "Gold": {
+        "name": "Gold",
+        "description": "Gold coins, used for trade and purchases.",
+        "base_price": 10,
+        "rarity": "high",
+        "weight": 0,
+        "effect": "Can be used for trading and purchasing supplies."
+    },
+    "Traps": {
+        "name": "Traps",
+        "description": "Used for catching animals for food or trade.",
+        "base_price": 15,
+        "rarity": "medium",
+        "weight": 2,
+        "effect": "Each trap can catch one animal per day."
+    },
+    "Tools": {
+        "name": "Tools",
+        "description": "Basic tools used for maintenance and repair.",
+        "base_price": 8,
+        "rarity": "low",
+        "weight": 3,
+        "effect": "Used for repairs and other maintenance tasks."
+    },
+    "Wood": {
+        "name": "Wood",
+        "description": "Wood for fuel or building.",
+        "base_price": 2,
+        "rarity": "low",
+        "weight": 1,
+        "effect": "Can be used for fuel or building repairs."
+    },
+    "WagonRepairKit": {
+        "name": "Wagon Repair Kit",
+        "description": "Used for repairing the wagon.",
+        "base_price": 30,
+        "rarity": "medium",
+        "weight": 5,
+        "effect": "Used to repair the wagon, restoring durability."
+    }
+}
