@@ -4,6 +4,20 @@
 // Include the necessary files for database connection and game logic
 include_once(__DIR__ . '/db_connection.php'); // Database connection
 
+function initializeDefaultInventory() {
+    return [
+        "Oxen" => 0,
+        "Food" => 0,
+        "Ammunition" => 0,
+        "Clothes" => 0,
+        "Gold" => 0,
+        "Traps" => 0,
+        "Tools" => 0,
+        "Wood" => 0,
+        "WagonRepairKit" => 0
+    ];
+}
+
 function getPlayerState($player_id, $conn) {
     // Modify the query to fetch start_date from the players table
     $query = "SELECT ps.*, p.id AS player_id FROM player_state ps
@@ -27,6 +41,17 @@ function getPlayerState($player_id, $conn) {
         // Get the month after adding days
         $month = $startDateObj->format('F');  // This will give the current month based on the updated date
         $currentMile = $playerRow['mile'];
+
+        // Check if inventory is NULL or blank, and if so, initialize it as an empty array
+        $inventory = !empty($playerRow['inventory']) ? json_decode($playerRow['inventory'], true) : [];
+    
+        // If the inventory is NULL or not a valid JSON, initialize with default items
+        if (!$inventory || !is_array($inventory)) {
+            $inventory = initializeDefaultInventory();
+        }
+
+
+
         
 $terrainPath = __DIR__ . '/../config/terrain.json';
 if (file_exists($terrainPath)) {
