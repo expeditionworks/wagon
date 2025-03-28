@@ -198,6 +198,43 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Retrieve the current mile
     $currentMile = $playerState['mile'];
 
+    // Example: Decrementing food based on party size and rations
+    $itemName = "Food";  // We're working with the 'Food' item
+    $foodPerPerson = 2;  // Example: 2 lbs of food per person per day
+    
+    // Get the party size (e.g., number of family members in $playerState)
+    // $partySize = count($playerState['family']);  // Assuming you have a family array in playerState
+    $partySize = 3;
+    // Calculate total food consumption for the day
+    $totalFoodConsumed = $foodPerPerson * $partySize;
+    
+    // Check if the player has enough food
+    if (isset($playerState['inventory'][$itemName])) {
+        $foodItem = $playerState['inventory'][$itemName];
+        
+        // If the player has enough food, decrease the quantity
+        if ($foodItem['quantity'] >= $totalFoodConsumed) {
+            $foodItem['quantity'] -= $totalFoodConsumed;
+        } else {
+            // Not enough food, handle accordingly (e.g., set quantity to 0)
+            $foodItem['quantity'] = 0;
+            // You could also handle consequences of food shortage (e.g., morale impact)
+        }
+    
+        // Update the inventory in playerState
+        $playerState['inventory'][$itemName] = $foodItem;
+        
+        // Optionally, print out the remaining food for the player
+        echo "Food remaining: " . $foodItem['quantity'] . " lbs\n";
+    } else {
+        echo "No food in inventory.\n";
+    }
+
+
+
+
+
+    
 
         // Load weather_months.json
         $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
