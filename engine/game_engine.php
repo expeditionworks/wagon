@@ -221,7 +221,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         }
     }
     $wind_modifier = 1.0;  // Default to no effect (tailwind)
-   
+    $wind_speed = 5; // set default for wind
     $wind_types = ["headwind", "tailwind", "crosswind"];  // Define an array of possible wind types
     $random_index = array_rand($wind_types); // Randomly select a wind type get the index
     $wind_type = $wind_types[$random_index]; // Select the wind type based on the random index
