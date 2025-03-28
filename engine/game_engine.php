@@ -104,6 +104,16 @@ function getPlayerState($player_id, $conn) {
             $weather = $defaultWeather;
         }
 
+        // Add month calculation based on the start date and the player's day
+        $startDate = $playerRow['start_date']; // Start date in YYYY-MM-DD format
+        $startTimestamp = strtotime($startDate);
+        $currentDay = $playerRow['day']; // The number of days since the start date
+        
+        // Add the days to the start date
+        $currentDate = strtotime("+$currentDay days", $startTimestamp);
+        // Get the month from the resulting date
+        $month = date('F', $currentDate); // Full month name (e.g., 'January')
+
         // Populate player state or set default values if missing
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
@@ -120,7 +130,8 @@ function getPlayerState($player_id, $conn) {
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
             'weather' => $weather,  // Include weather data (either from DB or default)
-            'start_date' => $playerRow['start_date'] ?? null,
+            'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
+            'month' => $month  // Add the calculated month
         ];
 
         return $playerState;  // Return the populated player state
@@ -129,23 +140,8 @@ function getPlayerState($player_id, $conn) {
     return null;  // Return null if player not found
 }
 
-//grab current month
-function getCurrentMonth($playerState) {
-    // Assuming $playerState['start_date'] is in the format 'YYYY-MM-DD' and $playerState['day'] is the number of days since start
-    $startDate = $playerState['start_date']; // Start date from the database (YYYY-MM-DD)
-    $daysSinceStart = $playerState['day'];  // Days that have passed since the start
 
-    // Create a DateTime object from the start date
-    $startDateTime = new DateTime($startDate);
 
-    // Add the days since the start to the start date
-    $startDateTime->modify("+$daysSinceStart days");
-
-    // Get the current month
-    $currentMonth = $startDateTime->format('F'); // 'F' gives full month name (e.g., "January")
-
-    return $currentMonth; // Return the current month name
-}
 
 
 
