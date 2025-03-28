@@ -158,7 +158,10 @@ function getPlayerState($player_id, $conn) {
 
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
-
+    // Player movement: increment miles and days
+    $previousMile = $playerState['mile'];
+    // Retrieve the current mile
+    $currentMile = $playerState['mile'];
 
 
         // Load weather_months.json
@@ -264,10 +267,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         return $playerState;  // Skip further movement and milestone checks
     }
 
-    // Player movement: increment miles and days
-    $previousMile = $playerState['mile'];
-    // Retrieve the current mile
-    $currentMile = $playerState['mile'];
+
     $baseMiles = 15;  // Default miles traveled without adjustments
     
 
