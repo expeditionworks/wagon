@@ -5,8 +5,10 @@
 include_once(__DIR__ . '/db_connection.php'); // Database connection
 
 function getPlayerState($player_id, $conn) {
-    // Query to fetch player state from the database
-    $query = "SELECT * FROM player_state WHERE player_id = ?";
+    // Modify the query to fetch start_date from the players table
+    $query = "SELECT ps.*, p.start_date FROM player_state ps
+              LEFT JOIN players p ON p.player_id = ps.player_id
+              WHERE ps.player_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $player_id);
     $stmt->execute();
@@ -104,44 +106,17 @@ function getPlayerState($player_id, $conn) {
             $weather = $defaultWeather;
         }
 
-        // Get the start_date and calculate the current month
+        // Get the start date from player_row (it should now be part of the playerRow)
         $startDate = isset($playerRow['start_date']) ? $playerRow['start_date'] : null;
-        $month = 'Unknown'; // Default month if no start date exists
-
-// Get the start_date and calculate the current month
-$startDate = isset($playerRow['start_date']) ? $playerRow['start_date'] : null;
-$month = 'Unknown'; // Default month if no start date exists
-
-if ($startDate) {
-    // Debugging: Echo the start date to check
-    echo "Start Date: " . $startDate . "<br>";
-
-    $startTimestamp = strtotime($startDate); // Convert start date to timestamp
-    if ($startTimestamp === false) {
-        echo "Error: strtotime() failed to parse the start date.<br>";
-    }
-
-    $currentDay = isset($playerRow['day']) ? $playerRow['day'] : 0; // Get the current day from player state
-    // Debugging: Echo the current day
-    echo "Current Day: " . $currentDay . "<br>";
-
-    $currentDate = strtotime("+$currentDay days", $startTimestamp); // Add days to start date
-    if ($currentDate === false) {
-        echo "Error: strtotime() failed to calculate the new date.<br>";
-    }
-
-    // Debugging: Show the calculated current date
-    echo "Current Date: " . date('Y-m-d', $currentDate) . "<br>";
-
-    // Get the current month
-    $month = date('F', $currentDate); // Get the current month
-    // Debugging: Echo the calculated month
-    echo "Month: " . $month . "<br>";
-}
-
-
-
-        // Populate player state or set default values if missing
+        
+        // Convert start_date to DateTime object
+        $startDateTime = new DateTime($startDate);
+        $currentDate = $startDateTime->add(new DateInterval("P" . ($playerRow['day'] - 1) . "D"));
+        
+        // Get the month name
+        $month = $currentDate->format('F'); // 'F' gives the full month name (e.g., "January", "February")
+        
+        // Add month to playerState
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
@@ -157,8 +132,8 @@ if ($startDate) {
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
             'weather' => $weather,  // Include weather data (either from DB or default)
-            'start_date' => $startDate, // Adding start_date from the database
-            'month' => $month // Add the calculated month
+            'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
+            'month' => $month // Adding month to player state
         ];
 
         return $playerState;  // Return the populated player state
@@ -166,6 +141,7 @@ if ($startDate) {
 
     return null;  // Return null if player not found
 }
+
 
 
 
