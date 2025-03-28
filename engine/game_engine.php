@@ -36,11 +36,14 @@ function getPlayerState($player_id, $conn) {
 
             // Retrieve the terrain for the current mile
             $terrainType = 'plains';  // Default terrain if none found
+            $altitude = 'low';  // Default altitude if none found
     
             // Loop through the terrain array to find the correct terrain type for the current mile
             foreach ($terrain as $section) {
                 if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
                     $terrainType = $section['terrain'];
+                    $altitude = $section['altitude'] ?? 'low'; // Default to 'low' altitude if not specified
+
                     break;  // Exit the loop once the correct terrain is found
                 }
             }
@@ -121,6 +124,7 @@ function getPlayerState($player_id, $conn) {
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
             'terrain' => $terrain,  // Ensure terrain is always set
             'terrainCurrent' => $terrainType, // current terrain is always set
+            'altitude' => $altitude ?? 'low', // set altitude
             'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
