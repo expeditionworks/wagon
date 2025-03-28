@@ -179,7 +179,7 @@ function simulateWeather($playerState, $weatherMonths) {
 
     // Get wind speed range for the current month and weather type
     $windSpeedRange = $monthData['wind_speed_range'];
-    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;
+    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
 
     // Construct the weather data to return
     $weatherData = [
@@ -189,11 +189,13 @@ function simulateWeather($playerState, $weatherMonths) {
         'wind_speed' => $windSpeed,
         'date' => date('Y-m-d'), // Store the current date of the weather
     ];    
-    
-    $playerState['weatherThisTurn'] = $weatherData;
+
+    // Optionally, add the weather to playerState directly
+    $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
 
     return $weatherData;    
 }
+
 
 
 
