@@ -6,7 +6,7 @@
         "rarity": "low",
         "weight": 200,
         "effect": "Used for pulling the wagon, increases travel speed.",
-        "durability": 100  // Oxen will wear out over time
+        "durability": 100  
     },
     "Food": {
         "name": "Food",
@@ -15,7 +15,7 @@
         "rarity": "medium",
         "weight": 1,
         "effect": "Each lb of food supports 1 person for 1 day.",
-        "durability": null  // No durability for food
+        "durability": null  
     },
     "Ammunition": {
         "name": "Ammunition",
@@ -24,7 +24,7 @@
         "rarity": "high",
         "weight": 0.2,
         "effect": "Each bullet supports a hunting action or defense.",
-        "durability": null  // No durability for ammunition
+        "durability": null  
     },
     "Clothes": {
         "name": "Clothes",
@@ -33,7 +33,7 @@
         "rarity": "medium",
         "weight": 5,
         "effect": "Protects from the cold, impacts morale.",
-        "durability": 50  // Clothes will wear out over time
+        "durability": 50  
     },
     "Books": {
         "name": "Books",
@@ -42,7 +42,7 @@
         "rarity": "low",
         "weight": 2,
         "effect": "Increases morale over time.",
-        "durability": null  // No durability for books
+        "durability": null  
     },
     "Gold": {
         "name": "Gold",
@@ -51,7 +51,7 @@
         "rarity": "high",
         "weight": 0,
         "effect": "Can be used for trading and purchasing supplies.",
-        "durability": null  // Gold doesn't wear out
+        "durability": null 
     },
     "Traps": {
         "name": "Traps",
@@ -60,7 +60,7 @@
         "rarity": "medium",
         "weight": 2,
         "effect": "Each trap can catch one animal per day.",
-        "durability": 10  // Traps wear out over time
+        "durability": 10
     },
     "Tools": {
         "name": "Tools",
@@ -69,7 +69,7 @@
         "rarity": "low",
         "weight": 3,
         "effect": "Used for repairs and other maintenance tasks.",
-        "durability": 20  // Tools wear out with use
+        "durability": 20
     },
     "Wood": {
         "name": "Wood",
@@ -78,7 +78,7 @@
         "rarity": "low",
         "weight": 1,
         "effect": "Can be used for fuel or building repairs.",
-        "durability": null  // Wood doesn't wear out
+        "durability": null
     },
     "WagonRepairKit": {
         "name": "Wagon Repair Kit",
@@ -87,6 +87,6 @@
         "rarity": "medium",
         "weight": 5,
         "effect": "Used to repair the wagon, restoring durability.",
-        "durability": 5  // Wagon repair kits are consumed after use
+        "durability": 5
     }
 }
