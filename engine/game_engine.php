@@ -129,6 +129,24 @@ function getPlayerState($player_id, $conn) {
     return null;  // Return null if player not found
 }
 
+//grab current month
+function getCurrentMonth($playerState) {
+    // Assuming $playerState['start_date'] is in the format 'YYYY-MM-DD' and $playerState['day'] is the number of days since start
+    $startDate = $playerState['start_date']; // Start date from the database (YYYY-MM-DD)
+    $daysSinceStart = $playerState['day'];  // Days that have passed since the start
+
+    // Create a DateTime object from the start date
+    $startDateTime = new DateTime($startDate);
+
+    // Add the days since the start to the start date
+    $startDateTime->modify("+$daysSinceStart days");
+
+    // Get the current month
+    $currentMonth = $startDateTime->format('F'); // 'F' gives full month name (e.g., "January")
+
+    return $currentMonth; // Return the current month name
+}
+
 
 
 
