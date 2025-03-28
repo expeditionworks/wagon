@@ -28,29 +28,33 @@ function getPlayerState($player_id, $conn) {
         $month = $startDateObj->format('F');  // This will give the current month based on the updated date
         $currentMile = $playerRow['mile'];
         
-        // Load JSON configurations for terrain and milestones
-        $terrainPath = __DIR__ . '/../config/terrain.json';
-        if (file_exists($terrainPath)) {
-            $terrainContent = file_get_contents($terrainPath);
-            $terrain = $terrainContent !== false ? json_decode($terrainContent, true) : [];
+$terrainPath = __DIR__ . '/../config/terrain.json';
+if (file_exists($terrainPath)) {
+    $terrainContent = file_get_contents($terrainPath);
+    $terrain = $terrainContent !== false ? json_decode($terrainContent, true) : [];
 
-            // Retrieve the terrain for the current mile
-            $terrainType = 'plains';  // Default terrain if none found
-            $altitude = 'low';  // Default altitude if none found
-    
-            // Loop through the terrain array to find the correct terrain type for the current mile
-            foreach ($terrain as $section) {
-                if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
-                    $terrainType = $section['terrain'] ?? 'plains';
-                    $altitude = $section['altitude'] ?? 'low'; 
-                    break;  // Exit the loop once the correct terrain is found
-                }
-            }
+    // Initialize default values
+    $terrainType = 'plains';  // Default terrain if none found
+    $altitude = 'low';  // Default altitude if none found
 
-        } else {
-            echo "Terrain file not found or not accessible.";
-            $terrain = []; // Default empty array
+    // Loop through the terrain array to find the correct terrain type for the current mile
+    foreach ($terrain as $section) {
+        if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
+            $terrainType = $section['terrain'] ?? 'plains';
+            $altitude = $section['altitude'] ?? 'low'; 
+            break;  // Exit the loop once the correct terrain is found
         }
+    }
+
+    // Save the terrain and altitude values into the playerState
+    $playerState['terrainCurrent'] = $terrainType;
+    $playerState['altitude'] = $altitude;
+
+} else {
+    echo "Terrain file not found or not accessible.";
+    $terrain = []; // Default empty array
+}
+        
 
         $milestonesPath = __DIR__ . '/../config/milestones.json';
         if (file_exists($milestonesPath)) {
