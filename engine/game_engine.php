@@ -37,13 +37,13 @@ function getPlayerState($player_id, $conn) {
             $playerInventory = [
                 "Oxen" => ["quantity" => 0, "durability" => 100],
                 "Food" => ["quantity" => 0, "durability" => null],
-                "Ammunition" => ["quantity" => 0, "durability" => null]
-                "Clothes" => ["quantity" => 0, "durability" => 100]
-                "Books" => ["quantity" => 0, "durability" => 20]
-                "Gold" => ["quantity" => 0, "durability" => null]
-                "Traps" => ["quantity" => 0, "durability" => 20]
-                "Tools" => ["quantity" => 0, "durability" => 20]
-                "Wood" => ["quantity" => 0, "durability" => null]
+                "Ammunition" => ["quantity" => 0, "durability" => null],
+                "Clothes" => ["quantity" => 0, "durability" => 100],
+                "Books" => ["quantity" => 0, "durability" => 20],
+                "Gold" => ["quantity" => 0, "durability" => null],
+                "Traps" => ["quantity" => 0, "durability" => 20],
+                "Tools" => ["quantity" => 0, "durability" => 20],
+                "Wood" => ["quantity" => 0, "durability" => null],
                 "WagonRepairKit" => ["quantity" => 0, "durability" => 20]
             ];
         }
