@@ -215,14 +215,17 @@ function getWindModifier($terrainType, $altitude) {
 
     // Calculate the total wind modifier
     return $terrainWindModifier * $altitudeWindModifier;
-}
 
-echo "<p><strong>Weather Simulation:</strong></p>";
+
+    echo "<p><strong>Weather Simulation:</strong></p>";
 echo "<p><strong>Weather Type:</strong> " . $weatherData['weather_type'] . "</p>";
 echo "<p><strong>Temperature:</strong> " . $weatherData['temperature'] . "°F</p>";
 echo "<p><strong>Precipitation:</strong> " . $weatherData['precipitation'] . "</p>";
 echo "<p><strong>Wind Speed:</strong> " . $weatherData['wind_speed'] . " mph</p>";
 echo "<p><strong>Date:</strong> " . $weatherData['date'] . "</p>";
+}
+
+
 
 
 
