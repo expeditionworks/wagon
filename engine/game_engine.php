@@ -49,7 +49,7 @@ function getPlayerState($player_id, $conn) {
         } else {
             // If inventory is NULL or empty, initialize with default items
             $inventory = [
-                "Oxen" => 0,
+                "Oxen" => 6,
                 "Food" => 0,
                 "Ammunition" => 0,
                 "Clothes" => 0,
