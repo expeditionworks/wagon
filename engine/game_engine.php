@@ -143,6 +143,10 @@ function getPlayerState($player_id, $conn) {
     return null;  // Return null if player not found
 }
 
+echo "<pre>";
+print_r($playerState);  // Debug: See the contents of playerState
+echo "</pre>";
+
 
 function simulateWeather($playerState, $weatherMonths) {
     // Retrieve the current month based on the player's start date and day
@@ -224,7 +228,7 @@ function getWindModifier($terrainType, $altitude) {
 }
 
 // Assuming $playerState and $weatherMonths are available
-$weatherData = simulateWeather($playerState, $weatherMonths);
+// $weatherData = simulateWeather($playerState, $weatherMonths);
 
 // Now you can work with the $weatherData, or pass it to updatePlayerState to save it in the DB
 echo "<p><strong>Weather Simulation:</strong></p>";
