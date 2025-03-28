@@ -341,9 +341,36 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
         'hard' => 0.9
     ];
     $difficultyMultiplier = $difficultyMod[$playerState['difficulty']] ?? 1.0;  // Default to 1 if difficulty is unknown
+    // Adjust the morale modifier based on morale value
+    if ($morale >= 90) {
+        $moraleMod *= 1.1;  // Increase speed by 10% if morale is between 90-100
+    } elseif ($morale >= 50) {
+        $moraleMod *= 1.0;  // No effect on speed if morale is between 50-89
+    } else {
+        $moraleMod *= 0.8;  // Reduce speed by 20% if morale is below 50
+    }
+
+    // oxen
+    $oxenNumber = $playerState['oxen'] ?? 6;  // Default to 6 if 'oxen' is not set
+    
+    // Initialize oxen modifier
+    $oxenMod = 1.0;  // Default: no change in distance
+    
+    // Adjust oxen modifier based on the number of oxen
+    if ($oxenNumber >= 8) {
+        $oxenMod *= 1.2;  // More than enough oxen, no reduction, possibly increase speed
+    } elseif ($oxenNumber >= 6) {
+        $oxenMod *= 1.0;  // Adequate number of oxen, no change
+    } elseif ($oxenNumber >= 3) {
+        $oxenMod *= 0.8;  // Less than enough, some reduction in speed
+    } elseif ($oxenNumber >= 1) {
+        $oxenMod *= 0.5;  // Very few oxen, significant reduction in speed
+    } else {
+        $oxenMod *= 0.0;  // No oxen, no movement possible
+    }
 
     // Calculate initial miles traveled with adjustments
-    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty);
+    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty * $moraleMod * $oxenMod);
     $milesTraveled = round(max( $adjusted_distance * $wind_modifier, 0)); //add wind modifier
 
     
@@ -355,13 +382,6 @@ echo "<p>Difficulty Modifier: $difficultyMultiplier</p>";
 echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
     echo "<p>Wind type: $wind_type</p>";
 
-    // Adjust for player conditions (e.g., morale, oxen)
-    if ($playerState['morale'] < 50) {
-        $milesTraveled *= 0.8;  // Reduce miles if morale is low
-    }
-    if ($playerState['oxen'] < 2) {
-        $milesTraveled *= 0.7;  // Reduce miles if not enough oxen
-    }
 
     // Store miles traveled in playerState
     $playerState['miles_traveled'] = $milesTraveled;  // Save miles traveled in playerState
