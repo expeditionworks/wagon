@@ -28,36 +28,23 @@ function getPlayerState($player_id, $conn) {
         $month = $startDateObj->format('F');  // This will give the current month based on the updated date
         $currentMile = $playerRow['mile'];
         $inventory = [];
-        if (!empty($playerRow['inventory'])) {
-            // Attempt to decode the inventory JSON
-            $inventory = json_decode($playerRow['inventory'], true);
         
-            // If decoding fails (returns null) or the result is not an array, initialize to default items
-            if (!$inventory || !is_array($inventory)) {
-                $inventory = [
-                    "Oxen" => 0,
-                    "Food" => 0,
-                    "Ammunition" => 0,
-                    "Clothes" => 0,
-                    "Gold" => 0,
-                    "Traps" => 0,
-                    "Tools" => 0,
-                    "Wood" => 0,
-                    "WagonRepairKit" => 0
-                ];
-            }
-        } else {
-            // If inventory is NULL or empty, initialize with default items
-            $inventory = [
-                "Oxen" => 6,
-                "Food" => 0,
-                "Ammunition" => 0,
-                "Clothes" => 0,
-                "Gold" => 0,
-                "Traps" => 0,
-                "Tools" => 0,
-                "Wood" => 0,
-                "WagonRepairKit" => 0
+        // Initialize inventory if it’s NULL or invalid
+        $inventory = !empty($playerRow['inventory']) ? json_decode($playerRow['inventory'], true) : [];
+        
+        // Initialize the inventory with default values if it’s empty or invalid
+        if (empty($playerInventory) || !is_array($playerInventory)) {
+            $playerInventory = [
+                "Oxen" => ["quantity" => 0, "durability" => 100],
+                "Food" => ["quantity" => 0, "durability" => null],
+                "Ammunition" => ["quantity" => 0, "durability" => null]
+                "Clothes" => ["quantity" => 0, "durability" => 100]
+                "Books" => ["quantity" => 0, "durability" => 20]
+                "Gold" => ["quantity" => 0, "durability" => null]
+                "Traps" => ["quantity" => 0, "durability" => 20]
+                "Tools" => ["quantity" => 0, "durability" => 20]
+                "Wood" => ["quantity" => 0, "durability" => null]
+                "WagonRepairKit" => ["quantity" => 0, "durability" => 20]
             ];
         }
 
