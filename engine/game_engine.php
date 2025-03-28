@@ -79,6 +79,8 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     // Player movement: increment miles and days
     $previousMile = $playerState['mile'];
+    // Retrieve the current mile
+    $currentMile = $playerState['mile'];
     $baseMiles = 15;  // Default miles traveled without adjustments
     
       // Retrieve the terrain for the current mile
@@ -86,12 +88,12 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     // Loop through the terrain array to find the correct terrain type for the current mile
     foreach ($playerState['terrain'] as $section) {
-        if ($previousMile >= $section['start_mile'] && $previousMile <= $section['end_mile']) {
+        if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
             $terrainType = $section['terrain'];
-            break;
+            break;  // Exit the loop once the correct terrain is found
         }
     }
-
+    
     // Adjust based on terrain type
     $terrainModifiers = [
         'plains' => 1.2,
@@ -102,8 +104,12 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'desert' => 0.7
     ];
 
-    $terrainMod = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1 if terrain is unknown
+// Get the modifier based on the terrain type
+$terrainMod = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1 if terrain is unknown
 
+// You can now use $terrainMod in your movement calculation
+echo "Terrain Type: $terrainType, Modifier: $terrainMod";
+    
     // Adjust based on difficulty setting
     $difficultyMod = [
         'easy' => 1.1,
