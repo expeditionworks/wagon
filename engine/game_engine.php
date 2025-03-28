@@ -188,6 +188,12 @@ function simulateWeather($playerState, $weatherMonths) {
         'date' => date('Y-m-d'), // Store the current date of the weather
     ];
 
+    // Debug: Echo the weather data
+    echo "<p><strong>Final Weather Data:</strong></p>";
+    echo "<pre>";
+    print_r($weatherData);
+    echo "</pre>";
+
     return $weatherData;
 }
 
@@ -213,17 +219,21 @@ function getWindModifier($terrainType, $altitude) {
     // Get the wind modifier for altitude
     $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;  // Default to 1.0 if altitude not found
 
-        echo "<p><strong>Final Weather Data:</strong></p>";
-echo "<pre>";
-print_r($weatherData);
-echo "</pre>";
-    
     // Calculate the total wind modifier
     return $terrainWindModifier * $altitudeWindModifier;
-
-
-
 }
+
+// Assuming $playerState and $weatherMonths are available
+$weatherData = simulateWeather($playerState, $weatherMonths);
+
+// Now you can work with the $weatherData, or pass it to updatePlayerState to save it in the DB
+echo "<p><strong>Weather Simulation:</strong></p>";
+echo "<p><strong>Weather Type:</strong> " . $weatherData['weather_type'] . "</p>";
+echo "<p><strong>Temperature:</strong> " . $weatherData['temperature'] . "°F</p>";
+echo "<p><strong>Precipitation:</strong> " . $weatherData['precipitation'] . "</p>";
+echo "<p><strong>Wind Speed:</strong> " . $weatherData['wind_speed'] . " mph</p>";
+echo "<p><strong>Date:</strong> " . $weatherData['date'] . "</p>";
+
 
 
 
