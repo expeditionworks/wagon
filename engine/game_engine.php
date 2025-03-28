@@ -271,10 +271,11 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $currentTrail = $playerState['current_trail'];
     $delayDays = $playerState['delay_days']; // Ensure the delay_days is passed
     $milesTraveled = $playerState['miles_traveled'] ?? 0;  // Get miles_traveled from playerState
+    $weatherJson = json_encode($playerState['weather']);  // Convert weather to JSON string
 
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ? 
+              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ? 
               WHERE player_id = ?";
 
     $stmt = $conn->prepare($query);
@@ -285,7 +286,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
 
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iissssssii', 
+        'iissssssssi', 
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
@@ -295,6 +296,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $lastLogItem,    
         $delayDays,      // Pass the delay_days value
         $milesTraveled,  // Pass the miles_traveled value
+        $weatherJson,    // Pass the weather as JSON string
         $player_id
     );
 
@@ -305,6 +307,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
         echo "<p>Error executing query: " . $stmt->error . "</p>";
     }
 }
+
 
 
 ?>
