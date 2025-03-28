@@ -114,6 +114,7 @@ function getPlayerState($player_id, $conn) {
             $currentDate = strtotime("+$currentDay days", $startTimestamp); // Add days to start date
             $month = date('F', $currentDate); // Get the current month
         }
+        echo  $month;
 
         // Populate player state or set default values if missing
         $playerState = [
