@@ -26,13 +26,25 @@ function getPlayerState($player_id, $conn) {
         $startDateObj->modify('+' . ($playerRow['day'] - 1) . ' days'); // Subtract 1 to avoid adding an extra day at the beginning
         // Get the month after adding days
         $month = $startDateObj->format('F');  // This will give the current month based on the updated date
-        
+        $currentMile = $playerRow['mile'];
         
         // Load JSON configurations for terrain and milestones
         $terrainPath = __DIR__ . '/../config/terrain.json';
         if (file_exists($terrainPath)) {
             $terrainContent = file_get_contents($terrainPath);
             $terrain = $terrainContent !== false ? json_decode($terrainContent, true) : [];
+
+            // Retrieve the terrain for the current mile
+            $terrainType = 'plains';  // Default terrain if none found
+    
+            // Loop through the terrain array to find the correct terrain type for the current mile
+            foreach ($terrain as $section) {
+                if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
+                    $terrainType = $section['terrain'];
+                    break;  // Exit the loop once the correct terrain is found
+                }
+            }
+
         } else {
             echo "Terrain file not found or not accessible.";
             $terrain = []; // Default empty array
@@ -108,6 +120,7 @@ function getPlayerState($player_id, $conn) {
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
             'terrain' => $terrain,  // Ensure terrain is always set
+            'terrainCurrent' => $terrainType; // current terrain is always set
             'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
@@ -238,16 +251,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     }
 
 
-          // Retrieve the terrain for the current mile
-    $terrainType = 'plains';  // Default terrain if none found
-    
-        // Loop through the terrain array to find the correct terrain type for the current mile
-    foreach ($playerState['terrain'] as $section) {
-        if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
-            $terrainType = $section['terrain'];
-            break;  // Exit the loop once the correct terrain is found
-        }
-    }
+
     
     // Calculate the wind speed using terrain and altitude modifiers
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
