@@ -223,6 +223,13 @@ echo "<p><strong>Temperature:</strong> " . $weatherData['temperature'] . "°F</p
 echo "<p><strong>Precipitation:</strong> " . $weatherData['precipitation'] . "</p>";
 echo "<p><strong>Wind Speed:</strong> " . $weatherData['wind_speed'] . " mph</p>";
 echo "<p><strong>Date:</strong> " . $weatherData['date'] . "</p>";
+
+
+    echo "<p><strong>Final Weather Data:</strong></p>";
+echo "<pre>";
+print_r($weatherData);
+echo "</pre>";
+
 }
 
 
