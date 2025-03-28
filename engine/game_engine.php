@@ -191,7 +191,7 @@ function getWindModifier($terrainType, $altitude) {
     ];
     $terrainWindModifier = 1;
     // Get the wind modifier for the terrain type (default to 1.0 if terrain type not found)
-    $terrainWindModifier = $terrainModifiers[$playerState['altitude']]; // Default to 1.0 if not found
+    $terrainWindModifier = $terrainModifiers[$playerState['terrainCurrent']]; // Default to 1.0 if not found
 
     // Get the wind modifier for altitude (default to 1.0 if altitude type not found)
     $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;
