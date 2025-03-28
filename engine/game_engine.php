@@ -156,7 +156,14 @@ function simulateWeather($playerState, $weatherMonths) {
     // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
     $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
-
+    // Validate the weatherType
+    if (!in_array($weatherType, $weatherTypes)) {
+        $weatherType = 'sunny'; // Default to sunny if the weatherType is invalid
+    }
+    
+    // Debug: Print the weather type to confirm it's valid
+    echo "<p><strong>Weather Type Selected:</strong> $weatherType</p>";
+    
     // Get the temperature range for the chosen weather type
     $temperatureRange = $monthData['temperature_range'][$weatherType];
     $temperature = rand($temperatureRange[0], $temperatureRange[1]);
