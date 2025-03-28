@@ -41,7 +41,7 @@ if ($playerState) {
     }
 
     // Add wind speed info
-    $weatherString .= "Wind gusted to about " . ucfirst($weatherData['wind_speed'] . " mph. ";
+    $weatherString .= "Wind gusted to about " . ucfirst($weatherData['wind_speed']) . " mph. ";
 
     // Display the formatted weather string
     echo "<p><strong>Weather for Today:</strong> " . $weatherString . "</p>";
