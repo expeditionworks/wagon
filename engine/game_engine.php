@@ -278,6 +278,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
    
     // Adjust based on terrain type
     $terrainModifiers = [
+        '' => 1.0,
         'plains' => 1.2,
         'rolling hills' => 1.0,
         'mountains' => 0.8,
