@@ -31,9 +31,18 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 
     // Format the weather data into a readable string
     $weatherString = "Today's weather is " . ucfirst($weatherData['weather_type']) . ". ";
-    
-    // Ensure temperature is displayed as a number
-    $weatherString .= "The temperature is around " . $weatherData['temperature'] . "°F. ";
+
+    // Check if 'temperature' is an array and handle it
+    if (is_array($weatherData['temperature'])) {
+        // Get a random temperature between the min and max values
+        $temperature = rand($weatherData['temperature']['min'], $weatherData['temperature']['max']);
+    } else {
+        // Use the temperature directly if it's not an array
+        $temperature = $weatherData['temperature'];
+    }
+
+    // Format temperature as a string
+    $weatherString .= "The temperature is around " . $temperature . "°F. ";
 
     // Add precipitation info if available
     if ($weatherData['precipitation'] !== 'none') {
@@ -50,6 +59,7 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 } else {
     echo "<p>Weather data is not available for today.</p>";
 }
+
 
 
     
