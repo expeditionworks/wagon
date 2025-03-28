@@ -103,9 +103,11 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'river valley' => 1.0,
         'desert' => 0.7
     ];
+    // Introduce some randomness (e.g., between 0.95 and 1.05)
+    $randomFactor = mt_rand(95, 105) / 100;  // Random value between 0.95 and 1.05
 
-// Get the modifier based on the terrain type
-$terrainMod = $terrainModifiers[$terrainType] ?? 1.0;  // Default to 1 if terrain is unknown
+    // Get the modifier based on the terrain type
+    $terrainMod = ($terrainModifiers[$terrainType] ?? 1.0) * $randomFactor;  // Default to 1 if terrain is unknown
 
 // You can now use $terrainMod in your movement calculation
 echo "Terrain Type: $terrainType, Modifier: $terrainMod";
