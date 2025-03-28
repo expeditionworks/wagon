@@ -106,15 +106,16 @@ function getPlayerState($player_id, $conn) {
             $weather = $defaultWeather;
         }
 
-        // Get the start date from player_row (it should now be part of the playerRow)
-        $startDate = isset($playerRow['start_date']) ? $playerRow['start_date'] : null;
+        // Assuming $playerRow['start_date'] is the value fetched from the database
         
-        // Convert start_date to DateTime object
-        $startDateTime = new DateTime($startDate);
-        $currentDate = $startDateTime->add(new DateInterval("P" . ($playerRow['day'] - 1) . "D"));
+        $startDate = $playerRow['start_date'] ?? '1849-05-01'; // Use default date if start_date is null
         
-        // Get the month name
-        $month = $currentDate->format('F'); // 'F' gives the full month name (e.g., "January", "February")
+        // Create DateTime object
+        $startDateObj = new DateTime($startDate);
+        
+        // Now, calculate the month
+        $month = $startDateObj->format('F');  // This will give you the full month name (e.g., "January", "February", etc.)
+
         
         // Add month to playerState
         $playerState = [
