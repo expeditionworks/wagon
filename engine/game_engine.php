@@ -108,13 +108,38 @@ function getPlayerState($player_id, $conn) {
         $startDate = isset($playerRow['start_date']) ? $playerRow['start_date'] : null;
         $month = 'Unknown'; // Default month if no start date exists
 
-        if ($startDate) {
-            $startTimestamp = strtotime($startDate); // Convert start date to timestamp
-            $currentDay = isset($playerRow['day']) ? $playerRow['day'] : 0; // Get the current day from player state
-            $currentDate = strtotime("+$currentDay days", $startTimestamp); // Add days to start date
-            $month = date('F', $currentDate); // Get the current month
-        }
-        echo  $month;
+// Get the start_date and calculate the current month
+$startDate = isset($playerRow['start_date']) ? $playerRow['start_date'] : null;
+$month = 'Unknown'; // Default month if no start date exists
+
+if ($startDate) {
+    // Debugging: Echo the start date to check
+    echo "Start Date: " . $startDate . "<br>";
+
+    $startTimestamp = strtotime($startDate); // Convert start date to timestamp
+    if ($startTimestamp === false) {
+        echo "Error: strtotime() failed to parse the start date.<br>";
+    }
+
+    $currentDay = isset($playerRow['day']) ? $playerRow['day'] : 0; // Get the current day from player state
+    // Debugging: Echo the current day
+    echo "Current Day: " . $currentDay . "<br>";
+
+    $currentDate = strtotime("+$currentDay days", $startTimestamp); // Add days to start date
+    if ($currentDate === false) {
+        echo "Error: strtotime() failed to calculate the new date.<br>";
+    }
+
+    // Debugging: Show the calculated current date
+    echo "Current Date: " . date('Y-m-d', $currentDate) . "<br>";
+
+    // Get the current month
+    $month = date('F', $currentDate); // Get the current month
+    // Debugging: Echo the calculated month
+    echo "Month: " . $month . "<br>";
+}
+
+
 
         // Populate player state or set default values if missing
         $playerState = [
