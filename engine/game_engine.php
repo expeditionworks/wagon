@@ -229,7 +229,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     
     // Calculate the wind speed using terrain and altitude modifiers
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
+    $windModifier = getWindModifier($terrainType, $playerState['altitude'] ?? 'low');  // Get wind modifier
 
     // Get wind speed range for the current month and weather type
     $windSpeedRange = $monthData['wind_speed_range'];
