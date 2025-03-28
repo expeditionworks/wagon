@@ -31,7 +31,7 @@ if ($playerState) {
 
     // Format the weather data into a readable string
     $weatherString = "Today's weather is " . ucfirst($weatherData['weather_type']) . ". ";
-    $weatherString .= "The temperature is between " . $weatherData['temperature'] . "°F. ";
+    $weatherString .= "The temperature was around " . ucfirst($weatherData['temperature']) . "°F. ";
 
     // Add precipitation info if available
     if ($weatherData['precipitation'] !== 'none') {
@@ -41,7 +41,7 @@ if ($playerState) {
     }
 
     // Add wind speed info
-    $weatherString .= "Wind speeds are between " . $weatherData['wind_speed'] . " mph. ";
+    $weatherString .= "Wind gusted to about " . ucfirst($weatherData['wind_speed'] . " mph. ";
 
     // Display the formatted weather string
     echo "<p><strong>Weather for Today:</strong> " . $weatherString . "</p>";
