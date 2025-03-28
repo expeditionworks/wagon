@@ -56,29 +56,7 @@ function getPlayerState($player_id, $conn) {
             "type" => "default"
         ];
 
-        // Load weather_months.json
-        $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
-        if (file_exists($weatherMonthsPath)) {
-            $weatherMonthsContent = file_get_contents($weatherMonthsPath);
-            $weatherMonths = $weatherMonthsContent !== false ? json_decode($weatherMonthsContent, true) : [];
-        } else {
-            echo "Weather Months file not found or not accessible.";
-            // Default fallback to May if the file doesn't exist
-            $weatherMonths = [
-                "May" => [
-                    "weather_types" => ["sunny", "cloudy", "snowy"],
-                    "temperature_range" => [
-                        "sunny" => [25, 45],
-                        "cloudy" => [20, 40],
-                        "snowy" => [15, 30]
-                    ],
-                    "chance_of_snow" => 45,
-                    "chance_of_rain" => 15,
-                    "wind_speed_range" => ["min" => 5, "max" => 25],
-                    "description" => "Spring is in full swing with mild temperatures and occasional rain showers. Snow is rare during this period."
-                ]
-            ];
-        }
+
 
         // Load weather_types.json
         $weatherTypesPath = __DIR__ . '/../config/weather_types.json';
@@ -183,10 +161,33 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
 
 
-
+        // Load weather_months.json
+        $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
+        if (file_exists($weatherMonthsPath)) {
+            $weatherMonthsContent = file_get_contents($weatherMonthsPath);
+            $weatherMonths = $weatherMonthsContent !== false ? json_decode($weatherMonthsContent, true) : [];
+        } else {
+            echo "Weather Months file not found or not accessible.";
+            // Default fallback to May if the file doesn't exist
+            $weatherMonths = [
+                "May" => [
+                    "weather_types" => ["sunny", "cloudy", "snowy"],
+                    "temperature_range" => [
+                        "sunny" => [25, 45],
+                        "cloudy" => [20, 40],
+                        "snowy" => [15, 30]
+                    ],
+                    "chance_of_snow" => 45,
+                    "chance_of_rain" => 15,
+                    "wind_speed_range" => ["min" => 5, "max" => 25],
+                    "description" => "Spring is in full swing with mild temperatures and occasional rain showers. Snow is rare during this period."
+                ]
+            ];
+        }
 
     // Get weather data for the current month based on the player's month
     $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
+
 
    // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
