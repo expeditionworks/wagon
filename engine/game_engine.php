@@ -41,7 +41,7 @@ function getPlayerState($player_id, $conn) {
             // Loop through the terrain array to find the correct terrain type for the current mile
             foreach ($terrain as $section) {
                 if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
-                    $terrainType = $section['terrain']; 
+                    $terrainType = $section['terrain'] ?? 'plains';
                     $altitude = $section['altitude']; 
                     break;  // Exit the loop once the correct terrain is found
                 }
@@ -187,7 +187,7 @@ function getWindModifier($terrainType, $altitude) {
     ];
 
     // Get the wind modifier for the terrain type (default to 1.0 if terrain type not found)
-    $terrainWindModifier = $terrainModifiers[$terrainType] ?? 1.0;
+    $terrainWindModifier = $terrainModifiers[$playerState['currentAltitude']] ?? 1.0; // Default to 1.0 if not found
 
     // Get the wind modifier for altitude (default to 1.0 if altitude type not found)
     $altitudeWindModifier = $altitudeModifiers[$altitude] ?? 1.0;
