@@ -341,15 +341,16 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
 
     // Calculate initial miles traveled with adjustments
     $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod);
-    $milesTraveled = max( $adjusted_distance * $wind_modifier, 0);
+    $milesTraveled = max( $adjusted_distance * $wind_modifier, 0); //add wind modifier
 
     
     // Debug: Output the miles traveled calculation
 echo "<p>Base Miles: $baseMiles</p>";
 echo "<p>Terrain Modifier: $terrainMod</p>";
 echo "<p>Difficulty Modifier: $difficultyMultiplier</p>";
+    echo "<p>Miles Traveled (base + difficult + terrain): $adjusted_distance</p>";
 echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
-    echo "<p>Wind type (Before Adjustments): $wind_type</p>";
+    echo "<p>Wind type: $wind_type</p>";
 
     // Adjust for player conditions (e.g., morale, oxen)
     if ($playerState['morale'] < 50) {
