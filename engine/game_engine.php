@@ -186,7 +186,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
 
     // Get weather data for the current month based on the player's month
-    $monthData = $weatherMonths[$month] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
+    $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
 
    // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
