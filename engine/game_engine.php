@@ -156,41 +156,47 @@ function simulateWeather($playerState, $weatherMonths) {
     // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
     $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
-    // Validate the weatherType
-    if (!in_array($weatherType, $weatherTypes)) {
-        $weatherType = 'sunny'; // Default to sunny if the weatherType is invalid
-    }
 
+    // Get the temperature range for the chosen weather type
+    $temperatureRange = $monthData['temperature_range'][$weatherType];
+    
     // Check if the temperature range is an array with two values (min and max)
     if (is_array($temperatureRange) && count($temperatureRange) === 2) {
+        // Generate a random temperature between min and max
         $temperature = rand($temperatureRange[0], $temperatureRange[1]);
     } else {
-        $temperature = rand(40, 50); // Default fallback if something goes wrong
+        // Fallback if temperature range is not as expected
+        $temperature = rand(40, 50); // Default fallback temperature
     }
 
-   // Chance of snow and rain (based on weather month data)
+    // Chance of snow and rain (based on weather month data)
     $chanceOfSnow = $monthData['chance_of_snow'];
     $chanceOfRain = $monthData['chance_of_rain'];
 
-    // Initialize precipitation
-    $precipitation = 'none';  // Default to no precipitation
-    
-    // Check if the weather type is snowy or cloudy
-    if ($weatherType === 'snowy' && rand(0, 100) <= $monthData['chance_of_snow']) {
-        $precipitation = 'snow';  // Snow happens based on the chance of snow
-    } elseif ($weatherType === 'cloudy' && rand(0, 100) <= $monthData['chance_of_rain']) {
-        $precipitation = 'rain';  // Rain happens based on the chance of rain
+    // Determine precipitation (snow or rain) based on weather type and probabilities
+    $precipitation = 'none';
+    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
+        $precipitation = 'snow';
+    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
+        $precipitation = 'rain';
     }
 
     // Retrieve the terrain type for the current mile (defaulting to 'plains')
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
     // Get the wind modifier based on terrain type and altitude
-    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get the wind modifier
+    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
+
     // Get the wind speed range for the current month and weather type
     $windSpeedRange = $monthData['wind_speed_range'];
-    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
+    if (is_array($windSpeedRange) && isset($windSpeedRange['min']) && isset($windSpeedRange['max'])) {
+        // Generate a random wind speed between min and max, adjusted by the wind modifier
+        $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier; 
+    } else {
+        // Fallback if wind speed range is not valid
+        $windSpeed = rand(5, 15) * $windModifier; // Default to a random value with modifier
+    }
 
-   // Construct the weather data to return
+    // Construct the weather data to return
     $weatherData = [
         'weather_type' => $weatherType,
         'temperature' => $temperature,
@@ -199,8 +205,9 @@ function simulateWeather($playerState, $weatherMonths) {
         'date' => date('Y-m-d'), // Store the current date of the weather
     ];
 
-    return $weatherData;
+    return $weatherData;    
 }
+
 
 
 
