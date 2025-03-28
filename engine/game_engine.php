@@ -32,6 +32,61 @@ function getPlayerState($player_id, $conn) {
             $milestones = []; // Default empty array
         }
 
+        // Default weather if not set in the database
+        $defaultWeather = [
+            "weather_type" => "sunny",
+            "temperature" => ["min" => 20, "max" => 40],
+            "precipitation" => "none",
+            "wind_speed" => ["min" => 5, "max" => 15]
+        ];
+
+        // Load weather_months.json
+        $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
+        if (file_exists($weatherMonthsPath)) {
+            $weatherMonths = json_decode(file_get_contents($weatherMonthsPath), true);
+        } else {
+            echo "Weather Months file not found or not accessible.";
+            // Default fallback to May if the file doesn't exist
+            $weatherMonths = [
+                "May" => [
+                    "weather_types" => ["sunny", "cloudy", "snowy"],
+                    "temperature_range" => [
+                        "sunny" => [25, 45],
+                        "cloudy" => [20, 40],
+                        "snowy" => [15, 30]
+                    ],
+                    "chance_of_snow" => 45,
+                    "chance_of_rain" => 15,
+                    "wind_speed_range" => ["min" => 5, "max" => 25],
+                    "description" => "Spring is in full swing with mild temperatures and occasional rain showers. Snow is rare during this period."
+                ]
+            ]; 
+        }
+        
+        // Load weather_types.json
+        $weatherTypesPath = __DIR__ . '/../config/weather_types.json';
+        if (file_exists($weatherTypesPath)) {
+            $weatherTypes = json_decode(file_get_contents($weatherTypesPath), true);
+        } else {
+            echo "Weather Types file not found or not accessible.";
+            // Default fallback if the file doesn't exist
+            $weatherTypes = [
+                "sunny" => [
+                    "descriptions" => [
+                        "The sun is shining brightly in a clear sky.",
+                        "A warm, sunny day with no clouds in sight.",
+                        "Clear skies and radiant sunlight fill the air."
+                    ]
+                ]
+            ];
+        }
+        
+        // Now you can access $weatherMonths and $weatherTypes as needed
+
+
+        // Check if weather exists in the player row, otherwise use the default
+        $weather = json_decode($playerRow['weather'], true) ?? $defaultWeather;
+
         // Populate player state or set default values if missing
         $playerState = [
             'day' => $playerRow['day'] ?? 1,
@@ -47,6 +102,7 @@ function getPlayerState($player_id, $conn) {
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
+            'weather' => $weather  // Include weather data (either from DB or default)
         ];
 
         return $playerState;  // Return the populated player state
@@ -54,6 +110,7 @@ function getPlayerState($player_id, $conn) {
 
     return null;  // Return null if player not found
 }
+
 
 
 
