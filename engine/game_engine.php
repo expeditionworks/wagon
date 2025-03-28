@@ -172,19 +172,21 @@ function simulateWeather($playerState, $weatherMonths) {
     $chanceOfSnow = $monthData['chance_of_snow'];
     $chanceOfRain = $monthData['chance_of_rain'];
 
-    // Determine precipitation (snow or rain) based on weather type and probabilities
-    $precipitation = 'none';
-    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
-        $precipitation = 'snow';
-    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
-        $precipitation = 'rain';
+    // Initialize precipitation
+    $precipitation = 'none';  // Default to no precipitation
+    
+    // Check if the weather type is snowy or cloudy
+    if ($weatherType === 'snowy' && rand(0, 100) <= $monthData['chance_of_snow']) {
+        $precipitation = 'snow';  // Snow happens based on the chance of snow
+    } elseif ($weatherType === 'cloudy' && rand(0, 100) <= $monthData['chance_of_rain']) {
+        $precipitation = 'rain';  // Rain happens based on the chance of rain
     }
 
-    // Calculate the wind speed using terrain and altitude modifiers
+    // Retrieve the terrain type for the current mile (defaulting to 'plains')
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
-
-    // Get wind speed range for the current month and weather type
+    // Get the wind modifier based on terrain type and altitude
+    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get the wind modifier
+    // Get the wind speed range for the current month and weather type
     $windSpeedRange = $monthData['wind_speed_range'];
     $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
 
@@ -195,9 +197,11 @@ function simulateWeather($playerState, $weatherMonths) {
         'precipitation' => $precipitation,
         'wind_speed' => $windSpeed,
         'date' => date('Y-m-d'), // Store the current date of the weather
-    ];    
-    return $weatherData;    
+    ];
+
+    return $weatherData;
 }
+
 
 
 
