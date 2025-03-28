@@ -27,7 +27,7 @@ function getPlayerState($player_id, $conn) {
         // Get the month after adding days
         $month = $startDateObj->format('F');  // This will give the current month based on the updated date
         $currentMile = $playerRow['mile'];
-
+        $inventory = [];
         if (!empty($playerRow['inventory'])) {
             // Attempt to decode the inventory JSON
             $inventory = json_decode($playerRow['inventory'], true);
