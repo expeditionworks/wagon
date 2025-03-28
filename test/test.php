@@ -24,6 +24,8 @@ if ($playerState) {
     // Show basic info
     echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";
     echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
+    echo "<p><strong>Month</strong> " . $updatedPlayerState['month'] . "</p>";
+
     
     echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['miles_traveled'] . "</p>";
 
