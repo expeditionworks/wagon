@@ -134,7 +134,7 @@ function getPlayerState($player_id, $conn) {
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
             'weatherLastTurn' => $weatherLastTurn,  // Initialize weatherLastTurn
-            'weatherThisTurn' => $weather,  // Initialize weatherThisTurn
+            'weatherThisTurn' => $weatherLastTurn,  // Initialize weatherThisTurn
             'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
             'month' => $month // Adding month to player state
         ];
