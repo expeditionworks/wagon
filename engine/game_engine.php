@@ -104,15 +104,16 @@ function getPlayerState($player_id, $conn) {
             $weather = $defaultWeather;
         }
 
-        // Add month calculation based on the start date and the player's day
-        $startDate = $playerRow['start_date']; // Start date in YYYY-MM-DD format
-        $startTimestamp = strtotime($startDate);
-        $currentDay = $playerRow['day']; // The number of days since the start date
-        
-        // Add the days to the start date
-        $currentDate = strtotime("+$currentDay days", $startTimestamp);
-        // Get the month from the resulting date
-        $month = date('F', $currentDate); // Full month name (e.g., 'January')
+        // Get the start_date and calculate the current month
+        $startDate = isset($playerRow['start_date']) ? $playerRow['start_date'] : null;
+        $month = 'Unknown'; // Default month if no start date exists
+
+        if ($startDate) {
+            $startTimestamp = strtotime($startDate); // Convert start date to timestamp
+            $currentDay = isset($playerRow['day']) ? $playerRow['day'] : 0; // Get the current day from player state
+            $currentDate = strtotime("+$currentDay days", $startTimestamp); // Add days to start date
+            $month = date('F', $currentDate); // Get the current month
+        }
 
         // Populate player state or set default values if missing
         $playerState = [
@@ -130,8 +131,8 @@ function getPlayerState($player_id, $conn) {
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
             'weather' => $weather,  // Include weather data (either from DB or default)
-            'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
-            'month' => $month  // Add the calculated month
+            'start_date' => $startDate, // Adding start_date from the database
+            'month' => $month // Add the calculated month
         ];
 
         return $playerState;  // Return the populated player state
@@ -139,6 +140,7 @@ function getPlayerState($player_id, $conn) {
 
     return null;  // Return null if player not found
 }
+
 
 
 
