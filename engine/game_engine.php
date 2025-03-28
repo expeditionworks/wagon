@@ -119,29 +119,6 @@ function getPlayerState($player_id, $conn) {
         }
 
 
-    // Get weather data for the current month based on the player's month
-    $monthData = $weatherMonths[$month] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
-
-   // Determine the weather type for the day
-    $weatherTypes = $monthData['weather_types'];
-    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
-
-    // Get the temperature range for the chosen weather type
-    $temperatureRange = $monthData['temperature_range'][$weatherType];
-    $temperature = rand($temperatureRange[0], $temperatureRange[1]);
-
-    // Chance of snow and rain (based on weather month data)
-    $chanceOfSnow = $monthData['chance_of_snow'];
-    $chanceOfRain = $monthData['chance_of_rain'];
-
-   // Determine precipitation (snow or rain) based on weather type and probabilities
-    $precipitation = 'none';
-    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
-        $precipitation = 'snow';
-    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
-        $precipitation = 'rain';
-    }
-        
 
     
         $playerState = [
@@ -171,29 +148,6 @@ function getPlayerState($player_id, $conn) {
  
 
  
-
-    // Calculate the wind speed using terrain and altitude modifiers
-    $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
-
-    // Get wind speed range for the current month and weather type
-    $windSpeedRange = $monthData['wind_speed_range'];
-    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
-
-    // Construct the weather data to return
-    $weatherData = [
-        'weather_type' => $weatherType,
-        'temperature' => $temperature,
-        'precipitation' => $precipitation,
-        'wind_speed' => $windSpeed,
-        'date' => date('Y-m-d'), // Store the current date of the weather
-    ];    
-
-    // Optionally, add the weather to playerState directly
-    $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
-
-
-        return $playerState;  // Return the populated player state
 
 
         
@@ -226,6 +180,60 @@ function getPlayerState($player_id, $conn) {
 
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
+
+
+
+
+
+    // Get weather data for the current month based on the player's month
+    $monthData = $weatherMonths[$month] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
+
+   // Determine the weather type for the day
+    $weatherTypes = $monthData['weather_types'];
+    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
+
+    // Get the temperature range for the chosen weather type
+    $temperatureRange = $monthData['temperature_range'][$weatherType];
+    $temperature = rand($temperatureRange[0], $temperatureRange[1]);
+
+    // Chance of snow and rain (based on weather month data)
+    $chanceOfSnow = $monthData['chance_of_snow'];
+    $chanceOfRain = $monthData['chance_of_rain'];
+
+   // Determine precipitation (snow or rain) based on weather type and probabilities
+    $precipitation = 'none';
+    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
+        $precipitation = 'snow';
+    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
+        $precipitation = 'rain';
+    }
+        
+    // Calculate the wind speed using terrain and altitude modifiers
+    $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
+    $windModifier = getWindModifier($terrainType, $playerState['altitude']);  // Get wind modifier
+
+    // Get wind speed range for the current month and weather type
+    $windSpeedRange = $monthData['wind_speed_range'];
+    $windSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']) * $windModifier;  // Adjust wind speed by the terrain modifier
+
+    // Construct the weather data to return
+    $weatherData = [
+        'weather_type' => $weatherType,
+        'temperature' => $temperature,
+        'precipitation' => $precipitation,
+        'wind_speed' => $windSpeed,
+        'date' => date('Y-m-d'), // Store the current date of the weather
+    ];    
+
+    // Optionally, add the weather to playerState directly
+    $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
+
+
+
+
+
+
+    
     // Check if delay_days is greater than 0
     if ($playerState['delay_days'] > 0) {
         // Decrease the delay_days and log the delay message
