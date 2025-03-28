@@ -249,13 +249,14 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $chanceOfRain = $monthData['chance_of_rain'];
 
    // Determine precipitation (snow or rain) based on weather type and probabilities
+    $precipitationPenalty = 1.0; // make base percipitation penalty 1
     $precipitation = 'none';
     if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
         $precipitation = 'snow';
-        $precipitationPenalty = 0.5;
+        $precipitationPenalty = 0.8;
     } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
         $precipitation = 'rain';
-        $precipitationPenalty = 0.8;
+        $precipitationPenalty = 1.0;
     }
 
 
