@@ -43,7 +43,8 @@ function getPlayerState($player_id, $conn) {
         // Load weather_months.json
         $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
         if (file_exists($weatherMonthsPath)) {
-            $weatherMonths = json_decode(file_get_contents($weatherMonthsPath), true);
+            $fileContents = file_get_contents($weatherMonthsPath);
+            $weatherMonths = $fileContents !== false ? json_decode($fileContents, true) : [];
         } else {
             echo "Weather Months file not found or not accessible.";
             // Default fallback to May if the file doesn't exist
@@ -60,13 +61,14 @@ function getPlayerState($player_id, $conn) {
                     "wind_speed_range" => ["min" => 5, "max" => 25],
                     "description" => "Spring is in full swing with mild temperatures and occasional rain showers. Snow is rare during this period."
                 ]
-            ]; 
+            ];
         }
         
         // Load weather_types.json
         $weatherTypesPath = __DIR__ . '/../config/weather_types.json';
         if (file_exists($weatherTypesPath)) {
-            $weatherTypes = json_decode(file_get_contents($weatherTypesPath), true);
+            $fileContents = file_get_contents($weatherTypesPath);
+            $weatherTypes = $fileContents !== false ? json_decode($fileContents, true) : [];
         } else {
             echo "Weather Types file not found or not accessible.";
             // Default fallback if the file doesn't exist
@@ -82,6 +84,7 @@ function getPlayerState($player_id, $conn) {
         }
         
         // Now you can access $weatherMonths and $weatherTypes as needed
+
 
 
         // Check if weather exists in the player row, otherwise use the default
