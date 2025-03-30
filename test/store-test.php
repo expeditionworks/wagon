@@ -1,6 +1,7 @@
 <?php
-// Include game engine or DB connection
-include('game_engine.php');
+// Include the database connection and the game engine module
+include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
+
 
 // Set player ID and milestone ID for testing
 $playerState = [
