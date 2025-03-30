@@ -8,7 +8,7 @@ $milestone = $milestones[$milestone_id] ?? null;  // Access milestone by ID
 
 // Debugging: Check if $milestones is defined
 echo "<pre>";
-print_r($milestones);  // Check what $milestones contains
+print_r($milestone);  // Check what $milestones contains
 echo "</pre>";
 
 
