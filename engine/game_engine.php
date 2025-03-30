@@ -136,11 +136,11 @@ if (file_exists($terrainPath)) {
 
     
         $playerState = [
-            'dollars' => playerRow['dollars'] ?? 10,
+            'dollars' => $playerRow['dollars'] ?? 10,
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
             'morale' => $playerRow['morale'] ?? 100,
-            'ration'=> playerRow['ration_size'] ?? full,
+            'ration'=> $playerRow['ration_size'] ?? full,
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
             'log' => json_decode($playerRow['log'], true) ?? [],
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
