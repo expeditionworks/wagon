@@ -35,7 +35,7 @@ function getPlayerState($player_id, $conn) {
         // Initialize the inventory with default values if it’s empty or invalid
         if (empty($playerInventory) || !is_array($playerInventory)) {
             $playerInventory = [
-                "Oxen" => ["quantity" => 8, "durability" => 100],
+                "Oxen" => ["quantity" => 0, "durability" => 100],
                 "Food" => ["quantity" => 0, "durability" => null],
                 "Ammunition" => ["quantity" => 0, "durability" => null],
                 "Clothes" => ["quantity" => 0, "durability" => 100],
@@ -77,18 +77,11 @@ if (file_exists($terrainPath)) {
         $milestonesPath = __DIR__ . '/../config/milestones.json';
         if (file_exists($milestonesPath)) {
             $milestonesContent = file_get_contents($milestonesPath);
-            // Decode the JSON content into an associative array
-            $milestones = json_decode($milestonesContent, true);
-        
-            // Assign to player state
-            $playerState['milestones'] = $milestones;
+            $milestones = $milestonesContent !== false ? json_decode($milestonesContent, true) : [];
         } else {
             echo "Milestones file not found or not accessible.";
-            $playerState['milestones'] = []; // Default empty array
+            $milestones = []; // Default empty array
         }
-        
-        // Make $milestones global for access in other scripts
-        global $milestones;
 
         // Default weather if not set in the database
         $defaultWeather = [
@@ -147,17 +140,18 @@ if (file_exists($terrainPath)) {
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
             'morale' => $playerRow['morale'] ?? 100,
-            'ration'=> $playerRow['ration_size'] ?? 'full',
+            'ration'=> $playerRow['ration_size'] ?? full,
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
-            'milestones' => $playerState['milestones'] = $milestones ?? [],
             'log' => json_decode($playerRow['log'], true) ?? [],
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
             'terrain' => $terrain,  // Ensure terrain is always set
             'terrainCurrent' => $terrainType, // current terrain is always set
             'altitude' => $altitude, // set altitude
+            'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
+            'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
             'weatherLastTurn' => $weatherLastTurn,  // Initialize weatherLastTurn
             'weatherThisTurn' => $weatherLastTurn,  // Initialize weatherThisTurn
@@ -421,9 +415,8 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     }
 
     // oxen
-    $oxenNumber = $playerState['inventory']["Oxen"]["quantity"] ?? 6; // Default to 6 if 'oxen' is not set
-    // $oxenNumber = $playerState['intentory'] ?? 6;  // Default to 6 if 'oxen' is not set
-    echo "oxen = $oxenNumber";
+    $oxenNumber = $playerState['oxen'] ?? 6;  // Default to 6 if 'oxen' is not set
+    
     // Initialize oxen modifier
     $oxenMod = 1.0;  // Default: no change in distance
     
@@ -441,7 +434,6 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     }
 
     // Calculate initial miles traveled with adjustments
-    echo "<p> $baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty * $moraleMod * $oxenMod</p>";
     $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty * $moraleMod * $oxenMod);
     $milesTraveled = round(max( $adjusted_distance * $wind_modifier, 0)); //add wind modifier
 
@@ -494,82 +486,6 @@ echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
 }
 
 
-function handleStorePurchase($playerState, $milestone_id) {
-    // Load the milestone data from milestone.json (or database)
-    $milestone = $milestones[$milestone_id] ?? null;
-
- // Check if the milestone exists and has the 'store' key
-if ($milestone === null) {
-    echo "Milestone with ID '$milestone_id' not found.\n";
-    return;
-}
-
-// Proceed with store logic if the 'store' flag is set to true
-if (isset($milestone['store']) && $milestone['store']) {
-    // Handle store logic here
-    echo "Store available at this milestone.\n";
-} else {
-    echo "No store available at this milestone.\n";
-    return;
-}
-
-    // Extract player dollars and inventory from $playerState
-    $playerDollars = $playerState['dollars'];
-    $playerInventory = $playerState['inventory'];
-
-    // Display store inventory based on milestone
-    echo "Store at {$milestone['title']}:\n";
-    foreach ($milestone['items_for_sale'] as $itemName => $itemData) {
-        echo "$itemName\n";
-        echo "Description: {$itemData['description']}\n";
-        echo "Price: " . (isset($itemData['total_cost']) ? $itemData['total_cost'] : $itemData['base_price']) . " dollars\n";
-        echo "Stock Available: {$itemData['stock_limit']}\n";
-        echo "---------------------\n";
-    }
-
-    // Simulating player input for item selection (e.g., buying Oxen or a Bundle)
-    $selectedItem = "Oxen"; // Example: Buying Oxen
-    $quantityToBuy = 2;     // Example: Quantity to buy (e.g., 2 pairs of Oxen)
-
-    // Check if item exists in the store and if player can afford it
-    if (isset($milestone['items_for_sale'][$selectedItem])) {
-        $item = $milestone['items_for_sale'][$selectedItem];
-        $totalCost = $item['base_price'] * $quantityToBuy;
-
-        if ($playerDollars >= $totalCost && $item['stock_limit'] >= $quantityToBuy) {
-            // Deduct money from player and update stock
-            $playerDollars -= $totalCost;
-            $item['stock_limit'] -= $quantityToBuy;
-
-            // Update player's inventory (for Oxen, increase quantity)
-            if (isset($playerInventory[$selectedItem])) {
-                $playerInventory[$selectedItem]['quantity'] += $quantityToBuy;
-            } else {
-                // If Oxen is not in the inventory, add it
-                $playerInventory[$selectedItem] = [
-                    'quantity' => $quantityToBuy,
-                    'durability' => 100 // Default durability for Oxen
-                ];
-            }
-
-            // Save updated player data to database (inventory and dollars)
-            $inventoryJson = json_encode($playerInventory);
-            $query = "UPDATE player_state SET inventory = :inventory, dollars = :dollars WHERE id = :player_id";
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(':inventory', $inventoryJson, PDO::PARAM_STR);
-            $stmt->bindParam(':dollars', $playerDollars, PDO::PARAM_INT);
-            $stmt->bindParam(':player_id', $playerState['id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            echo "Purchase successful! You bought $quantityToBuy $selectedItem(s).\n";
-            echo "Remaining money: $playerDollars\n";
-        } else {
-            echo "Not enough money or stock available for $selectedItem.\n";
-        }
-    } else {
-        echo "$selectedItem not available at this store.\n";
-    }
-}
 
 
 
