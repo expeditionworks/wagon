@@ -489,7 +489,7 @@ echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
 
 function handleStorePurchase($playerState, $milestone_id) {
     // Load the milestone data from milestone.json (or database)
-    $milestone = json_decode(file_get_contents('milestone.json'), true)[$milestone_id];
+    $milestone = $milestones[$milestone_id] ?? null;
 
     if (!$milestone['store']) {
         echo "No store available at this milestone.\n";
