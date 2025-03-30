@@ -35,7 +35,7 @@ function getPlayerState($player_id, $conn) {
         // Initialize the inventory with default values if it’s empty or invalid
         if (empty($playerInventory) || !is_array($playerInventory)) {
             $playerInventory = [
-                "Oxen" => ["quantity" => 0, "durability" => 100],
+                "Oxen" => ["quantity" => 8, "durability" => 100],
                 "Food" => ["quantity" => 0, "durability" => null],
                 "Ammunition" => ["quantity" => 0, "durability" => null],
                 "Clothes" => ["quantity" => 0, "durability" => 100],
