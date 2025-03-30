@@ -7,7 +7,45 @@
     "trail": [       "oregon"     ],
     "force_stop": true,
     "description": "The starting point of the Oregon Trail.",
-    "extended_description": "From the muddy banks of the Missouri River, the town of Independence bustled with emigrants gathering supplies and forming wagon trains. This was the last major stop before the long journey west. Oxen were hitched, families said their goodbyes, and the trail ahead beckoned with both promise and peril."
+    "extended_description": "From the muddy banks of the Missouri River, the town of Independence bustled with emigrants gathering supplies and forming wagon trains. This was the last major stop before the long journey west. Oxen were hitched, families said their goodbyes, and the trail ahead beckoned with both promise and peril.",
+    "store": true,
+    "items_for_sale": {
+        "Oxen": {
+            "base_price": 50,  // Base price for Oxen per pair
+            "stock_limit": 10,  // How many pairs of Oxen are available
+            "description": "A sturdy animal used for pulling the wagon."
+        },
+        "Small Bundle": {
+            "items": {
+                "Oxen": 2,
+                "Food": 20,
+                "Tools": 1
+            },
+            "total_cost": 150,  // Bundle price
+            "stock_limit": 5,  // Limited availability
+            "description": "A small bundle to get you started."
+        },
+        "Medium Bundle": {
+            "items": {
+                "Oxen": 4,
+                "Food": 50,
+                "Tools": 2
+            },
+            "total_cost": 300,  // Bundle price
+            "stock_limit": 5,
+            "description": "A medium bundle for the long haul."
+        },
+        "Large Bundle": {
+            "items": {
+                "Oxen": 6,
+                "Food": 100,
+                "Tools": 5
+            },
+            "total_cost": 500,
+            "stock_limit": 3,
+            "description": "A large bundle to fully outfit your wagon."
+        }
+    }
   },
   {
     "id": "kansas_river",
