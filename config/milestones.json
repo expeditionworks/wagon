@@ -11,8 +11,8 @@
     "store": true,
     "items_for_sale": {
         "Oxen": {
-            "base_price": 50,  // Base price for Oxen per pair
-            "stock_limit": 10,  // How many pairs of Oxen are available
+            "base_price": 50,
+            "stock_limit": 10, 
             "description": "A sturdy animal used for pulling the wagon."
         },
         "Small Bundle": {
@@ -21,8 +21,8 @@
                 "Food": 20,
                 "Tools": 1
             },
-            "total_cost": 150,  // Bundle price
-            "stock_limit": 5,  // Limited availability
+            "total_cost": 150,
+            "stock_limit": 5,
             "description": "A small bundle to get you started."
         },
         "Medium Bundle": {
@@ -31,7 +31,7 @@
                 "Food": 50,
                 "Tools": 2
             },
-            "total_cost": 300,  // Bundle price
+            "total_cost": 300,e
             "stock_limit": 5,
             "description": "A medium bundle for the long haul."
         },
