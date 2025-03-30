@@ -81,7 +81,7 @@ if (file_exists($terrainPath)) {
             $milestones = json_decode($milestonesContent, true);
         
             // Assign to player state
-            $playerState['milestones'] = $milestones;
+            // $playerState['milestones'] = $milestones;
         } else {
             echo "Milestones file not found or not accessible.";
             $playerState['milestones'] = []; // Default empty array
