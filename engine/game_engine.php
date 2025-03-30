@@ -434,6 +434,7 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     }
 
     // Calculate initial miles traveled with adjustments
+    echo "<p> $baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty * $moraleMod * $oxenMod</p>";
     $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty * $moraleMod * $oxenMod);
     $milesTraveled = round(max( $adjusted_distance * $wind_modifier, 0)); //add wind modifier
 
