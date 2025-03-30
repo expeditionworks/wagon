@@ -1,17 +1,17 @@
 <?php
 // Include the database connection and the game engine module
 include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
+// Example of accessing a milestone
+$milestone_id = 'independence';  // Testing with a known milestone ID
 
+$milestone = $milestones[$milestone_id] ?? null;  // Access milestone by ID
 
 // Debugging: Check if $milestones is defined
 echo "<pre>";
 print_r($milestones);  // Check what $milestones contains
 echo "</pre>";
 
-// Example of accessing a milestone
-$milestone_id = 'independence';  // Testing with a known milestone ID
 
-$milestone = $milestones[$milestone_id] ?? null;  // Access milestone by ID
 
 if ($milestone === null) {
     echo "Milestone with ID '$milestone_id' not found.\n";
