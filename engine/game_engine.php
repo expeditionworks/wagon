@@ -81,7 +81,7 @@ if (file_exists($terrainPath)) {
             $milestones = json_decode($milestonesContent, true);
         
             // Assign to player state
-            // $playerState['milestones'] = $milestones;
+            $playerState['milestones'] = $milestones;
         } else {
             echo "Milestones file not found or not accessible.";
             $playerState['milestones'] = []; // Default empty array
@@ -155,7 +155,6 @@ if (file_exists($terrainPath)) {
             'terrain' => $terrain,  // Ensure terrain is always set
             'terrainCurrent' => $terrainType, // current terrain is always set
             'altitude' => $altitude, // set altitude
-            'milestones' => $milestones ?? [],  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
