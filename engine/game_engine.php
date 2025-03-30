@@ -149,6 +149,7 @@ if (file_exists($terrainPath)) {
             'morale' => $playerRow['morale'] ?? 100,
             'ration'=> $playerRow['ration_size'] ?? 'full',
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
+            'milestones' => $playerState['milestones'] = $milestones ?? [];
             'log' => json_decode($playerRow['log'], true) ?? [],
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
             'last_log_item' => json_decode($playerRow['last_log_item'], true) ?? [],  // Assuming empty array if NULL
