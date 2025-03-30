@@ -5,6 +5,8 @@ include_once(__DIR__ . '/db_connection.php'); // Include database connection
 
 // Set up player ID
 $player_id = 1;  // Example player ID
+// Ensure $milestone_id is set to a valid milestone ID
+$milestone_id = 'independence';  // This should match a milestone in your $milestones array
 
 // Call getPlayerState with both the player ID and the database connection
 $playerState = getPlayerState($player_id, $conn);  // Pass both $player_id and $conn
