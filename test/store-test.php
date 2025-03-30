@@ -1,17 +1,18 @@
 <?php
-// Include the database connection and the game engine module
-include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
-// Example of accessing a milestone
-$milestone_id = 'independence';  // Testing with a known milestone ID
+// Include the game engine file (which defines loadMilestones)
+include_once(__DIR__ . '/../engine/game_engine.php');
 
-$milestone = $milestones[$milestone_id] ?? null;  // Access milestone by ID
+// Load the milestones by calling the function
+$milestones = loadMilestones(); // This will return the $milestones array
 
-// Debugging: Check if $milestones is defined
+// Debug: Print $milestones to verify it's loaded
 echo "<pre>";
-print_r($milestone);  // Check what $milestones contains
+print_r($milestones);  // Print the loaded milestones
 echo "</pre>";
 
-
+// Example of accessing a specific milestone
+$milestone_id = 'independence';  // Example ID
+$milestone = $milestones[$milestone_id] ?? null;  // Access by milestone ID
 
 if ($milestone === null) {
     echo "Milestone with ID '$milestone_id' not found.\n";
