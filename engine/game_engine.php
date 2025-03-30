@@ -77,10 +77,19 @@ if (file_exists($terrainPath)) {
         $milestonesPath = __DIR__ . '/../config/milestones.json';
         if (file_exists($milestonesPath)) {
             $milestonesContent = file_get_contents($milestonesPath);
-            $milestones = $milestonesContent !== false ? json_decode($milestonesContent, true) : [];
+            // Decode the JSON content into an associative array
+            $milestones = json_decode($milestonesContent, true);
+        
+            // Debugging: print the milestones to verify loading
+            echo "<pre>";
+            print_r($milestones);  // Check the contents of $milestones
+            echo "</pre>";
+        
+            // Assign to player state
+            $playerState['milestones'] = $milestones;
         } else {
             echo "Milestones file not found or not accessible.";
-            $milestones = []; // Default empty array
+            $playerState['milestones'] = []; // Default empty array
         }
         
         // Make $milestones global for access in other scripts
