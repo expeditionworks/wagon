@@ -1,6 +1,10 @@
 <?php
 // Include the database connection and the game engine module
 include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
+// Check if milestones are loaded correctly
+echo "<pre>";
+print_r($milestones);  // This will print the full array of milestones
+echo "</pre>";
 
 
 // Set player ID and milestone ID for testing
