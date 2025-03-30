@@ -136,7 +136,7 @@ if (file_exists($terrainPath)) {
 
     
         $playerState = [
-            'dollars' => $playerRow['dollars'],
+            'dollars' => $playerRow['dollars'] ?? 10,
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
             'morale' => $playerRow['morale'] ?? 100,
@@ -504,7 +504,7 @@ function handleStorePurchase($playerState, $milestone_id) {
     foreach ($milestone['items_for_sale'] as $itemName => $itemData) {
         echo "$itemName\n";
         echo "Description: {$itemData['description']}\n";
-        echo "Price: {$itemData['total_cost'] ?? $itemData['base_price']} dollars\n";
+        echo "Price: " . (isset($itemData['total_cost']) ? $itemData['total_cost'] : $itemData['base_price']) . " dollars\n";
         echo "Stock Available: {$itemData['stock_limit']}\n";
         echo "---------------------\n";
     }
