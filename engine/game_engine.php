@@ -416,7 +416,7 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
 
     // oxen
     $oxenNumber = $playerState['oxen'] ?? 6;  // Default to 6 if 'oxen' is not set
-    
+    echo "oxen = $oxenNumber";
     // Initialize oxen modifier
     $oxenMod = 1.0;  // Default: no change in distance
     
