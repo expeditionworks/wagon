@@ -136,7 +136,7 @@ if (file_exists($terrainPath)) {
 
     
         $playerState = [
-            'dollars' => $playerRow['dollars'] ?? 10,
+            'dollars' => $playerRow['dollars'],
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
             'morale' => $playerRow['morale'] ?? 100,
