@@ -486,6 +486,72 @@ echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
 }
 
 
+function handleStorePurchase($playerState, $milestone_id) {
+    // Load the milestone data from milestone.json (or database)
+    $milestone = json_decode(file_get_contents('milestone.json'), true)[$milestone_id];
+
+    if (!$milestone['store']) {
+        echo "No store available at this milestone.\n";
+        return;
+    }
+
+    // Extract player dollars and inventory from $playerState
+    $playerDollars = $playerState['dollars'];
+    $playerInventory = $playerState['inventory'];
+
+    // Display store inventory based on milestone
+    echo "Store at {$milestone['title']}:\n";
+    foreach ($milestone['items_for_sale'] as $itemName => $itemData) {
+        echo "$itemName\n";
+        echo "Description: {$itemData['description']}\n";
+        echo "Price: {$itemData['total_cost'] ?? $itemData['base_price']} dollars\n";
+        echo "Stock Available: {$itemData['stock_limit']}\n";
+        echo "---------------------\n";
+    }
+
+    // Simulating player input for item selection (e.g., buying Oxen or a Bundle)
+    $selectedItem = "Oxen"; // Example: Buying Oxen
+    $quantityToBuy = 2;     // Example: Quantity to buy (e.g., 2 pairs of Oxen)
+
+    // Check if item exists in the store and if player can afford it
+    if (isset($milestone['items_for_sale'][$selectedItem])) {
+        $item = $milestone['items_for_sale'][$selectedItem];
+        $totalCost = $item['base_price'] * $quantityToBuy;
+
+        if ($playerDollars >= $totalCost && $item['stock_limit'] >= $quantityToBuy) {
+            // Deduct money from player and update stock
+            $playerDollars -= $totalCost;
+            $item['stock_limit'] -= $quantityToBuy;
+
+            // Update player's inventory (for Oxen, increase quantity)
+            if (isset($playerInventory[$selectedItem])) {
+                $playerInventory[$selectedItem]['quantity'] += $quantityToBuy;
+            } else {
+                // If Oxen is not in the inventory, add it
+                $playerInventory[$selectedItem] = [
+                    'quantity' => $quantityToBuy,
+                    'durability' => 100 // Default durability for Oxen
+                ];
+            }
+
+            // Save updated player data to database (inventory and dollars)
+            $inventoryJson = json_encode($playerInventory);
+            $query = "UPDATE player_state SET inventory = :inventory, dollars = :dollars WHERE id = :player_id";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':inventory', $inventoryJson, PDO::PARAM_STR);
+            $stmt->bindParam(':dollars', $playerDollars, PDO::PARAM_INT);
+            $stmt->bindParam(':player_id', $playerState['id'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo "Purchase successful! You bought $quantityToBuy $selectedItem(s).\n";
+            echo "Remaining money: $playerDollars\n";
+        } else {
+            echo "Not enough money or stock available for $selectedItem.\n";
+        }
+    } else {
+        echo "$selectedItem not available at this store.\n";
+    }
+}
 
 
 
