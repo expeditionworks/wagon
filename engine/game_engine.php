@@ -78,6 +78,11 @@ if (file_exists($terrainPath)) {
         if (file_exists($milestonesPath)) {
             $milestonesContent = file_get_contents($milestonesPath);
             $milestones = $milestonesContent !== false ? json_decode($milestonesContent, true) : [];
+            // Check if milestones are loaded correctly
+echo "<pre>";
+print_r($milestones);  // This will print the full array of milestones
+echo "</pre>";
+
         } else {
             echo "Milestones file not found or not accessible.";
             $milestones = []; // Default empty array
