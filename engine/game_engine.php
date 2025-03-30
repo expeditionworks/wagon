@@ -151,7 +151,6 @@ if (file_exists($terrainPath)) {
             'milestones' => $milestones ?? [],  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
-            'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
             'weatherLastTurn' => $weatherLastTurn,  // Initialize weatherLastTurn
             'weatherThisTurn' => $weatherLastTurn,  // Initialize weatherThisTurn
@@ -415,7 +414,8 @@ echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     }
 
     // oxen
-    $oxenNumber = $playerState['oxen'] ?? 6;  // Default to 6 if 'oxen' is not set
+    $oxenNumber = $playerState['inventory']["Oxen"]["quantity"] ?? 6; // Default to 6 if 'oxen' is not set
+    // $oxenNumber = $playerState['intentory'] ?? 6;  // Default to 6 if 'oxen' is not set
     echo "oxen = $oxenNumber";
     // Initialize oxen modifier
     $oxenMod = 1.0;  // Default: no change in distance
