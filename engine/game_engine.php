@@ -491,10 +491,20 @@ function handleStorePurchase($playerState, $milestone_id) {
     // Load the milestone data from milestone.json (or database)
     $milestone = $milestones[$milestone_id] ?? null;
 
-    if (!$milestone['store']) {
-        echo "No store available at this milestone.\n";
-        return;
-    }
+ // Check if the milestone exists and has the 'store' key
+if ($milestone === null) {
+    echo "Milestone with ID '$milestone_id' not found.\n";
+    return;
+}
+
+// Proceed with store logic if the 'store' flag is set to true
+if (isset($milestone['store']) && $milestone['store']) {
+    // Handle store logic here
+    echo "Store available at this milestone.\n";
+} else {
+    echo "No store available at this milestone.\n";
+    return;
+}
 
     // Extract player dollars and inventory from $playerState
     $playerDollars = $playerState['dollars'];
