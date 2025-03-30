@@ -140,7 +140,7 @@ if (file_exists($terrainPath)) {
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
             'morale' => $playerRow['morale'] ?? 100,
-            'ration'=> $playerRow['ration_size'] ?? full,
+            'ration'=> $playerRow['ration_size'] ?? 'full',
             'inventory' => json_decode($playerRow['inventory'], true) ?? [],
             'log' => json_decode($playerRow['log'], true) ?? [],
             'current_trail' => $playerRow['current_trail'] ?? 'oregon', // New field
@@ -148,7 +148,7 @@ if (file_exists($terrainPath)) {
             'terrain' => $terrain,  // Ensure terrain is always set
             'terrainCurrent' => $terrainType, // current terrain is always set
             'altitude' => $altitude, // set altitude
-            'milestones' => $milestones,  // Ensure milestones is always set
+            'milestones' => $milestones ?? [],  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
