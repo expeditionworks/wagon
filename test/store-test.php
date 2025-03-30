@@ -1,21 +1,21 @@
 <?php
-// Include the game engine file (which defines loadMilestones)
-include_once(__DIR__ . '/../engine/game_engine.php');
+// Include the necessary files for database connection and game logic
+include_once(__DIR__ . '/../engine/game_engine.php'); // Include game engine
+include_once(__DIR__ . '/db_connection.php'); // Include database connection
 
-// Set up player ID (or any required data)
-$player_id = 1;  // For example
+// Set up player ID
+$player_id = 1;  // Example player ID
 
-// Call getPlayerState function to load milestones
-$playerState = getPlayerState($player_id);  // Assuming this loads $playerState['milestones']
+// Call getPlayerState with both the player ID and the database connection
+$playerState = getPlayerState($player_id, $conn);  // Pass both $player_id and $conn
 
-// Now you can access $playerState['milestones']
-$milestones = $playerState['milestones'] ?? null;  // Get milestones from playerState
+// Print the loaded milestones for debugging
+$milestones = $playerState['milestones'] ?? null;  // Access milestones from playerState
 
 // Debug: Print $milestones
 echo "<pre>";
 print_r($milestones);  // Print the loaded milestones
 echo "</pre>";
-
 
 
 
@@ -39,4 +39,7 @@ $playerState = [
 
 // Test the store purchase function
 handleStorePurchase($playerState, $milestone_id);
+
+// Close the connection once done
+closeConnection();
 ?>
