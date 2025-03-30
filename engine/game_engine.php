@@ -80,11 +80,6 @@ if (file_exists($terrainPath)) {
             // Decode the JSON content into an associative array
             $milestones = json_decode($milestonesContent, true);
         
-            // Debugging: print the milestones to verify loading
-            echo "<pre>";
-            print_r($milestones);  // Check the contents of $milestones
-            echo "</pre>";
-        
             // Assign to player state
             $playerState['milestones'] = $milestones;
         } else {
