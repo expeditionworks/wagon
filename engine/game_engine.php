@@ -454,9 +454,10 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     echo "<li>Base Miles: $baseMiles</li>";
     echo "<li>Terrain Modifier: $terrainMod</li>";
     echo "<li>Difficulty Modifier: $difficultyMultiplier</li>";
+    echo "<li>Oxen Modifier: $oxenMod</li>";   
     echo "<li>Miles Traveled (base + difficult + terrain): $adjusted_distance</li>";
     echo "<li>Miles Traveled (Before Adjustments): $milesTraveled</li>";
-    echo "<p>Wind type: $wind_type</p>";
+    echo "<li>Wind type: $wind_type</li>";
     echo "</ul>";
 
 
