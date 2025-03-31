@@ -83,7 +83,7 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     // Display the current terrain
     echo "<ul>";
     echo "<li><strong>Current Terrain:</strong> " . $currentTerrain . "</li>";
-    echo "<li><strong>Current Terrain:</strong> " . $altitude . "</li>";
+    echo "<li><strong>Current altitude:</strong> " . $updatedPlayerState['altitude'] . "</li>";
     echo "</ul>";
 
 
