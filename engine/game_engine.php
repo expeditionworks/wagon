@@ -186,7 +186,7 @@ echo "</pre>";
 
  
     $newDelayState = $playerRow['delay_status'];
- 
+  echo "$playerState['terrainCurrent']";
 
 
         
@@ -342,12 +342,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         $precipitationPenalty = 1.0;
     }
 
-
-
-    
-    // Calculate the wind speed using terrain and altitude modifiers
-    // $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-    // echo "Terrain Type: $terrainType";
     
     // Construct the weather data to return
     $weatherData = [
