@@ -50,7 +50,7 @@ function getPlayerState($player_id, $conn) {
 
 
 
-    // set terrain from terrain.json        
+// set terrain from terrain.json        
 $terrainPath = __DIR__ . '/../config/terrain.json';
 if (file_exists($terrainPath)) {
     $terrainContent = file_get_contents($terrainPath);
@@ -58,7 +58,7 @@ if (file_exists($terrainPath)) {
 
     // Initialize default values
     $terrainType = 'plains';  // Default terrain if none found
-    $altitude = 'low';  // Default altitude if none found
+    $altitude = 'low';        // Default altitude if none found
 
     // Check if terrain data is valid
     if (is_array($terrain) && !empty($terrain)) {
@@ -84,7 +84,10 @@ if (file_exists($terrainPath)) {
 }
 
 // Debug: Check the terrain type and altitude
-echo "Current Terrain: $terrainType, Altitude: $altitude\n";
+echo "<pre>";
+echo "Terrain Type: $terrainType\n";  // Debug the value of terrainType
+echo "Altitude: $altitude\n";        // Debug the value of altitude
+echo "</pre>";
 
 
         
@@ -344,7 +347,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     
     // Calculate the wind speed using terrain and altitude modifiers
     // $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-    echo "Terrain Type: $terrainType";
+    // echo "Terrain Type: $terrainType";
     
     // Construct the weather data to return
     $weatherData = [
