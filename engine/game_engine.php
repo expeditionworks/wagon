@@ -241,6 +241,34 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             break;
     }
 
+
+    // family conditions code
+$conditionsPath = __DIR__ . '/../config/conditions.json';
+// Default empty array if conditions can't be loaded
+$conditionsList = [];
+// Check if the conditions file exists
+if (file_exists($conditionsPath)) {
+    // Read the contents of the file
+    $conditionsContent = file_get_contents($conditionsPath);
+
+    // Decode the JSON content into an associative array
+    $conditionsList = json_decode($conditionsContent, true);
+
+    // If decoding fails, handle it
+    if ($conditionsList === null) {
+        echo "Error: Failed to decode conditions.json.";
+        $conditionsList = []; // Default to an empty array if decoding fails
+    }
+
+    // Do your transformations, logic, etc., now that conditions are loaded
+} else {
+    // Handle the case where conditions file is missing or inaccessible
+    echo "Conditions file not found or not accessible.";
+}
+
+
+    
+    
     
     // Get the party size (e.g., number of family members in $playerState)
     // $partySize = count($playerState['family']);  // Assuming you have a family array in playerState
