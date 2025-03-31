@@ -81,7 +81,11 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     }
 
     // Display the current terrain
-    echo "<p><strong>Current Terrain:</strong> " . $currentTerrain . "</p>";
+    echo "<ul>";
+    echo "<li><strong>Current Terrain:</strong> " . $currentTerrain . "</li>";
+    echo "<li><strong>Current Terrain:</strong> " . $altitude . "</li>";
+    echo "</ul>";
+
 
     // Display morale only if it exists
     echo "<p><strong>Morale:</strong> " . $updatedPlayerState['morale'] . "</p>";
