@@ -503,7 +503,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
         'total_miles' => $newMile,
         'milestone' => $milestoneToday['title'] ?? null,
-        'notes' => $milestoneToday ? "Today, you reached " . $milestoneToday['title'] . "." : null
+        'notes' => "Today you kept on rolling without a milesone."
     ];
     }
 
