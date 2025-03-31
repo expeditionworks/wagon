@@ -364,7 +364,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             'notes' => "Paused at a milestone (delay in progress)."
         ];
 
-        echo "$milestone['title']";
 
         $playerState['day'] += 1; // Increment the day even when paused
         updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
