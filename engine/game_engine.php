@@ -368,7 +368,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
                 'day' => $playerState['day'],
                 'miles_traveled' => 0,
                 'total_miles' => $playerState['mile'],
-                'notes' => "Paused at the milestone: " . $milestone['title'] . "\nThere is a delay in progress."
+                'notes' => "Paused at the milestone: " . $milestone['title'] . ". \nThere is a delay in progress. You have " . $playerState['delay_days'] . " more days left to wait."
             ];
 
             
