@@ -48,8 +48,6 @@ function getPlayerState($player_id, $conn) {
             ];
         }
 
-        
-
 
 
 // set terrain from terrain.json        
@@ -249,6 +247,15 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         // Update the inventory in playerState
         $playerState['inventory'][$itemName] = $foodItem;
         
+        // Optionally, print out the remaining food for the player
+        echo "Food remaining: " . $foodItem['quantity'] . " lbs\n";
+    } else {
+        echo "No food in inventory.\n";
+    }
+
+
+
+
 
     
 
