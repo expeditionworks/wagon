@@ -294,9 +294,9 @@ if (file_exists($conditionsPath)) {
         //    'day' => $updatedPlayerState['day'],
         //    'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, 
         //                losing {$healthRisk} health and {$moralePenalty} morale."
-        echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, 
-        //                losing {$healthRisk} health and {$moralePenalty} morale.";
-        ];
+        // ];
+        echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
+        
     }
 }
 
