@@ -73,6 +73,12 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     echo "<li><strong>Miles Marker:</strong> " . $updatedPlayerState['mile'] . "</li>";
     echo "</ul>";
 
+    echo "<ul>";    
+
+    echo "<li>Food durability: " . $updatedPlayerState['inventory']['Food']['quantity'] . "</li>";
+    echo "</ul>";
+
+
     // Get the terrain type based on the current mile
     $currentTerrain = 'Unknown';  // Default value if terrain is not found
     foreach ($updatedPlayerState['terrain'] as $terrainSegment) {
