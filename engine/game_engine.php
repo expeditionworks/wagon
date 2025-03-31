@@ -356,7 +356,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         // Decrease the delay_days and log the delay message
         $playerState['delay_days'] -= 1;
         $playerState['delay_status'] = 'active';
-
+        $milestones = $playerState['milestones'];
         if (is_array($milestones) && !empty($milestones)) {
         foreach ($milestones as $milestone) {
         if ($milestone['mile'] === $playerState['mile']) {
