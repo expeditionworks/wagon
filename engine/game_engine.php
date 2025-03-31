@@ -409,7 +409,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $terrainMod = ($terrainModifiers[$playerState['terrainCurrent']] ?? 1.0) * $randomFactor;  // Default to 1 if terrain is unknown
 
 // You can now use $terrainMod in your movement calculation
-echo "Terrain Type: $terrainType, Modifier: $terrainMod";
+// echo "Terrain Type: $terrainType, Modifier: $terrainMod";
     
     // Adjust based on difficulty setting
     $difficultyMod = [
