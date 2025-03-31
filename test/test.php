@@ -77,6 +77,10 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
   
     echo "<ul>";    
     echo "<li>Food left: " . $updatedPlayerState['inventory']['Food']['quantity'] . "</li>";
+    echo "<li>Food remaining: " . $updatedPlayerState['inventory']['Food']['quantity'] . " lbs</li>";
+    } else {
+        echo "<li>No food in inventory.</li>";
+    }
     echo "<li>Ammunition: " . $updatedPlayerState['inventory']['Ammunition']['quantity'] . "</li>";
     echo "</ul>";
 
