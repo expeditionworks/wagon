@@ -226,7 +226,22 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     } else {
         // Handle the case where 'family' is not set or is not an array
         $familyCount = 2;  // Set the family count to 2 to not penalize the player for our bad coding
-    }    
+    }
+    // Define the food per person based on the ration type
+    switch ($familyState['ration']) {
+        case 'generous':
+            $foodPerPerson = 3;  // Generous ration
+            break;
+        case 'half':
+            $foodPerPerson = 1;  // Half ration
+            break;
+        case 'full':
+        default:
+            $foodPerPerson = 2;  // Full ration (default)
+            break;
+    }
+
+    
     // Get the party size (e.g., number of family members in $playerState)
     // $partySize = count($playerState['family']);  // Assuming you have a family array in playerState
     $partySize = $familyCount;
@@ -253,7 +268,8 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
          }
 
 
-
+    // WEATHER SYSTEM
+    
         // Load weather_months.json
         $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
         if (file_exists($weatherMonthsPath)) {
@@ -277,16 +293,13 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
                 ]
             ];
         }
-
     // Get weather data for the current month based on the player's month
     $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
     // Define the default value for wind speed if something goes wrong
     $defaultWindSpeed = 20;  // You can set your default value here
-    
     // Initialize wind speed range and randomly selected wind speed
     $windSpeedRange = null;
-    $randomWindSpeed = $defaultWindSpeed;  // Default value in case we can't find a valid range
-    
+    $randomWindSpeed = $defaultWindSpeed;  // Default value in case we can't find a valid range    
     // Check if the current month exists in the JSON data
     if (isset($monthData['wind_speed_range'])) {
         $windSpeedRange = $monthData['wind_speed_range'];
@@ -303,7 +316,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $wind_types = ["headwind", "tailwind", "crosswind"];  // Define an array of possible wind types
     $random_index = array_rand($wind_types); // Randomly select a wind type get the index
     $wind_type = $wind_types[$random_index]; // Select the wind type based on the random index
-    
     // Determine wind effect based on type
     if ($wind_type == "headwind") {
         $wind_modifier = 1 - ($wind_speed / 50);  // Example: max 40% reduction for very strong headwinds
@@ -312,20 +324,15 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     } elseif ($wind_type == "crosswind") {
         $wind_modifier = 1 - ($wind_speed / 200);  // Minimal effect for crosswinds
     }
-
-    
    // Determine the weather type for the day
     $weatherTypes = $monthData['weather_types'];
     $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
-
     // Get the temperature range for the chosen weather type
     $temperatureRange = $monthData['temperature_range'][$weatherType];
     $temperature = rand($temperatureRange[0], $temperatureRange[1]);
-
     // Chance of snow and rain (based on weather month data)
     $chanceOfSnow = $monthData['chance_of_snow'];
     $chanceOfRain = $monthData['chance_of_rain'];
-
    // Determine precipitation (snow or rain) based on weather type and probabilities
     $precipitationPenalty = 1.0; // make base percipitation penalty 1
     $precipitation = 'none';
@@ -335,9 +342,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
         $precipitation = 'rain';
         $precipitationPenalty = 1.0;
-    }
-
-    
+    }   
     // Construct the weather data to return
     $weatherData = [
         'weather_type' => $weatherType,
@@ -346,7 +351,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'wind_speed' => $randomWindSpeed,
         'date' => date('Y-m-d'), // Store the current date of the weather
     ];    
-
     // Optionally, add the weather to playerState directly
     $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
 
