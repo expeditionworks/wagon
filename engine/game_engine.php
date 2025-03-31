@@ -186,7 +186,7 @@ echo "</pre>";
 
  
     $newDelayState = $playerRow['delay_status'];
-  echo "$playerState['terrainCurrent']";
+echo "{$playerState['terrainCurrent']}";
 
 
         
