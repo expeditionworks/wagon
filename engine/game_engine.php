@@ -248,10 +248,10 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         $playerState['inventory'][$itemName] = $foodItem;
         
         // Optionally, print out the remaining food for the player
-        echo "Food remaining: " . $foodItem['quantity'] . " lbs\n";
-    } else {
-        echo "No food in inventory.\n";
-    }
+     //    echo "Food remaining: " . $foodItem['quantity'] . " lbs\n";
+        // } else {
+        // echo "No food in inventory.\n";
+        // }
 
 
 
