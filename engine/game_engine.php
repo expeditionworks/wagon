@@ -355,13 +355,16 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     if ($playerState['delay_days'] > 0) {
         // Decrease the delay_days and log the delay message
         $playerState['delay_days'] -= 1;
-
+        $playerState['delay_status'] = 'active';
+ 
         $playerState['log'][] = [
             'day' => $playerState['day'],
             'miles_traveled' => 0,
             'total_miles' => $playerState['mile'],
             'notes' => "Paused at a milestone (delay in progress)."
         ];
+
+        echo "$playerState['milestone']['title']";
 
         $playerState['day'] += 1; // Increment the day even when paused
         updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
