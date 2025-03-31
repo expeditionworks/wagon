@@ -457,12 +457,14 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     
     // Debug: Output the miles traveled calculation
-echo "<p>Base Miles: $baseMiles</p>";
-echo "<p>Terrain Modifier: $terrainMod</p>";
-echo "<p>Difficulty Modifier: $difficultyMultiplier</p>";
-    echo "<p>Miles Traveled (base + difficult + terrain): $adjusted_distance</p>";
-echo "<p>Miles Traveled (Before Adjustments): $milesTraveled</p>";
+    echo "<ul>";
+    echo "<li>Base Miles: $baseMiles</li>";
+    echo "<li>Terrain Modifier: $terrainMod</li>";
+    echo "<li>Difficulty Modifier: $difficultyMultiplier</li>";
+    echo "<li>Miles Traveled (base + difficult + terrain): $adjusted_distance</li>";
+    echo "<li>Miles Traveled (Before Adjustments): $milesTraveled</li>";
     echo "<p>Wind type: $wind_type</p>";
+    echo "</ul>";
 
 
     // Store miles traveled in playerState
