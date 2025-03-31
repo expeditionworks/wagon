@@ -351,26 +351,38 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
 
     
-    // Check if delay_days is greater than 0
-    if ($playerState['delay_days'] > 0) {
-        // Decrease the delay_days and log the delay message
-        $playerState['delay_days'] -= 1;
-        $playerState['delay_status'] = 'active';
- 
-        $playerState['log'][] = [
-            'day' => $playerState['day'],
-            'miles_traveled' => 0,
-            'total_miles' => $playerState['mile'],
-            'notes' => "Paused at a milestone (delay in progress)."
-        ];
+// Check if delay_days is greater than 0
+if ($playerState['delay_days'] > 0) {
+    // Decrease the delay_days and log the delay message
+    $playerState['delay_days'] -= 1;
+    $playerState['delay_status'] = 'active';
 
-        echo "$milestone['title']";
+    // Log the pause at the current milestone
+    $playerState['log'][] = [
+        'day' => $playerState['day'],
+        'miles_traveled' => 0,
+        'total_miles' => $playerState['mile'],
+        'notes' => "Paused at a milestone (delay in progress)."
+    ];
 
-        $playerState['day'] += 1; // Increment the day even when paused
-        updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
-        return $playerState;  // Skip further movement and milestone checks
+    // Find and display the milestone's title, description, and extended description
+    foreach ($milestones as $milestone) {
+        if ($milestone['mile'] === $playerState['mile']) {
+            echo "You are at: " . $milestone['title'] . "<br>";
+            echo "Description: " . $milestone['description'] . "<br>";
+            echo "Extended Description: " . $milestone['extended_description'] . "<br>";
+            break;  // Exit loop once we find the milestone
+        }
     }
 
+    // Increment the day even when paused
+    $playerState['day'] += 1;
+
+    // Update player state in the database with the new delay_days value
+    updatePlayerState($player_id, $playerState, $conn);
+
+    return $playerState;  // Skip further movement and milestone checks
+} else {
 
     $baseMiles = 15;  // Default miles traveled without adjustments
     
@@ -500,8 +512,8 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with new values
     return $playerState;
+    }
 }
-
 
 
 
