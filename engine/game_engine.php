@@ -426,7 +426,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     }
 
     // oxen
-    $oxenNumber = $playerState['oxen'] ?? 6;  // Default to 6 if 'oxen' is not set
+    $oxenNumber = $playerState['inventory']['Oxen']['quantity'] ?? 6;  // Default to 6 if 'oxen' is not set
     
     // Initialize oxen modifier
     $oxenMod = 1.0;  // Default: no change in distance
