@@ -499,7 +499,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     } else {
 
        $playerState['log'][] = [
-        'notes' => "You kept on rolling"
+        'notes' => "You kept on rolling" . $milestoneToday
         ];
     }
 
