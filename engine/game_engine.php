@@ -261,7 +261,7 @@ if (file_exists($conditionsPath)) {
     }
 
     // Do your transformations, logic, etc., now that conditions are loaded
-        foreach ($updatedPlayerState['family'] as &$familyMember) {
+        foreach ($playerState['family'] as &$familyMember) {
     // Check if the family member has a condition
     if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
         // Get the condition data from conditions.json
@@ -278,7 +278,7 @@ if (file_exists($conditionsPath)) {
         // Apply travel penalty (if applicable)
         if ($conditionData['slows_travel']) {
             // Logic to reduce travel distance (e.g., reduce miles traveled by some factor)
-            $updatedPlayerState['miles_traveled'] *= 0.5; // Example: 50% of the original travel distance
+            $playerState['miles_traveled'] *= 0.5; // Example: 50% of the original travel distance
         }
 
         // Track the remaining duration of the condition (decrease each day)
