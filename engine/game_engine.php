@@ -288,6 +288,7 @@ if (file_exists($conditionsPath)) {
             // If duration reaches 0, remove the condition
             $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
         }
+        echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
 
         // Log the effects of the condition
         // $updatedPlayerState['log'][] = [
@@ -295,7 +296,6 @@ if (file_exists($conditionsPath)) {
         //    'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, 
         //                losing {$healthRisk} health and {$moralePenalty} morale."
         // ];
-        echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
         
     }
 }
