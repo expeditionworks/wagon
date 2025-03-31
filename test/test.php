@@ -82,11 +82,8 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     foreach ($updatedPlayerState['inventory'] as $itemName => $itemData) {
         // Display the item name and its details (e.g., quantity and durability)
         echo "<li>";
-        echo "$itemName" . $itemData['quantity'] . "<br>";
-        echo "Durability: " . ($itemData['durability'] !== null ? $itemData['durability'] : 'N/A') . "<br>";
-        echo "</li>";
+        echo "$itemName: " . $itemData['quantity'] . "</li>";
     }
-    
     echo "</ul>";
 
     
