@@ -73,7 +73,23 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     echo "<li><strong>Miles Marker:</strong> " . $updatedPlayerState['mile'] . "</li>";
     echo "</ul>";
 
-    echo "<strong>Inventory</strong>";    
+    echo "<strong>Inventory</strong>";
+    // Assuming your inventory data is in $playerState['inventory']
+    echo "<h3>Player Inventory</h3>";
+    echo "<ul>";
+    
+    // Iterate through the inventory
+    foreach ($updatedPlayerState['inventory'] as $itemName => $itemData) {
+        // Display the item name and its details (e.g., quantity and durability)
+        echo "<li>";
+        echo "$itemName" . $itemData['quantity'] . "<br>";
+        echo "Durability: " . ($itemData['durability'] !== null ? $itemData['durability'] : 'N/A') . "<br>";
+        echo "</li>";
+    }
+    
+    echo "</ul>";
+
+    
   
     echo "<ul>";    
     echo "<li>Food left: " . $updatedPlayerState['inventory']['Food']['quantity'] . "</li>";
