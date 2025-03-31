@@ -37,9 +37,10 @@ if ($playerState) {
     echo "</ul>";    
 
 
-    // Ensure family data exists and is an array
+// Ensure family data exists and is an array
 if (isset($updatedPlayerState['family']) && is_array($updatedPlayerState['family'])) {
-        echo "<ul>";
+    echo "<ul>";
+    
     // Loop through each family member
     foreach ($updatedPlayerState['family'] as $familyMember) {
         // Check if necessary keys exist for each family member
@@ -48,29 +49,28 @@ if (isset($updatedPlayerState['family']) && is_array($updatedPlayerState['family
         $condition = isset($familyMember['condition']) ? $familyMember['condition'] : 'Unknown';
         $health = isset($familyMember['health']) ? $familyMember['health'] : 'N/A';
         $skills = isset($familyMember['skills']) ? implode(", ", $familyMember['skills']) : 'None';
-        $deceased = isset($familyMember['deceased']) ? ($familyMember['deceased'] ? 'Yes' : 'No') : 'No';
+        $deceased = isset($familyMember['deceased']) ? $familyMember['deceased'] : false;  // Default to false if not set
         $morale = isset($familyMember['morale']) ? $familyMember['morale'] : 'N/A';
-       // Deceased check using switch
-        switch ($familyMember['deceased']) {
-            case true:
-                $deceasedStatus = 'are living their best lives, man';
-                break;
-            case false:
-                $deceasedStatus = 'are deceased';
-                break;
-            default:
-                $deceasedStatus = 'abide';
+
+        // Check deceased status
+        if ($deceased) {
+            $deceasedStatus = 'are deceased';
+        } else {
+            $deceasedStatus = 'are living their best lives, man';
         }
+
         // Display family member's details
-        echo "<li>Name: $firstName, $role is feeling $condition and have $morale moral and has $health health and hhave $skills skills. They $deceasedStatus.";
+        echo "<li>Name: $firstName, $role is feeling $condition and has $morale morale and $health health and has $skills skills. They $deceasedStatus.</li>";
     }
-        echo "</ul>";
+
+    echo "</ul>";
     
 } else {
     // Handle the case where 'family' is not set or is not an array
     echo "Error: Family data is missing or corrupted. Unable to display family details.";
 }
 
+// weather
 if (isset($updatedPlayerState['weatherThisTurn'])) {
     $weatherData = $updatedPlayerState['weatherThisTurn'];
 
