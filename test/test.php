@@ -66,10 +66,10 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 
 
 
-    
-    echo "<p><strong>Miles Traveled:</strong> " . $updatedPlayerState['miles_traveled'] . "</p>";
-
-    echo "<p><strong>Miles Marker:</strong> " . $updatedPlayerState['mile'] . "</p>";
+    echo "<ul>";    
+    echo "<li><strong>Miles Traveled:</strong> " . $updatedPlayerState['miles_traveled'] . "</li>";
+    echo "<li><strong>Miles Marker:</strong> " . $updatedPlayerState['mile'] . "</li>";
+    echo "</ul>";
 
     // Get the terrain type based on the current mile
     $currentTerrain = 'Unknown';  // Default value if terrain is not found
