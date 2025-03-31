@@ -84,10 +84,10 @@ if (file_exists($terrainPath)) {
 }
 
 // Debug: Check the terrain type and altitude
-echo "<pre>";
-echo "Terrain Type: $terrainType\n";  // Debug the value of terrainType
-echo "Altitude: $altitude\n";        // Debug the value of altitude
-echo "</pre>";
+// echo "<pre>";
+// echo "Terrain Type: $terrainType\n";  // Debug the value of terrainType
+// echo "Altitude: $altitude\n";        // Debug the value of altitude
+// echo "</pre>";
 
 
         
