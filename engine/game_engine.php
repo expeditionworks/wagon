@@ -181,18 +181,6 @@ if (file_exists($terrainPath)) {
  
     $newDelayState = $playerRow['delay_status'];
 
-    // Initialize $familyCount to ensure it always has a value
-    $familyCount = 2;  // Default to 2 in case of error or missing data
-    
-    // Check if 'family' exists and is an array
-    if (isset($playerState['family']) && is_array($playerState['family'])) {
-        $familyCount = count($playerState['family']);  // Get the number of family members
-    } else {
-        // Handle the case where 'family' is not set or is not an array
-        $familyCount = 2;  // Set the family count to 2 to not penalize the player for our bad coding
-    }
-
-
         
 echo "{$playerState['terrainCurrent']}";
        
@@ -229,7 +217,16 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Example: Decrementing food based on party size and rations
     $itemName = "Food";  // We're working with the 'Food' item
     $foodPerPerson = 2;  // Example: 2 lbs of food per person per day
+    // Initialize $familyCount to ensure it always has a value
+    $familyCount = 2;  // Default to 2 in case of error or missing data
     
+    // Check if 'family' exists and is an array
+    if (isset($playerState['family']) && is_array($playerState['family'])) {
+        $familyCount = count($playerState['family']);  // Get the number of family members
+    } else {
+        // Handle the case where 'family' is not set or is not an array
+        $familyCount = 2;  // Set the family count to 2 to not penalize the player for our bad coding
+    }    
     // Get the party size (e.g., number of family members in $playerState)
     // $partySize = count($playerState['family']);  // Assuming you have a family array in playerState
     $partySize = $familyCount;
