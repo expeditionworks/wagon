@@ -6,6 +6,7 @@
     "mile": 0,
     "trail": [       "oregon"     ],
     "force_stop": true,
+    "delay_days": 5,
     "description": "The starting point of the Oregon Trail.",
     "extended_description": "From the muddy banks of the Missouri River, the town of Independence bustled with emigrants gathering supplies and forming wagon trains. This was the last major stop before the long journey west. Oxen were hitched, families said their goodbyes, and the trail ahead beckoned with both promise and peril.",
     "store": true,
