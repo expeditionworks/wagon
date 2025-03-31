@@ -356,6 +356,19 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         // Decrease the delay_days and log the delay message
         $playerState['delay_days'] -= 1;
         $playerState['delay_status'] = 'active';
+
+        if (is_array($milestones) && !empty($milestones)) {
+        foreach ($milestones as $milestone) {
+        if ($milestone['mile'] === $playerState['mile']) {
+            echo "You are at: " . $milestone['title'] . "<br>";
+            echo "Description: " . $milestone['description'] . "<br>";
+            echo "Extended Description: " . $milestone['extended_description'] . "<br>";
+            break;  // Exit loop once we find the milestone
+                }
+            }
+        } else {
+            echo "Milestones data is missing or invalid.";
+        }
  
         $playerState['log'][] = [
             'day' => $playerState['day'],
