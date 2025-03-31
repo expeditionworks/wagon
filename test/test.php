@@ -22,12 +22,14 @@ if ($playerState) {
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
     // Show basic info
-    echo "<p><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</p>";
-    echo "<p><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</p>";
-    echo "<p><strong>Month</strong> " . $updatedPlayerState['month'] . "</p>";
-    echo "<p><strong>Altitude</strong> " . $updatedPlayerState['altitude'] . "</p>";
-    echo "<p><strong>Money</strong> " . $updatedPlayerState['dollars'] . "</p>";
-    echo "<p><strong>Ration</strong> " . $updatedPlayerState['ration'] . "</p>";
+    echo "<ul>";    
+   
+    echo "<li><strong>Current Trail:</strong> " . $updatedPlayerState['current_trail'] . "</li>";
+    echo "<li><strong>Days on Trail:</strong> " . $updatedPlayerState['day'] . "</li>";
+    echo "<li><strong>Month</strong> " . $updatedPlayerState['month'] . "</li>";
+    echo "<li><strong>Money</strong> " . $updatedPlayerState['dollars'] . "</li>";
+    echo "<li><strong>Ration</strong> " . $updatedPlayerState['ration'] . "</li>";
+    echo "</ul>";    
 
 
 if (isset($updatedPlayerState['weatherThisTurn'])) {
