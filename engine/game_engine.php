@@ -200,7 +200,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $previousMile = $playerState['mile'];
     // Retrieve the current mile
     $currentMile = $playerState['mile'];
-
+    $newDelayState = $playerRow['delay_status'];
     // Example: Decrementing food based on party size and rations
     $itemName = "Food";  // We're working with the 'Food' item
     $foodPerPerson = 2;  // Example: 2 lbs of food per person per day
@@ -508,22 +508,24 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $delayDays = $playerState['delay_days']; // Ensure the delay_days is passed
     $milesTraveled = $playerState['miles_traveled'] ?? 0;  // Get miles_traveled from playerState
     $weatherJson = json_encode($playerState['weatherThisTurn']);  // Convert weather to JSON string
+    $newDelayState = $playerState['delay_status'];  // Pull delay_status from the database (default to completed)
+
 
     
     // Query to update the player state in the database
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ? 
+              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ?, delay_status = ? 
               WHERE player_id = ?";
-
+    
     $stmt = $conn->prepare($query);
     if ($stmt === false) {
         echo "<p>Error preparing statement: " . $conn->error . "</p>";
         return;
     }
-
+    
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iissssssssi', 
+        'iisssssssssi', // Added 's' for delay_status (VARCHAR)
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
@@ -534,9 +536,9 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $delayDays,      // Pass the delay_days value
         $milesTraveled,  // Pass the miles_traveled value
         $weatherJson,    // Pass the weather as JSON string
+        $newDelayState,  // Pass the delay_status value
         $player_id
     );
-
     // Execute the query to update the player state in the database
     if ($stmt->execute()) {
         echo "<p>Player state updated successfully!</p>";
