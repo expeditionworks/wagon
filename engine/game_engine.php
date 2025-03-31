@@ -165,7 +165,7 @@ if (file_exists($terrainPath)) {
 
 
  
-
+    $newDelayState = $playerRow['delay_status'];
  
 
 
@@ -200,7 +200,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $previousMile = $playerState['mile'];
     // Retrieve the current mile
     $currentMile = $playerState['mile'];
-    $newDelayState = $playerRow['delay_status'];
+
     // Example: Decrementing food based on party size and rations
     $itemName = "Food";  // We're working with the 'Food' item
     $foodPerPerson = 2;  // Example: 2 lbs of food per person per day
