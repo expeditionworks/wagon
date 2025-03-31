@@ -70,7 +70,13 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 } else {
     echo "<p>Weather data is not available for today.</p>";
 }
-        echo "<p>" . $updatedPlayerState['log'] . "</p>";
+
+        // Display the last log item
+    if (isset($updatedPlayerState['last_log_item'])) {
+        // Check if the last_log_item is already an array or a JSON string
+        $lastLogItem = is_array($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : json_decode($updatedPlayerState['last_log_item'], true);
+        echo "<p><strong>Last Log Item:</strong><br>" . $lastLogItem['notes'] . "</p>";
+    }
 
 
 
@@ -121,12 +127,7 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 
     
 
-    // Display the last log item
-    if (isset($updatedPlayerState['last_log_item'])) {
-        // Check if the last_log_item is already an array or a JSON string
-        $lastLogItem = is_array($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : json_decode($updatedPlayerState['last_log_item'], true);
-        echo "<p><strong>Last Log Item:</strong><br>" . $lastLogItem['notes'] . "</p>";
-    }
+
 
     // Display log if any milestones are reached
     if (!empty($updatedPlayerState['log'])) {
