@@ -83,13 +83,6 @@ if (file_exists($terrainPath)) {
     $terrain = []; // Default empty array
 }
 
-// Debug: Check the terrain type and altitude
-// echo "<pre>";
-// echo "Terrain Type: $terrainType\n";  // Debug the value of terrainType
-// echo "Altitude: $altitude\n";        // Debug the value of altitude
-// echo "</pre>";
-
-
         
 
         
@@ -390,8 +383,9 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         $playerState['day'] += 1; // Increment the day even when paused
         updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
         return $playerState;  // Skip further movement and milestone checks
+        
     } else {
-
+    // this bit if if we move
 
     $baseMiles = 15;  // Default miles traveled without adjustments
     
@@ -425,10 +419,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
     // Get the modifier based on the terrain type
     $terrainMod = ($terrainModifiers[$playerState['terrainCurrent']] ?? 1.0) * $randomFactor;  // Default to 1 if terrain is unknown
-
-// You can now use $terrainMod in your movement calculation
-// echo "Terrain Type: $terrainType";
-    //Modifier: $terrainMod";
 
     
     // Adjust based on difficulty setting
@@ -505,6 +495,11 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     if ($milestoneToday) {
         $playerState['log'][] = [
             'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
+        ];
+    } else {
+
+       $playerState['log'][] = [
+        'notes' => "Weather: " . $playerState['weatherThisTurn'] . "\nFood consumed: " . $totalFoodConsumed . "\n" . $terrainEffect . "."
         ];
     }
 
