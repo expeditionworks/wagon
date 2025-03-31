@@ -494,17 +494,21 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Log milestone if reached
     if ($milestoneToday) {
         $playerState['log'][] = [
+            'day' => $playerState['day'],
+            'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
+            'total_miles' => $newMile,
+            'milestone' => $milestoneToday['title'] ?? null,            
             'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
         ];
     } else {
 
-    $playerState['log'][] = [
-        'day' => $playerState['day'],
-        'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
-        'total_miles' => $newMile,
-        'milestone' => $milestoneToday['title'] ?? null,
-        'notes' => "Today you kept on rolling without a milesone. You travelled " . $milesTraveled . " miles, and ate " . $totalFoodConsumed . "lbs of food."
-    ];
+        $playerState['log'][] = [
+            'day' => $playerState['day'],
+            'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
+            'total_miles' => $newMile,
+            'milestone' => $milestoneToday['title'] ?? null,
+            'notes' => "Today you kept on rolling without a milesone. You travelled " . $milesTraveled . " miles, and ate " . $totalFoodConsumed . "lbs of food."
+        ];
     }
 
     // Update player state
