@@ -150,6 +150,7 @@ if (file_exists($terrainPath)) {
             'altitude' => $altitude, // set altitude
             'milestones' => $milestones,  // Ensure milestones is always set
             'delay_days' => $playerRow['delay_days'] ?? 0,  // Pull delay_days from the database (default to 0)
+            'delay_status' => $playerRow['delay_status'] ?? 'completed',  // Pull delay_status from the database (default to completed)
             'difficulty' => $playerRow['difficulty'] ?? 'medium', // Default difficulty to 'medium' if not set
             'oxen' => $playerRow['oxen'] ?? 2, // Default oxen to 2 if not set
             'miles_traveled' => $playerRow['miles_traveled'] ?? 0, // Pull miles_traveled from the database (default to 0)
