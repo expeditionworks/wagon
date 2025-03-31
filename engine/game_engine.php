@@ -149,6 +149,7 @@ if (file_exists($terrainPath)) {
 
     
         $playerState = [
+            'family' => !empty($playerRow['family']) ? json_decode($playerRow['family'], true) : [],
             'dollars' => $playerRow['dollars'] ?? 10,
             'day' => $playerRow['day'] ?? 1,
             'mile' => $playerRow['mile'] ?? 0,
