@@ -95,7 +95,7 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     if (isset($updatedPlayerState['delay_days'])) {
         echo "<p><strong>Delay Days:</strong> " . json_encode($updatedPlayerState['delay_days']) . "</p>"; // Encode the array to a string
     }
-    echo "<p><strong>Ration</strong> " . $updatedPlayerState['delay_status'] . "</p>";
+    echo "<p><strong>Delay Status</strong> " . $updatedPlayerState['delay_status'] . "</p>";
     
 
     // Display the last log item
