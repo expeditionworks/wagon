@@ -363,20 +363,29 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             echo "You are at: " . $milestone['title'] . "<br>";
             echo "Description: " . $milestone['description'] . "<br>";
             echo "Extended Description: " . $milestone['extended_description'] . "<br>";
+
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => 0,
+                'total_miles' => $playerState['mile'],
+                'notes' => "Paused at the milestone: " . $milestone['title'] . "\nThere is a delay in progress."
+            ];
+
+            
             break;  // Exit loop once we find the milestone
                 }
             }
         } else {
             echo "Milestones data is missing or invalid.";
-        }
- 
-        $playerState['log'][] = [
+
+             $playerState['log'][] = [
             'day' => $playerState['day'],
             'miles_traveled' => 0,
             'total_miles' => $playerState['mile'],
             'notes' => "Paused at a milestone (delay in progress)."
         ];
 
+        }
 
         $playerState['day'] += 1; // Increment the day even when paused
         updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
