@@ -363,8 +363,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
                 'total_miles' => $playerState['mile'],
                 'notes' => "Paused at the milestone: " . $milestone['title'] . ". \nThere is a delay in progress. You have " . $playerState['delay_days'] . " more days left to wait."
             ];
-
-            
             break;  // Exit loop once we find the milestone
                 }
             }
@@ -372,11 +370,11 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             echo "Milestones data is missing or invalid.";
 
              $playerState['log'][] = [
-            'day' => $playerState['day'],
-            'miles_traveled' => 0,
-            'total_miles' => $playerState['mile'],
-            'notes' => "Paused at a milestone (delay in progress)."
-        ];
+                'day' => $playerState['day'],
+                'miles_traveled' => 0,
+                'total_miles' => $playerState['mile'],
+                'notes' => "Paused at a milestone (delay in progress)."
+            ];
 
         }
 
