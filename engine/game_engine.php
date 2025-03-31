@@ -86,6 +86,9 @@ if (file_exists($terrainPath)) {
 // Debug: Check the terrain type and altitude
 echo "Current Terrain: $terrainType, Altitude: $altitude\n";
 
+
+        
+
         
 
         $milestonesPath = __DIR__ . '/../config/milestones.json';
@@ -341,7 +344,8 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     
     // Calculate the wind speed using terrain and altitude modifiers
     $terrainType = $playerState['terrain'][$playerState['mile']] ?? 'plains';  // Default to 'plains' if not found
-
+    echo "Terrain Type: $terrainType";
+    
     // Construct the weather data to return
     $weatherData = [
         'weather_type' => $weatherType,
@@ -409,7 +413,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $terrainMod = ($terrainModifiers[$playerState['terrainCurrent']] ?? 1.0) * $randomFactor;  // Default to 1 if terrain is unknown
 
 // You can now use $terrainMod in your movement calculation
-echo "Terrain Type: $terrainType";
+// echo "Terrain Type: $terrainType";
     //Modifier: $terrainMod";
 
 
