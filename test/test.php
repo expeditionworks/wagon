@@ -73,9 +73,11 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     echo "<li><strong>Miles Marker:</strong> " . $updatedPlayerState['mile'] . "</li>";
     echo "</ul>";
 
+    echo "<strong>Inventory</strong>";    
+  
     echo "<ul>";    
-
-    echo "<li>Food durability: " . $updatedPlayerState['inventory']['Food']['quantity'] . "</li>";
+    echo "<li>Food left: " . $updatedPlayerState['inventory']['Food']['quantity'] . "</li>";
+    echo "<li>Ammunition: " . $updatedPlayerState['inventory']['Ammunition']['quantity'] . "</li>";
     echo "</ul>";
 
 
