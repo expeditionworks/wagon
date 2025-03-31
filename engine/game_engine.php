@@ -498,14 +498,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         ];
     } else {
 
-       $playerState['log'][] = [
-        'notes' => "You kept on rolling"
-        ];
-    }
-
-    // Update player state
-    $playerState['mile'] = $newMile;
-    $playerState['day'] += 1;
     $playerState['log'][] = [
         'day' => $playerState['day'],
         'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
@@ -513,6 +505,18 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         'milestone' => $milestoneToday['title'] ?? null,
         'notes' => $milestoneToday ? "Today, you reached " . $milestoneToday['title'] . "." : null
     ];
+    }
+
+    // Update player state
+    $playerState['mile'] = $newMile;
+    $playerState['day'] += 1;
+//    $playerState['log'][] = [
+  //      'day' => $playerState['day'],
+    //    'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
+      //  'total_miles' => $newMile,
+        // 'milestone' => $milestoneToday['title'] ?? null,
+        // 'notes' => $milestoneToday ? "Today, you reached " . $milestoneToday['title'] . "." : null
+    // ];
 
     updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with new values
     return $playerState;
