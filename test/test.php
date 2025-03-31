@@ -70,6 +70,7 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 } else {
     echo "<p>Weather data is not available for today.</p>";
 }
+        echo "<p>" . $updatedPlayerState['last_log_item'] . "</p>";
 
 
 
