@@ -29,6 +29,11 @@ if ($playerState) {
     echo "<li><strong>Month</strong> " . $updatedPlayerState['month'] . "</li>";
     echo "<li><strong>Money</strong> " . $updatedPlayerState['dollars'] . "</li>";
     echo "<li><strong>Ration</strong> " . $updatedPlayerState['ration'] . "</li>";
+     // Display Delay Days
+    if (isset($updatedPlayerState['delay_days'])) {
+        echo "<li>Delay Days:</strong> " . json_encode($updatedPlayerState['delay_days']) . "</li>"; // Encode the array to a string
+    }
+    echo "<li>Delay Status</strong> " . $updatedPlayerState['delay_status'] . "</li>";
     echo "</ul>";    
 
 
@@ -111,17 +116,8 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 
     // Display morale only if it exists
     echo "<p><strong>Morale:</strong> " . $updatedPlayerState['morale'] . "</p>";
-
-    // Display inventory if available
-    if (isset($updatedPlayerState['inventory'])) {
-        echo "<p><strong>Inventory:</strong> " . json_encode($updatedPlayerState['inventory']) . "</p>"; // Encode the array to a string
-    }
     
-    // Display Delay Days
-    if (isset($updatedPlayerState['delay_days'])) {
-        echo "<p><strong>Delay Days:</strong> " . json_encode($updatedPlayerState['delay_days']) . "</p>"; // Encode the array to a string
-    }
-    echo "<p><strong>Delay Status</strong> " . $updatedPlayerState['delay_status'] . "</p>";
+
     
 
     // Display the last log item
