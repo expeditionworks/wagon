@@ -261,6 +261,49 @@ if (file_exists($conditionsPath)) {
     }
 
     // Do your transformations, logic, etc., now that conditions are loaded
+        foreach ($updatedPlayerState['family'] as &$familyMember) {
+    // Check if the family member has a condition
+    if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
+        // Get the condition data from conditions.json
+        $conditionData = $conditionsList[$familyMember['condition']];
+        
+        // Apply health risk
+        $healthRisk = $conditionData['health_risk'];
+        $familyMember['health'] -= $healthRisk;  // Apply health risk
+
+        // Apply morale penalty
+        $moralePenalty = $conditionData['morale_penalty'];
+        $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
+
+        // Apply travel penalty (if applicable)
+        if ($conditionData['slows_travel']) {
+            // Logic to reduce travel distance (e.g., reduce miles traveled by some factor)
+            $updatedPlayerState['miles_traveled'] *= 0.5; // Example: 50% of the original travel distance
+        }
+
+        // Track the remaining duration of the condition (decrease each day)
+        if (isset($familyMember['condition_duration']) && $familyMember['condition_duration'] > 0) {
+            $familyMember['condition_duration']--;
+        } else {
+            // If duration reaches 0, remove the condition
+            $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
+        }
+
+        // Log the effects of the condition
+        // $updatedPlayerState['log'][] = [
+        //    'day' => $updatedPlayerState['day'],
+        //    'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, 
+        //                losing {$healthRisk} health and {$moralePenalty} morale."
+        echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, 
+        //                losing {$healthRisk} health and {$moralePenalty} morale.";
+        ];
+    }
+}
+
+
+
+
+    
 } else {
     // Handle the case where conditions file is missing or inaccessible
     echo "Conditions file not found or not accessible.";
