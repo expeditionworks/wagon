@@ -50,28 +50,33 @@ function getPlayerState($player_id, $conn) {
 
 
 
-        
-$terrainPath = __DIR__ . '/../config/terrain.json';
-if (file_exists($terrainPath)) {
-    $terrainContent = file_get_contents($terrainPath);
-    $terrain = $terrainContent !== false ? json_decode($terrainContent, true) : [];
-
-    // Initialize default values
-    $terrainType = 'plains';  // Default terrain if none found
-    $altitude = 'low';  // Default altitude if none found
-
-    // Loop through the terrain array to find the correct terrain type for the current mile
-    foreach ($terrain as $section) {
-        if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
-            $terrainType = $section['terrain'] ?? 'plains';
-            $altitude = $section['altitude'] ?? 'low'; 
-            break;  // Exit the loop once the correct terrain is found
+    // set terrain from terrain.json        
+    $terrainPath = __DIR__ . '/../config/terrain.json';
+    if (file_exists($terrainPath)) {
+        $terrainContent = file_get_contents($terrainPath);
+        $terrain = $terrainContent !== false ? json_decode($terrainContent, true) : [];
+    
+        // Initialize default values
+        $terrainType = 'plains';  // Default terrain if none found
+        $altitude = 'low';  // Default altitude if none found
+    
+        // Check if terrain data is valid
+        if (is_array($terrain) && !empty($terrain)) {
+            // Loop through the terrain array to find the correct terrain type for the current mile
+            foreach ($terrain as $section) {
+                if ($currentMile >= $section['start_mile'] && $currentMile <= $section['end_mile']) {
+                    $terrainType = $section['terrain'] ?? 'plains';
+                    $altitude = $section['altitude'] ?? 'low'; 
+                    break;  // Exit the loop once the correct terrain is found
+                }
+            }
+        } else {
+            echo "Invalid terrain data or empty terrain array.\n";
         }
+    } else {
+        echo "Terrain file not found or not accessible.\n";
+        $terrain = []; // Default empty array
     }
-} else {
-    echo "Terrain file not found or not accessible.";
-    $terrain = []; // Default empty array
-}
         
 
         $milestonesPath = __DIR__ . '/../config/milestones.json';
