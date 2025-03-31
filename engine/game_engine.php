@@ -228,7 +228,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
         $familyCount = 2;  // Set the family count to 2 to not penalize the player for our bad coding
     }
     // Define the food per person based on the ration type
-    switch ($familyState['ration']) {
+    switch ($playerState['ration']) {
         case 'generous':
             $foodPerPerson = 3;  // Generous ration
             break;
