@@ -413,14 +413,6 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 // echo "Terrain Type: $terrainType";
     //Modifier: $terrainMod";
 
-
-    // Ensure that $terrainType is a string before echoing
-if (is_string($terrainType)) {
-    echo "Terrain Type: $terrainType";
-} else {
-    echo "Error: Terrain Type is not a string.";
-}
-
     
     // Adjust based on difficulty setting
     $difficultyMod = [
