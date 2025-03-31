@@ -50,7 +50,8 @@ if (isset($updatedPlayerState['family']) && is_array($updatedPlayerState['family
         $skills = isset($familyMember['skills']) ? implode(", ", $familyMember['skills']) : 'None';
         $deceased = isset($familyMember['deceased']) ? ($familyMember['deceased'] ? 'Yes' : 'No') : 'No';
         $morale = isset($familyMember['morale']) ? $familyMember['morale'] : 'N/A';
-        switch (isset($familyMember['deceased']) ? $familyMember['deceased'] : false) {
+       // Deceased check using switch
+        switch ($familyMember['deceased']) {
             case true:
                 $deceasedStatus = 'are living their best lives, man';
                 break;
@@ -58,7 +59,7 @@ if (isset($updatedPlayerState['family']) && is_array($updatedPlayerState['family
                 $deceasedStatus = 'are deceased';
                 break;
             default:
-                $deceasedStatus = 'They abide';
+                $deceasedStatus = 'abide';
         }
         // Display family member's details
         echo "<li>Name: $firstName, $role is feeling $condition and have $morale moral and has $health health and hhave $skills skills. They $deceasedStatus.";
