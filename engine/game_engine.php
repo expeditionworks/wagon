@@ -268,18 +268,30 @@ if (file_exists($conditionsPath)) {
         $conditionData = $conditionsList[$familyMember['condition']];
         
         // Apply health risk
-        $healthRisk = $conditionData['health_risk'];
-        $familyMember['health'] -= $healthRisk;  // Apply health risk
+            // Check if the required keys exist before applying the transformation
+            if (isset($conditionData['health_risk'])) {
+                $healthRisk = $conditionData['health_risk'];
+                $familyMember['health'] -= $healthRisk;  // Apply health risk
+            } else {
+                $healthRisk = 0;  // Default to 0 if health_risk is not set
+            }
+    
 
         // Apply morale penalty
-        $moralePenalty = $conditionData['morale_penalty'];
-        $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
+            // Check if the required keys exist before applying the morale penalty
+            if (isset($conditionData['morale_penalty'])) {
+                $moralePenalty = $conditionData['morale_penalty'];
+                $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
+            } else {
+                $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
+            }
 
         // Apply travel penalty (if applicable)
-        if ($conditionData['slows_travel']) {
-            // Logic to reduce travel distance (e.g., reduce miles traveled by some factor)
-            $playerState['miles_traveled'] *= 0.5; // Example: 50% of the original travel distance
-        }
+            // Apply travel penalty (if applicable)
+            if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
+                // Logic to reduce travel distance (e.g., reduce miles traveled by some factor)
+                $conditionTravelMod = 0.9; // Example: 90% of the original travel distance
+            }
 
         // Track the remaining duration of the condition (decrease each day)
         if (isset($familyMember['condition_duration']) && $familyMember['condition_duration'] > 0) {
@@ -541,7 +553,7 @@ if (file_exists($conditionsPath)) {
     }
 
     // Calculate initial miles traveled with adjustments
-    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $precipitationPenalty * $moraleMod * $oxenMod);
+    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $conditionTravelMod * $precipitationPenalty * $moraleMod * $oxenMod);
     $milesTraveled = round(max( $adjusted_distance * $wind_modifier, 0)); //add wind modifier
 
     
