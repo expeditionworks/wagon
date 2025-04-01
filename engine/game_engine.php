@@ -218,16 +218,13 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     switch ($playerState['ration']) {
         case 'generous':
             $foodPerPerson = 3;  // Generous ration
-            $foodMoraleMod = 5;      // Positive morale bonus for generous ration
             break;
         case 'half':
             $foodPerPerson = 1;  // Half ration
-            $foodMoraleMod = -5;     // Negative morale penalty for half ration
             break;
         case 'full':
         default:
             $foodPerPerson = 2;  // Full ration (default)
-            $foodMoraleMod = 0;      // No change in morale for full ration
             break;
     }
 
@@ -291,6 +288,19 @@ if (file_exists($conditionsPath)) {
                     $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
                 }
                 // Apply food morale modification (based on ration choice)
+                   switch ($playerState['ration']) {
+                        case 'generous':
+                            $foodMoraleMod = 5;      // Positive morale bonus for generous ration
+                            break;
+                        case 'half':
+                            $foodMoraleMod = -5;     // Negative morale penalty for half ration
+                            break;
+                        case 'full':
+                        default:
+                            $foodMoraleMod = 0;      // No change in morale for full ration
+                            break;
+                    }
+                
                 if (isset($foodMoraleMod)) {
                     $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
                 }
