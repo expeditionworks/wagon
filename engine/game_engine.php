@@ -586,13 +586,37 @@ if (file_exists($conditionsPath)) {
 
     // Log milestone if reached
     if ($milestoneToday) {
-        $playerState['log'][] = [
-            'day' => $playerState['day'],
-            'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
-            'total_miles' => $newMile,
-            'milestone' => $milestoneToday['title'] ?? null,            
-            'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
-        ];
+       // Apply morale change if morale_mod exists in milestone
+        if (isset($milestoneToday['morale_mod'])) {
+            $milestoneMoraleMod = $milestoneToday['morale_mod'];
+    
+            // Loop through each family member and modify morale
+            foreach ($playerState['family'] as &$familyMember) {
+                // Apply morale modification
+                $familyMember['morale'] += $milestoneMoraleMod;
+    
+                // Optional: Ensure morale is within the 0-100 range
+                $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
+            }
+    
+            // Log the morale modification
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+            ];
+        } else {
+            // Log the milestone without morale modification
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
+            ];
+        }
     } else {
 
         $playerState['log'][] = [
