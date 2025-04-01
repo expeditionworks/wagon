@@ -288,6 +288,7 @@ if (file_exists($conditionsPath)) {
 
         // Apply travel penalty (if applicable)
             // Apply travel penalty (if applicable)
+            $conditionTravelMod = 1; // initalize with no penalty
             if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
                 // Logic to reduce travel distance (e.g., reduce miles traveled by some factor)
                 $conditionTravelMod = 0.9; // Example: 90% of the original travel distance
