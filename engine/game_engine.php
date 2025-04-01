@@ -290,7 +290,7 @@ if (file_exists($conditionsPath)) {
         }
         echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
         
-        $playerState['family'] = json_encode($updatedPlayerState['family']); // Convert array back to JSON
+        $playerState['family'] = json_encode($playerState['family']); // Convert array back to JSON
 
         // Log the effects of the condition
         // $updatedPlayerState['log'][] = [
