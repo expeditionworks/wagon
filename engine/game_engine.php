@@ -301,9 +301,8 @@ if (file_exists($conditionsPath)) {
                             break;
                     }
                 
-                if (isset($foodMoraleMod)) {
                     $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
-                }
+                
                     // Ensure morale stays within the 0-100 range
                     $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
                 echo "Food Morale Mod: $foodMoraleMod";
