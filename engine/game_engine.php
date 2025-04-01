@@ -233,7 +233,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 $conditionsPath = __DIR__ . '/../config/conditions.json';
 // Default empty array if conditions can't be loaded
 $conditionsList = [];
-
+$conditionTravelMod = 1;
 // Check if the conditions file exists
 if (file_exists($conditionsPath)) {
     // Read the contents of the file
