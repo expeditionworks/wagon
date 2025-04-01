@@ -195,19 +195,6 @@ echo "{$playerState['terrainCurrent']}";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Player movement: increment miles and days
     $previousMile = $playerState['mile'];
@@ -302,6 +289,8 @@ if (file_exists($conditionsPath)) {
             $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
         }
         echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
+        
+        $playerState['family'] = json_encode($updatedPlayerState['family']); // Convert array back to JSON
 
         // Log the effects of the condition
         // $updatedPlayerState['log'][] = [
@@ -644,14 +633,15 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $milesTraveled = $playerState['miles_traveled'] ?? 0;  // Get miles_traveled from playerState
     $weatherJson = json_encode($playerState['weatherThisTurn']);  // Convert weather to JSON string
     $newDelayState = $playerState['delay_status'];  // Pull delay_status from the database (default to completed)
+    $newFamilyUpdate = json_encode($playerState['family']);  // Convert the family data into JSON
 
 
     
-    // Query to update the player state in the database
+   // Query to update the player state in the database
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ?, delay_status = ? 
+              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ?, delay_status = ?, family = ? 
               WHERE player_id = ?";
-    
+
     $stmt = $conn->prepare($query);
     if ($stmt === false) {
         echo "<p>Error preparing statement: " . $conn->error . "</p>";
@@ -660,7 +650,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
     
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iisssssssssi', // Added 's' for delay_status (VARCHAR)
+        'iissssssssss', // Adjusted to include the new family column (added 's' for family)
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
@@ -672,8 +662,10 @@ function updatePlayerState($player_id, $playerState, $conn) {
         $milesTraveled,  // Pass the miles_traveled value
         $weatherJson,    // Pass the weather as JSON string
         $newDelayState,  // Pass the delay_status value
-        $player_id
+        $newFamilyUpdate, // Pass the updated family data as JSON
+        $player_id       // Pass the player_id to update the correct row
     );
+
     // Execute the query to update the player state in the database
     if ($stmt->execute()) {
         echo "<p>Player state updated successfully!</p>";
