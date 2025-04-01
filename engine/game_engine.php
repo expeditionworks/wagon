@@ -646,8 +646,6 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $newDelayState = $playerState['delay_status'];  // Pull delay_status from the database (default to completed)
     $newFamilyUpdate = json_encode($playerState['family']);  // Convert the family data into JSON
 
-
-    
    // Query to update the player state in the database
     $query = "UPDATE player_state SET 
               day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ?, delay_status = ?, family = ? 
@@ -661,7 +659,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
     
     // Bind the parameters to the statement
     $stmt->bind_param(
-        'iissssssssss', // Adjusted to include the new family column (added 's' for family)
+        'iissssssssssi', // Added 'i' for the final player_id (integer)
         $playerState['day'], 
         $playerState['mile'], 
         $playerState['morale'], 
@@ -684,6 +682,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
         echo "<p>Error executing query: " . $stmt->error . "</p>";
     }
 }
+
 
 
 
