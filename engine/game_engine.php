@@ -207,6 +207,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Initialize $familyCount to ensure it always has a value
     $familyCount = 2;  // Default to 2 in case of error or missing data
     $foodMoraleMod = 0; // No change in morale as basic
+    $moralePenaltyForNoFood = 0;
     // Check if 'family' exists and is an array
     if (isset($playerState['family']) && is_array($playerState['family'])) {
         $familyCount = count($playerState['family']);  // Get the number of family members
@@ -284,7 +285,24 @@ if (file_exists($conditionsPath)) {
                     }                
                      // Ensure morale stays within the 0-100 range
                     $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
-
+                    
+                    // Check if the food inventory exists and has a valid quantity
+                    if (isset($playerState['inventory']['food']['quantity'])) {
+                        // Check if the quantity of food is 0 or less
+                        if ($playerState['inventory']['food']['quantity'] <= 0) {
+                            // No food available, apply morale penalty
+                            $moralePenaltyForNoFood = 10;  // Example: reduce morale by 10 points
+                        }
+                    } else {
+                        // Handle the case where food inventory is missing or corrupted
+                            $moralePenaltyForNoFood = 0;  // Example: reduce morale by 10 points
+                        return; 
+                    }
+                    if (isset($moralePenaltyForNoFood)) {
+                    $familyMember['morale'] += $moralePenaltyForNoFood;  // Apply food morale modification
+                    } 
+                    // Ensure morale stays within the 0-100 range
+                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
             
             // Ensure necessary fields are present for each family member
             if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
