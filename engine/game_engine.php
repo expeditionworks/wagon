@@ -264,12 +264,12 @@ if (file_exists($conditionsPath)) {
     if (isset($playerState['family']) && is_array($playerState['family'])) {
         // Loop through each family member
         foreach ($playerState['family'] as &$familyMember) {
-            // Check if the family member has a condition
+            // Ensure necessary fields are present for each family member
             if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
                 // Get the condition data from conditions.json
                 $conditionData = $conditionsList[$familyMember['condition']];
                 
-                // Apply health risk
+                // Apply health risk if it exists
                 if (isset($conditionData['health_risk'])) {
                     $healthRisk = $conditionData['health_risk'];
                     $familyMember['health'] -= $healthRisk;  // Apply health risk
@@ -277,7 +277,7 @@ if (file_exists($conditionsPath)) {
                     $healthRisk = 0;  // Default to 0 if health_risk is not set
                 }
 
-                // Apply morale penalty
+                // Apply morale penalty if it exists
                 if (isset($conditionData['morale_penalty'])) {
                     $moralePenalty = $conditionData['morale_penalty'];
                     $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
@@ -285,7 +285,7 @@ if (file_exists($conditionsPath)) {
                     $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
                 }
 
-                // Apply travel penalty (if applicable)
+                // Apply travel penalty if applicable
                 $conditionTravelMod = 1; // Initialize with no penalty
                 if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
                     $conditionTravelMod = 0.9; // Example: 90% of the original travel distance
@@ -299,14 +299,11 @@ if (file_exists($conditionsPath)) {
                     $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
                 }
 
-                echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
-
-                // Log the effects of the condition
-                // Log data can be saved as required (e.g., in $playerState['log'])
-                // $playerState['log'][] = [
-                //    'day' => $playerState['day'],
-                //    'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale."
-                // ];
+                // Optionally log the effects of the condition
+              //  $playerState['log'][] = [
+              //      'day' => $playerState['day'],
+              //      'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale."
+              //  ];
             }
         }
 
@@ -320,6 +317,7 @@ if (file_exists($conditionsPath)) {
     // Handle the case where conditions file is missing or inaccessible
     echo "Conditions file not found or not accessible.";
 }
+
 
 
 
