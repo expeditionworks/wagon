@@ -206,7 +206,7 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     $foodPerPerson = 2;  // Example: 2 lbs of food per person per day
     // Initialize $familyCount to ensure it always has a value
     $familyCount = 2;  // Default to 2 in case of error or missing data
-    
+    $foodMoraleMod = 0; // No change in morale as basic
     // Check if 'family' exists and is an array
     if (isset($playerState['family']) && is_array($playerState['family'])) {
         $familyCount = count($playerState['family']);  // Get the number of family members
@@ -218,13 +218,16 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     switch ($playerState['ration']) {
         case 'generous':
             $foodPerPerson = 3;  // Generous ration
+            $foodMoraleMod = 5;      // Positive morale bonus for generous ration
             break;
         case 'half':
             $foodPerPerson = 1;  // Half ration
+            $foodMoraleMod = -5;     // Negative morale penalty for half ration
             break;
         case 'full':
         default:
             $foodPerPerson = 2;  // Full ration (default)
+            $foodMoraleMod = 0;      // No change in morale for full ration
             break;
     }
 
@@ -281,10 +284,19 @@ if (file_exists($conditionsPath)) {
                 if (isset($conditionData['morale_penalty'])) {
                     $moralePenalty = $conditionData['morale_penalty'];
                     $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
+
+                    // Ensure morale stays within the 0-100 range
+                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
                 } else {
                     $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
                 }
-
+                // Apply food morale modification (based on ration choice)
+                if (isset($foodMoraleMod)) {
+                    $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
+                }
+                    // Ensure morale stays within the 0-100 range
+                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
+                
                 // Apply travel penalty if applicable
                 $conditionTravelMod = 1; // Initialize with no penalty
                 if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
