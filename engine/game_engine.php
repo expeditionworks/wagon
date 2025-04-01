@@ -306,7 +306,7 @@ if (file_exists($conditionsPath)) {
                 }
                     // Ensure morale stays within the 0-100 range
                     $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
-                
+                echo "Food Morale Mod: $foodMoraleMod";
                 // Apply travel penalty if applicable
                 $conditionTravelMod = 1; // Initialize with no penalty
                 if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
@@ -583,6 +583,7 @@ if (file_exists($conditionsPath)) {
     echo "<li>Base Miles: $baseMiles</li>";
     echo "<li>Terrain Modifier: $terrainMod</li>";
     echo "<li>Difficulty Modifier: $difficultyMultiplier</li>";
+    echo "<li>MoraleMod: $moraleMod</li>";
     echo "<li>Oxen Modifier: $oxenMod</li>";   
     echo "<li>Miles Traveled (base + difficult + terrain): $adjusted_distance</li>";
     echo "<li>Miles Traveled (Before Adjustments): $milesTraveled</li>";
