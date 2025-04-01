@@ -264,6 +264,27 @@ if (file_exists($conditionsPath)) {
     if (isset($playerState['family']) && is_array($playerState['family'])) {
         // Loop through each family member
         foreach ($playerState['family'] as &$familyMember) {
+
+                        // Apply food morale modification (based on ration choice)
+                   switch ($playerState['ration']) {
+                        case 'generous':
+                            $foodMoraleMod = 5;      // Positive morale bonus for generous ration
+                            break;
+                        case 'half':
+                            $foodMoraleMod = -5;     // Negative morale penalty for half ration
+                            break;
+                        case 'full':
+                        default:
+                            $foodMoraleMod = 0;      // No change in morale for full ration
+                            break;
+                    }
+                
+                    $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
+                
+                    // Ensure morale stays within the 0-100 range
+                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
+
+            
             // Ensure necessary fields are present for each family member
             if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
                 // Get the condition data from conditions.json
@@ -287,25 +308,7 @@ if (file_exists($conditionsPath)) {
                 } else {
                     $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
                 }
-                // Apply food morale modification (based on ration choice)
-                   switch ($playerState['ration']) {
-                        case 'generous':
-                            $foodMoraleMod = 5;      // Positive morale bonus for generous ration
-                            break;
-                        case 'half':
-                            $foodMoraleMod = -5;     // Negative morale penalty for half ration
-                            break;
-                        case 'full':
-                        default:
-                            $foodMoraleMod = 0;      // No change in morale for full ration
-                            break;
-                    }
-                
-                    $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
-                
-                    // Ensure morale stays within the 0-100 range
-                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
-                echo "Food Morale Mod: $foodMoraleMod";
+               
                 // Apply travel penalty if applicable
                 $conditionTravelMod = 1; // Initialize with no penalty
                 if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
