@@ -38,6 +38,19 @@ if ($playerState) {
 
 
 // Ensure family data exists and is an array
+// Ensure family data exists and is an array
+if (isset($updatedPlayerState['family']) && is_string($updatedPlayerState['family'])) {
+    // Decode family JSON string into an array
+    $updatedPlayerState['family'] = json_decode($updatedPlayerState['family'], true);
+
+    // Check if decoding was successful
+    if ($updatedPlayerState['family'] === null) {
+        echo "Error: Failed to decode family data from JSON.";
+        return;
+    }
+}
+
+// Check if family data exists and is an array
 if (isset($updatedPlayerState['family']) && is_array($updatedPlayerState['family'])) {
     echo "<ul>";
     
@@ -69,6 +82,10 @@ if (isset($updatedPlayerState['family']) && is_array($updatedPlayerState['family
     // Handle the case where 'family' is not set or is not an array
     echo "Error: Family data is missing or corrupted. Unable to display family details.";
 }
+
+
+
+    
 
 // weather
 if (isset($updatedPlayerState['weatherThisTurn'])) {
