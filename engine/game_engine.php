@@ -229,10 +229,11 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     }
 
 
-    // family conditions code
+// family conditions code
 $conditionsPath = __DIR__ . '/../config/conditions.json';
 // Default empty array if conditions can't be loaded
 $conditionsList = [];
+
 // Check if the conditions file exists
 if (file_exists($conditionsPath)) {
     // Read the contents of the file
@@ -247,69 +248,79 @@ if (file_exists($conditionsPath)) {
         $conditionsList = []; // Default to an empty array if decoding fails
     }
 
-    // Do your transformations, logic, etc., now that conditions are loaded
-        foreach ($playerState['family'] as &$familyMember) {
-    // Check if the family member has a condition
-    if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
-        // Get the condition data from conditions.json
-        $conditionData = $conditionsList[$familyMember['condition']];
+    // Check if 'family' data exists and if it needs to be decoded
+    if (isset($playerState['family']) && is_string($playerState['family'])) {
+        // Decode the family data from JSON to array
+        $playerState['family'] = json_decode($playerState['family'], true);
         
-        // Apply health risk
-            // Check if the required keys exist before applying the transformation
-            if (isset($conditionData['health_risk'])) {
-                $healthRisk = $conditionData['health_risk'];
-                $familyMember['health'] -= $healthRisk;  // Apply health risk
-            } else {
-                $healthRisk = 0;  // Default to 0 if health_risk is not set
-            }
-    
-
-        // Apply morale penalty
-            // Check if the required keys exist before applying the morale penalty
-            if (isset($conditionData['morale_penalty'])) {
-                $moralePenalty = $conditionData['morale_penalty'];
-                $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
-            } else {
-                $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
-            }
-
-        // Apply travel penalty (if applicable)
-            // Apply travel penalty (if applicable)
-            $conditionTravelMod = 1; // initalize with no penalty
-            if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
-                // Logic to reduce travel distance (e.g., reduce miles traveled by some factor)
-                $conditionTravelMod = 0.9; // Example: 90% of the original travel distance
-            }
-
-        // Track the remaining duration of the condition (decrease each day)
-        if (isset($familyMember['condition_duration']) && $familyMember['condition_duration'] > 0) {
-            $familyMember['condition_duration']--;
-        } else {
-            // If duration reaches 0, remove the condition
-            $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
+        // Check if decoding was successful
+        if ($playerState['family'] === null) {
+            echo "Error: Failed to decode family data from JSON.";
+            return;
         }
-        echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
-        
-        $playerState['family'] = json_encode($playerState['family']); // Convert array back to JSON
-
-        // Log the effects of the condition
-        // $updatedPlayerState['log'][] = [
-        //    'day' => $updatedPlayerState['day'],
-        //    'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, 
-        //                losing {$healthRisk} health and {$moralePenalty} morale."
-        // ];
-        
     }
-}
 
+    // Now, ensure family data is an array before processing
+    if (isset($playerState['family']) && is_array($playerState['family'])) {
+        // Loop through each family member
+        foreach ($playerState['family'] as &$familyMember) {
+            // Check if the family member has a condition
+            if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
+                // Get the condition data from conditions.json
+                $conditionData = $conditionsList[$familyMember['condition']];
+                
+                // Apply health risk
+                if (isset($conditionData['health_risk'])) {
+                    $healthRisk = $conditionData['health_risk'];
+                    $familyMember['health'] -= $healthRisk;  // Apply health risk
+                } else {
+                    $healthRisk = 0;  // Default to 0 if health_risk is not set
+                }
 
+                // Apply morale penalty
+                if (isset($conditionData['morale_penalty'])) {
+                    $moralePenalty = $conditionData['morale_penalty'];
+                    $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
+                } else {
+                    $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
+                }
 
+                // Apply travel penalty (if applicable)
+                $conditionTravelMod = 1; // Initialize with no penalty
+                if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
+                    $conditionTravelMod = 0.9; // Example: 90% of the original travel distance
+                }
 
-    
+                // Track the remaining duration of the condition (decrease each day)
+                if (isset($familyMember['condition_duration']) && $familyMember['condition_duration'] > 0) {
+                    $familyMember['condition_duration']--;
+                } else {
+                    // If duration reaches 0, remove the condition
+                    $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
+                }
+
+                echo "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale.";
+
+                // Log the effects of the condition
+                // Log data can be saved as required (e.g., in $playerState['log'])
+                // $playerState['log'][] = [
+                //    'day' => $playerState['day'],
+                //    'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale."
+                // ];
+            }
+        }
+
+        // Convert the family array back to JSON before saving it to the database
+        $playerState['family'] = json_encode($playerState['family']);  // Convert array back to JSON
+
+    } else {
+        echo "Error: Family data is missing or not properly formatted.";
+    }
 } else {
     // Handle the case where conditions file is missing or inaccessible
     echo "Conditions file not found or not accessible.";
 }
+
 
 
     
