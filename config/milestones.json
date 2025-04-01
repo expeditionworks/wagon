@@ -5,6 +5,7 @@
     "title": "Independence, Missouri",
     "mile": 0,
     "trail": [       "oregon"     ],
+    "morale_mod": 5,
     "force_stop": true,
     "delay_days": 5,
     "description": "The starting point of the Oregon Trail.",
@@ -54,6 +55,7 @@
     "title": "Kansas River Crossing",
     "mile": 102,
     "trail": [       "oregon"     ],
+    "morale_mod": 5,
     "force_stop": true,
     "description": "One of the first major river crossings on the trail.",
     "extended_description": "The Kansas River marked the first major test of the journey. With spring meltwater running high, wagons either floated, ferried, or forded with caution.",
@@ -76,6 +78,7 @@
     "title": "Big Blue River",
     "mile": 155,
     "trail": [       "oregon"     ],
+    "morale_mod": 5,
     "force_stop": true,
     "description": "A narrow but tricky early river crossing.",
     "extended_description": "Though not wide, the Big Blue River could be treacherous after rain. Fording here was a gamble, and many opted to wait out bad weather or seek a ferry.",
@@ -96,6 +99,7 @@
     "title": "Fort Kearny",
     "mile": 300,
     "trail": [       "oregon"     ],
+    "morale_mod": 20,
     "force_stop": true,
     "description": "A frontier outpost offering basic supplies and military presence.",
     "extended_description": "Fort Kearny stood as a critical waypoint for travelers heading west. Though not large, its wooden stockade provided a brief sense of safety and stability. Families camped nearby to barter for food and supplies, repair wagons, and hear the latest trail gossip from soldiers and other emigrants."
@@ -106,7 +110,8 @@
   "title": "Ash Hollow",
   "mile": 500,
   "trail": ["oregon", "california"],
-  "force_stop": false,
+  "morale_mod": 10,
+  "force_stop": true,
   "description": "A steep descent with water and grass—a welcome rest stop.",
   "extended_description": "Ash Hollow offered a rare oasis on the plains. The descent was steep, but the promise of cool water and grazing land below made it worth the effort. Emigrants rested here under cottonwoods, letting livestock graze while children splashed in the stream."
 },
@@ -116,6 +121,7 @@
     "title": "Chimney Rock",
     "mile": 636,
     "trail": [       "oregon"     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "Chimney Rock rises from the plains, a marker for emigrants for miles around.",
     "extended_description": "Jutting high from the plains of the meandering Platte River, Chimney Rock has been visible for days above the grasslands. On this day, the full 4,000-foot spire came into view, marking a third of your journey complete. The family paused to rest and reflect, and a few members walked to its base to carve their initials among thousands of others."
@@ -128,6 +134,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "A towering set of cliffs and buttes rising from the prairie.",
     "extended_description": "Visible for miles, Scotts Bluff was another powerful landmark for travelers heading west. Many camped in its shadow, noting its dramatic cliffs and drawing inspiration from its grandeur after long days on the plains."
@@ -140,6 +147,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 10,
     "force_stop": true,
     "description": "A major resupply point and meeting place along the trail.",
     "extended_description": "Fort Laramie was more than a military outpost \u2014 it was a bustling hub of commerce and reunion. Travelers traded with both soldiers and Native tribes, restocked crucial goods, and repaired wagons. Letters were posted, news exchanged, and alliances formed. The fort marked the end of the easy prairie stretch and the beginning of tougher terrain."
@@ -152,6 +160,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "A narrow gorge carved by the Sweetwater River.",
     "extended_description": "The Sweetwater River slices through a cleft in granite at Devil\u2019s Gate, creating a dramatic and eerie pass. Emigrants marveled at the jagged rocks and some climbed its flanks despite the danger."
@@ -164,7 +173,8 @@
     "trail": [
       "oregon"
     ],
-    "force_stop": false,
+    "morale_mod": 20,
+    "force_stop": true,
     "description": "A giant granite rock where travelers carved their names.",
     "extended_description": "Known as the 'Great Register of the Desert,' Independence Rock was a place of pilgrimage for emigrants. Families carved their names into its flanks as a declaration: 'We made it this far.' Campfires lit its base each night as travelers recounted stories and prepared for the rugged road ahead."
   },
@@ -176,6 +186,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "A gentle rise through the Rockies marking the Continental Divide.",
     "extended_description": "Crossing the Rockies was a feared chapter of the journey \u2014 yet South Pass defied those fears. With barely noticeable elevation, the trail stretched wide across a plateau of sagebrush and cool winds. From here, all rivers would run west. Emigrants paused here to take in the moment and brace for the unknown."
@@ -186,6 +197,7 @@
   "title": "Parting of the Ways",
   "mile": 1125,
   "trail": ["oregon"],
+  "morale_mod": 5,
   "force_stop": false,
   "description": "A fork in the trail offering the Sublette Cutoff or Fort Bridger route.",
   "extended_description": "Here the trail split again: the Sublette Cutoff led across a dry desert to save time, while the older road veered southwest toward Fort Bridger. Emigrants paused to debate which was safer—or faster. Rocks were inscribed with directions, warnings, and names."
@@ -198,6 +210,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": true,
     "description": "A key trading post founded by mountain men, offering supplies and repairs.",
     "extended_description": "Nestled at the edge of mountain country, Fort Bridger was a rough-hewn fortification run by trappers and traders. Here, travelers bartered for livestock, tools, and vital information. Though its services were dear, the fort was a welcome sign of civilization before the desolate stretches ahead."
@@ -207,6 +220,7 @@
   "type": "natural",
   "title": "Bear River Valley",
   "mile": 1220,
+  "morale_mod": 5,
   "trail": ["california"],
   "force_stop": false,
   "description": "A lush, fertile valley with fresh water and shade.",
@@ -220,6 +234,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "Naturally carbonated springs bubbling from the earth.",
     "extended_description": "Soda Springs were both curiosity and blessing. The naturally fizzy waters offered travelers a rare treat, and some believed they held medicinal powers. Children splashed while adults filled bottles and debated the springs\u2019 origins. It was a brief, joyful break from the rigors of travel."
@@ -230,6 +245,7 @@
     "title": "Fort Hall",
     "mile": 1350,
     "trail": [       "oregon"     ],
+    "morale_mod": 10,
     "force_stop": true,
     "branch": [
       "oregon",
@@ -246,6 +262,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": true,
     "description": "One of the most dangerous rivers to cross on the trail.",
     "extended_description": "The Snake River's icy, fast-moving waters spelled disaster for the unprepared. Here, every choice carried risk. Fording was near suicide, and many wagons capsized trying to float.",
@@ -269,6 +286,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 5,
     "force_stop": true,
     "description": "Final major river crossing before reaching the Willamette Valley.",
     "extended_description": "The Columbia River's powerful current and rocky terrain made The Dalles one of the most dangerous crossings on the trail...",
@@ -291,6 +309,7 @@
   "title": "Barlow Road Tollgate",
   "mile": 1850,
   "trail": ["oregon"],
+  "morale_mod": 5,
   "force_stop": true,
   "description": "Choose to float the Columbia or take the rugged Barlow Road.",
   "extended_description": "At this tollgate, travelers made a critical decision: raft the Columbia’s rapids or pay to brave the steep switchbacks of the Barlow Road. Toll keepers collected fees while giving conflicting advice. Either way, the Willamette Valley lay just beyond the final ridge."
@@ -303,6 +322,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 10,
     "force_stop": false,
     "description": "An outpost on the Columbia River with British and American presence.",
     "extended_description": "Fort Vancouver was a strategic trading post with both British and American influence. Some emigrants stopped here before continuing to Oregon City. The fort offered tools, food, and rest after the difficult descent from the mountains."
@@ -315,6 +335,7 @@
     "trail": [
       "oregon"
     ],
+    "morale_mod": 50,
     "force_stop": true,
     "description": "The end of the Oregon Trail.",
     "extended_description": "After months of hardship, hope, and perseverance, Oregon City rose from the foggy forests of the Willamette Valley. Homesteads waited for claim, rivers for fishing, and land for farming. Emigrants arrived worn but triumphant, having completed one of the most challenging journeys of their lives."
@@ -327,6 +348,7 @@
     "trail": [
       "california"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "A maze of granite towers and cliffs covered in emigrant carvings.",
     "extended_description": "The City of Rocks, a breathtaking cluster of stone spires, felt both alien and sacred. Travelers paused here to marvel, rest, and etch their names into the soft granite\u2014a testament to survival. The narrow defiles and odd formations echoed with wind and memory."
@@ -339,6 +361,7 @@
     "trail": [
       "california"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "A long, bitterly winding river through the Nevada desert.",
     "extended_description": "The Humboldt River offered water, but not comfort. Alkaline and sluggish, it mirrored the mood of weary travelers. Its banks were littered with carcasses, broken wagons, and graffiti scrawled in despair. Still, it was a lifeline through the desert."
@@ -349,6 +372,7 @@
   "title": "Fort Boise",
   "mile": 1600,
   "trail": ["california"],
+  "morale_mod": 10,
   "force_stop": true,
   "description": "A small but important trading post in western Idaho.",
   "extended_description": "Fort Boise was a scrappy outpost compared to its eastern cousins, but it marked the edge of the desert. Here, travelers bartered with trappers and ranchers before braving the alkali flats. Repairs were made, gossip exchanged, and nerves steeled."
@@ -361,6 +385,7 @@
     "trail": [
       "california"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "The river disappears into a dry, cracked basin.",
     "extended_description": "Here the Humboldt gave up the ghost, vanishing into scorched earth. This surreal landscape of dry alkali flats marked the transition from desert to mountains. Water grew scarce, tempers flared, and the mountains loomed ahead."
@@ -373,6 +398,7 @@
     "trail": [
       "california"
     ],
+    "morale_mod": 10,
     "force_stop": true,
     "description": "A modest outpost offering shelter and sparse supplies.",
     "extended_description": "Fort Churchill was more a collection of adobe walls than a true fort, but it meant civilization was near. Emigrants bartered for the last hardtack, heard tales of the Sierras, and prepared for the most dangerous leg of their journey."
@@ -385,6 +411,7 @@
     "trail": [
       "california"
     ],
+    "morale_mod": 5,
     "force_stop": true,
     "description": "The final river before the Sierra Nevada climb.",
     "extended_description": "The Carson River brought blessed water and dread. From here, the trail would ascend sharply into the mountains. Families soaked aching feet, filled barrels, and scanned the horizon for snowcaps.",
@@ -407,6 +434,7 @@
     "trail": [
       "california"
     ],
+    "morale_mod": 5,
     "force_stop": false,
     "description": "A steep, snowy pass through the Sierra Nevada.",
     "extended_description": "Carson Pass tested even the hardiest travelers. Snow drifts, narrow trails, and rocky climbs slowed wagons to a crawl. Many left possessions behind to lighten their load. The memory of the Donner Party hung over every turn."
@@ -416,6 +444,7 @@
     "type": "final",
     "title": "Sutter\u2019s Fort",
     "mile": 1950,
+    "morale_mod": 20,
     "trail": [
       "california"
     ],
@@ -428,6 +457,7 @@
     "type": "final",
     "title": "San Francisco Bay",
     "mile": 2000,
+    "morale_mod": 50,
     "trail": [
       "california"
     ],
