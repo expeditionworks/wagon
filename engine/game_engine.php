@@ -591,13 +591,35 @@ if (file_exists($conditionsPath)) {
             $milestoneMoraleMod = $milestoneToday['morale_mod'];
     
             // Loop through each family member and modify morale
-            foreach ($playerState['family'] as &$familyMember) {
-                // Apply morale modification
-                $familyMember['morale'] += $milestoneMoraleMod;
-    
-                // Optional: Ensure morale is within the 0-100 range
-                $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
+            // Check if family data exists and if it's a JSON-encoded string
+            if (isset($playerState['family']) && is_string($playerState['family'])) {
+                // Decode the family data from JSON to array
+                $playerState['family'] = json_decode($playerState['family'], true);
+                
+                // Check if decoding was successful
+                if ($playerState['family'] === null) {
+                    echo "Error: Failed to decode family data from JSON.";
+                    return;
+                }
             }
+            
+            // Ensure family data is an array before looping through it
+            if (isset($playerState['family']) && is_array($playerState['family'])) {
+                // Loop through each family member and modify morale
+                foreach ($playerState['family'] as &$familyMember) {
+                    // Apply morale modification
+                    $familyMember['morale'] += $milestoneMoraleMod;
+            
+                    // Optional: Ensure morale is within the 0-100 range
+                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
+                }
+            
+                // After modifications, re-encode family data back to JSON before saving it
+                $playerState['family'] = json_encode($playerState['family']);
+            } else {
+                echo "Error: Family data is missing or corrupted.";
+            }
+
     
             // Log the morale modification
             $playerState['log'][] = [
