@@ -268,20 +268,21 @@ if (file_exists($conditionsPath)) {
                         // Apply food morale modification (based on ration choice)
                    switch ($playerState['ration']) {
                         case 'generous':
-                            $foodMoraleMod = 5;      // Positive morale bonus for generous ration
+                            $foodMoraleMod = 1;      // Positive morale bonus for generous ration
                             break;
                         case 'half':
-                            $foodMoraleMod = -5;     // Negative morale penalty for half ration
+                            $foodMoraleMod = -1;     // Negative morale penalty for half ration
                             break;
                         case 'full':
                         default:
                             $foodMoraleMod = 0;      // No change in morale for full ration
                             break;
                     }
-                
-                    $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
-                
-                    // Ensure morale stays within the 0-100 range
+                    // Apply food morale modification (based on ration choice)
+                    if (isset($foodMoraleMod)) {
+                        $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
+                    }                
+                     // Ensure morale stays within the 0-100 range
                     $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
 
             
