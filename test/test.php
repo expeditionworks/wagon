@@ -23,6 +23,7 @@ if ($playerState) {
 
 // Assuming the $milestoneTodayID has been set
 $milestoneToday = null;
+$milestoneTodayID = null;
 foreach ($updatedPlayerState['milestones'] as $milestone) {
     if ($milestone['id'] === $milestoneTodayID) {
         $milestoneToday = $milestone;
