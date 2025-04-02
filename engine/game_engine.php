@@ -631,13 +631,38 @@ function checkMilestoneStore($milestone) {
 
     // Check milestones along the path
     $milestoneToday = null;
+    $milestoneTodayID = null;
     foreach ($playerState['milestones'] as $milestone) {
         if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
             $milestoneToday = $milestone;
+            $milestoneTodayID = $milestone['id'];
             $newMile = $milestone['mile'];
             break;
         }
     }
+
+
+
+
+
+        function checkMilestoneStore($milestoneToday) {
+        if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
+            $milestoneStore = $milestoneToday['items_for_sale'];
+    
+            // Loop through the items for sale
+            foreach ($milestoneStore as $itemName => $itemDetails) {
+                // Print out the item details: name, description, price, etc.
+                echo "Item: " . $itemName . "\n";
+                echo "Description: " . $itemDetails['description'] . "\n";
+                echo "Price: $" . $itemDetails['base_price'] . "\n";
+                echo "Stock limit: " . $itemDetails['stock_limit'] . "\n";
+                echo "----------\n";
+            }
+        } else {
+            echo "No store available at this milestone.\n";
+        }
+    }
+
 
 
         // Assuming $playerState['milestones'] is the array of all milestones
