@@ -611,17 +611,19 @@ if (file_exists($conditionsPath)) {
     // Check milestones along the path
     $milestoneToday = null;
     $milestoneTodayID = null;
+    $milestoneTodayTitle = null;
     foreach ($playerState['milestones'] as $milestone) {
         if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
             $milestoneToday = $milestone;
             $milestoneTodayID = $milestone['id'];
+            $milestoneTodayTitle = $milestone['title'];
             $newMile = $milestone['mile'];
             break;
         }
     }
 
 
-        // Assuming $playerState['milestones'] is the array of all milestones
+        // MILESTONE STORE
         // Check if the current milestone has a store
         $milestoneStore = null;  // Initialize the store variable
         if (isset($milestoneToday)) {
@@ -629,15 +631,18 @@ if (file_exists($conditionsPath)) {
             if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
                 $milestoneStore = $milestoneToday['items_for_sale'];
                 
-                echo "<h4>" . $milestoneTodayID . "Store</h4>\r<ul>";      
+                echo "<h4>" . $milestoneTodayTitle . " Store</h4>\r<ul>";      
                 // Loop through the items for sale
                 foreach ($milestoneStore as $itemName => $itemDetails) {
                     // Print out the item details: name, description, price, etc.
 
                     echo "<li>" . $itemName . "</li>";
-                    echo "<li>Description: " . $itemDetails['description'] . "</li>";
-                    echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
-                    echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
+                    echo "<li>";
+                        echo "<li>Description: " . $itemDetails['description'] . "</li>";
+                        echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
+                        echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
+                    echo "</li>";
+
                 }
                 echo "</ul>";
             } else {
