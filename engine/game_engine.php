@@ -472,6 +472,7 @@ if (file_exists($conditionsPath)) {
         $milestoneToday = null;
         $milestoneTodayID = null;
         $milestoneTodayTitle = null;
+        $newMile = 0;
         foreach ($playerState['milestones'] as $milestone) {
             if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
                 $milestoneToday = $milestone;
