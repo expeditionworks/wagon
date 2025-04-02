@@ -642,29 +642,6 @@ function checkMilestoneStore($milestone) {
     }
 
 
-
-
-
-        function checkMilestoneStore($milestoneToday) {
-        if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
-            $milestoneStore = $milestoneToday['items_for_sale'];
-    
-            // Loop through the items for sale
-            foreach ($milestoneStore as $itemName => $itemDetails) {
-                // Print out the item details: name, description, price, etc.
-                echo "Item: " . $itemName . "\n";
-                echo "Description: " . $itemDetails['description'] . "\n";
-                echo "Price: $" . $itemDetails['base_price'] . "\n";
-                echo "Stock limit: " . $itemDetails['stock_limit'] . "\n";
-                echo "----------\n";
-            }
-        } else {
-            echo "No store available at this milestone.\n";
-        }
-    }
-
-
-
         // Assuming $playerState['milestones'] is the array of all milestones
         // Check if the current milestone has a store
         $milestoneStore = null;  // Initialize the store variable
