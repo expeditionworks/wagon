@@ -479,29 +479,7 @@ if (file_exists($conditionsPath)) {
 
 
 
-// Store logic
-function checkMilestoneStore($milestone) {
-    // Check if the milestone has a store
-    if (isset($milestone['store']) && $milestone['store'] === true) {
-        echo "Store available at " . $milestone['title'] . "!\n";
-        
-        // Iterate through items for sale
-        foreach ($milestone['items_for_sale'] as $itemName => $itemDetails) {
-            // Print out the item details: name, description, price, etc.
-            echo "<h4>" . $milestone['title'] . " Store</h4>\r<ul>";
-            echo "<li>" . $itemName . "</li>";
-            echo "<li>Description: " . $itemDetails['description'] . "</li>";
-            echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
-            echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
-            echo "</ul>";
-        }
-    } else {
-        echo "No store available at this milestone.\n";
-    }
-}
-
-
-            
+         // possible delay day store action 
 
 
 
@@ -654,7 +632,7 @@ function checkMilestoneStore($milestone) {
                 // Loop through the items for sale
                 foreach ($milestoneStore as $itemName => $itemDetails) {
                     // Print out the item details: name, description, price, etc.
-                    echo "<ul>";
+                    echo "<h4>" . $milestoneTodayID . "Store</h4>\r<ul>";
                     echo "<li>" . $itemName . "</li>";
                     echo "<li>Description: " . $itemDetails['description'] . "</li>";
                     echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
