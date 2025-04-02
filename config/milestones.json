@@ -102,7 +102,45 @@
     "morale_mod": 20,
     "force_stop": true,
     "description": "A frontier outpost offering basic supplies and military presence.",
-    "extended_description": "Fort Kearny stood as a critical waypoint for travelers heading west. Though not large, its wooden stockade provided a brief sense of safety and stability. Families camped nearby to barter for food and supplies, repair wagons, and hear the latest trail gossip from soldiers and other emigrants."
+    "extended_description": "Fort Kearny stood as a critical waypoint for travelers heading west. Though not large, its wooden stockade provided a brief sense of safety and stability. Families camped nearby to barter for food and supplies, repair wagons, and hear the latest trail gossip from soldiers and other emigrants.",
+    "store": true,
+    "items_for_sale": {
+        "Oxen": {
+            "base_price": 50,
+            "stock_limit": 10, 
+            "description": "A sturdy animal used for pulling the wagon."
+        },
+        "Small Bundle": {
+            "items": {
+                "Oxen": 2,
+                "Food": 20,
+                "Tools": 1
+            },
+            "base_price": 150,
+            "stock_limit": 5,
+            "description": "A small bundle to get you started."
+        },
+        "Medium Bundle": {
+            "items": {
+                "Oxen": 4,
+                "Food": 50,
+                "Tools": 2
+            },
+            "base_price": 300,
+            "stock_limit": 5,
+            "description": "A medium bundle for the long haul."
+        },
+        "Large Bundle": {
+            "items": {
+                "Oxen": 6,
+                "Food": 100,
+                "Tools": 5
+            },
+            "base_price": 500,
+            "stock_limit": 3,
+            "description": "A large bundle to fully outfit your wagon."
+        }
+    }
   },
   {
   "id": "ash_hollow",
