@@ -695,7 +695,7 @@ if (file_exists($conditionsPath)) {
                 }
                 echo "</ul>";
             } else {
-                echo "No store available at this milestone.\n";
+            // don't know if I want to do anything here
             }
         }
 
