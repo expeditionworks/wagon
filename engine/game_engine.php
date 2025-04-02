@@ -343,12 +343,6 @@ if (file_exists($conditionsPath)) {
     echo "Conditions file not found or not accessible.";
 }
 
-
-
-
-    
-    
-    
     // Get the party size (e.g., number of family members in $playerState)
     // $partySize = count($playerState['family']);  // Assuming you have a family array in playerState
     $partySize = $familyCount;
@@ -376,8 +370,7 @@ if (file_exists($conditionsPath)) {
 
 
     // WEATHER SYSTEM
-    
-        // Load weather_months.json
+            // Load weather_months.json
         $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
         if (file_exists($weatherMonthsPath)) {
             $weatherMonthsContent = file_get_contents($weatherMonthsPath);
@@ -478,6 +471,8 @@ if (file_exists($conditionsPath)) {
         if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
             $milestoneToday = $playerState['milestones'][0];  // Independence, MO is the first milestone
             $milestoneTodayTitle = $milestoneToday['title'];  // Correctly access the 'title' field of the milestone
+
+// we should see if we can modularize this code since it shows up in a few places
             
             // Check if this milestone has a store
             if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
@@ -495,7 +490,44 @@ if (file_exists($conditionsPath)) {
                     echo "</ul>";
                 }
                 echo "</ul>";
-        
+
+// BUY LOGIC                
+            // Assuming we're working with a form submission in a web-based game
+            
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Get user input from the form
+                $itemName = $_POST['itemName'];
+                $quantity = $_POST['quantity'];
+            
+                // Get the selected item details from the store
+                if (isset($milestoneStore[$itemName])) {
+                    $itemDetails = $milestoneStore[$itemName];
+                    $totalCost = $itemDetails['base_price'] * $quantity;
+            
+                    // Check if the player can afford the purchase
+                    if ($playerState['dollars'] >= $totalCost) {
+                        // Check stock availability
+                        if ($itemDetails['stock_limit'] >= $quantity) {
+                            // Complete the transaction
+                            $playerState['dollars'] -= $totalCost;  // Deduct money
+                            $playerState['inventory'][$itemName] += $quantity;  // Add to inventory
+            
+                            // Update the stock in the store (you can adjust this logic based on your requirements)
+                            $milestoneStore[$itemName]['stock_limit'] -= $quantity;
+            
+                            echo "Purchase successful! You bought $quantity $itemName(s) for $$totalCost. You have $" . $playerState['dollars'] . " left.";
+                        } else {
+                            echo "Sorry, not enough stock for $itemName.";
+                        }
+                    } else {
+                        echo "You don't have enough money to buy $quantity $itemName(s).";
+                    }
+                } else {
+                    echo "Item not found.";
+                }
+            }
+
+                
             } else {
                 echo "No store available at this milestone.\n";
             }
