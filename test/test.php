@@ -22,7 +22,8 @@ if ($playerState) {
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
 
-
+    // Call the function to display the store and handle the logic
+    displayStoreAndProcessPurchase($playerState, $milestoneStore);
 
     
     // Show basic info
@@ -212,22 +213,3 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 } else {
     echo "<p>No player data found for Player ID: $player_id. Please ensure the player exists in the database.</p>";
 }
-?>
-
-<form method="POST" action="test.php">
-    <label for="itemName">Select Item:</label>
-    <select name="itemName" id="itemName">
-        <?php
-        // Loop through items for sale and create a dropdown list
-        foreach ($milestoneStore as $itemName => $itemDetails) {
-            echo "<option value=\"$itemName\">$itemName</option>";
-        }
-        ?>
-    </select><br>
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" name="quantity" id="quantity" min="1" value="1" required><br>
-
-    <input type="submit" value="Buy Item">
-</form>
-
