@@ -477,7 +477,8 @@ if (file_exists($conditionsPath)) {
         // Set the first milestone to Independence, MO (first entry in the milestones array)
         if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
             $milestoneToday = $playerState['milestones'][0];  // Independence, MO is the first milestone
-            $milestoneTodayTitle = $playerState['milestones']['title'];
+            $milestoneTodayTitle = $milestoneToday['title'];  // Correctly access the 'title' field of the milestone
+            
             // Check if this milestone has a store
             if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
                 // Display the store items from Independence, MO
@@ -494,11 +495,11 @@ if (file_exists($conditionsPath)) {
                     echo "</ul>";
                 }
                 echo "</ul>";
-
+        
             } else {
                 echo "No store available at this milestone.\n";
             }
-        }
+}
     
     } elseif ($playerState['delay_days'] > 0) {
     // Check if delay_days is greater than 0
