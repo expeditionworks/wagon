@@ -23,7 +23,7 @@
                 "Food": 20,
                 "Tools": 1
             },
-            "total_cost": 150,
+            "base_price": 150,
             "stock_limit": 5,
             "description": "A small bundle to get you started."
         },
@@ -33,7 +33,7 @@
                 "Food": 50,
                 "Tools": 2
             },
-            "total_cost": 300,
+            "base_price": 300,
             "stock_limit": 5,
             "description": "A medium bundle for the long haul."
         },
@@ -43,7 +43,7 @@
                 "Food": 100,
                 "Tools": 5
             },
-            "total_cost": 500,
+            "base_price": 500,
             "stock_limit": 3,
             "description": "A large bundle to fully outfit your wagon."
         }
