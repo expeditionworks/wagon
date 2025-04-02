@@ -21,18 +21,7 @@ if ($playerState) {
     // Display the updated player state and milestones
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
-// Assuming the $milestoneTodayID has been set
-$milestoneToday = null;
-$milestoneTodayID = null;
-foreach ($updatedPlayerState['milestones'] as $milestone) {
-    if ($milestone['id'] === $milestoneTodayID) {
-        $milestoneToday = $milestone;
-        break;
-    }
-}
 
-// Call the function to check and display store items
-checkMilestoneStore($milestoneToday);
 
 
     
