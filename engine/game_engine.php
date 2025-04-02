@@ -499,7 +499,18 @@ if (file_exists($conditionsPath)) {
             } else {
                 echo "No store available at this milestone.\n";
             }
-}
+        }
+
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => 0,
+                'total_miles' => $playerState['mile'],
+                'notes' => "Paused at the milestone: " . $milestone['title'] . ". \nThere is a delay in progress. You have " . $playerState['delay_days'] . " more days left to wait."
+            ];
+        
+            $playerState['day'] += 1; // Increment the day even when paused
+            updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
+            return $playerState;  // Skip further movement and milestone checks       
     
     } elseif ($playerState['delay_days'] > 0) {
     // Check if delay_days is greater than 0
