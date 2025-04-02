@@ -488,11 +488,12 @@ function checkMilestoneStore($milestone) {
         // Iterate through items for sale
         foreach ($milestone['items_for_sale'] as $itemName => $itemDetails) {
             // Print out the item details: name, description, price, etc.
-            echo "Item: " . $itemName . "\n";
-            echo "Description: " . $itemDetails['description'] . "\n";
-            echo "Price: $" . $itemDetails['base_price'] . "\n";
-            echo "Stock limit: " . $itemDetails['stock_limit'] . "\n";
-            echo "----------\n";
+            echo "<h4>" . $milestone['title'] . " Store</h4>\r<ul>";
+            echo "<li>" . $itemName . "</li>";
+            echo "<li>Description: " . $itemDetails['description'] . "</li>";
+            echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
+            echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
+            echo "</ul>";
         }
     } else {
         echo "No store available at this milestone.\n";
