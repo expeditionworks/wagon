@@ -472,20 +472,33 @@ if (file_exists($conditionsPath)) {
         $milestoneToday = null;
         $milestoneTodayID = null;
         $milestoneTodayTitle = null;
-        $newMile = 0;
-        foreach ($playerState['milestones'] as $milestone) {
-            if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
-                $milestoneToday = $milestone;
-                $milestoneTodayID = $milestone['id'];
-                $milestoneTodayTitle = $milestone['title'];
-                $newMile = $milestone['mile'];
-                break;
+        $milestoneToday = $playerState['milestones'][0];  // Get the first milestone (Independence)
+
+        // Set the first milestone to Independence, MO (first entry in the milestones array)
+        if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
+            $milestoneToday = $playerState['milestones'][0];  // Independence, MO is the first milestone
+            $milestoneTodayTitle = $playerState['milestones']['title'];
+            // Check if this milestone has a store
+            if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
+                // Display the store items from Independence, MO
+                $milestoneStore = $milestoneToday['items_for_sale'];
+        
+                // Loop through the items for sale and display them
+                echo "<h4>" . $milestoneTodayTitle . " Store</h4>\r<ul>";      
+                foreach ($milestoneStore as $itemName => $itemDetails) {
+                    echo "<li>" . $itemName . "</li>";
+                    echo "<ul>";
+                    echo "<li>Description: " . $itemDetails['description'] . "</li>";
+                    echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
+                    echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
+                    echo "</ul>";
+                }
+                echo "</ul>";
+
+            } else {
+                echo "No store available at this milestone.\n";
             }
         }
-        // Call the function to display the store at Independence
-        $milestoneToday = $playerState['milestones'][0];  // Get the first milestone (Independence)
-        echo "<h3>" . $milestone['title'] . "</h3>";
-    //     checkMilestoneStore($milestoneToday);  // Display the store items
     
     } elseif ($playerState['delay_days'] > 0) {
     // Check if delay_days is greater than 0
