@@ -637,11 +637,11 @@ if (file_exists($conditionsPath)) {
                     // Print out the item details: name, description, price, etc.
 
                     echo "<li>" . $itemName . "</li>";
-                    echo "<li>";
+                    echo "<ul>";
                         echo "<li>Description: " . $itemDetails['description'] . "</li>";
                         echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
                         echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
-                    echo "</li>";
+                    echo "</ul>";
 
                 }
                 echo "</ul>";
