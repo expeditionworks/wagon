@@ -126,12 +126,21 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
     echo "<p>Weather data is not available for today.</p>";
 }
 
-        // Display the last log item
-    if (isset($updatedPlayerState['last_log_item'])) {
+    // Only display the last log item if it exists
+    if (isset($updatedPlayerState['last_log_item']) && !empty($updatedPlayerState['last_log_item'])) {
         // Check if the last_log_item is already an array or a JSON string
         $lastLogItem = is_array($updatedPlayerState['last_log_item']) ? $updatedPlayerState['last_log_item'] : json_decode($updatedPlayerState['last_log_item'], true);
-        echo "<p><strong>Last Log Item:</strong><br>" . $lastLogItem['notes'] . "</p>";
+    
+        // Check if 'notes' key exists before trying to echo it
+        if (isset($lastLogItem['notes'])) {
+            echo "<p><strong>Last Log Item:</strong><br>" . $lastLogItem['notes'] . "</p>";
+        } else {
+            echo "<p><strong>Last Log Item:</strong><br>No notes available.</p>";
+        }
+    } else {
+        echo "<p><strong>Last Log Item:</strong><br>No log available.</p>";
     }
+
 
 
 
