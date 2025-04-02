@@ -22,10 +22,7 @@ if ($playerState) {
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
 
-    // Call the function to display the store and handle the logic
-    displayStoreAndProcessPurchase($updatedPlayerState, $milestoneStore);
-
-    
+   
     // Show basic info
     echo "<ul>";    
    
