@@ -505,7 +505,7 @@ if (file_exists($conditionsPath)) {
                 'day' => $playerState['day'],
                 'miles_traveled' => 0,
                 'total_miles' => $playerState['mile'],
-                'notes' => "Paused at the milestone: " . $milestone['title'] . ". \nThere is a delay in progress. You have " . $playerState['delay_days'] . " more days left to wait."
+                'notes' => "You started your day at " . $milestoneTodayTitle . " with nothing, and now you are ready to go on the trail. Today was a good day purchasing"
             ];
         
             $playerState['day'] += 1; // Increment the day even when paused
