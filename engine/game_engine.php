@@ -628,17 +628,18 @@ if (file_exists($conditionsPath)) {
             // If a milestone is found today, get the store data
             if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
                 $milestoneStore = $milestoneToday['items_for_sale'];
-        
+                
+                echo "<h4>" . $milestoneTodayID . "Store</h4>\r<ul>";      
                 // Loop through the items for sale
                 foreach ($milestoneStore as $itemName => $itemDetails) {
                     // Print out the item details: name, description, price, etc.
-                    echo "<h4>" . $milestoneTodayID . "Store</h4>\r<ul>";
+
                     echo "<li>" . $itemName . "</li>";
                     echo "<li>Description: " . $itemDetails['description'] . "</li>";
                     echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
                     echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
-                    echo "</ul>";
                 }
+                echo "</ul>";
             } else {
                 echo "No store available at this milestone.\n";
             }
