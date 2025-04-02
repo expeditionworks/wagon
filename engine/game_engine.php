@@ -665,6 +665,30 @@ if (file_exists($conditionsPath)) {
                 'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
             ];
         }
+
+
+                function checkMilestoneStore($milestone) {
+                    // Check if the milestone has a store
+                    if (isset($milestone['store']) && $milestone['store'] === true) {
+                        echo "Store available at " . $milestone['title'] . "!\n";
+                        
+                        // Iterate through items for sale
+                        foreach ($milestone['items_for_sale'] as $itemName => $itemDetails) {
+                            // Print out the item details: name, description, price, etc.
+                            echo "Item: " . $itemName . "\n";
+                            echo "Description: " . $itemDetails['description'] . "\n";
+                            echo "Price: $" . $itemDetails['base_price'] . "\n";
+                            echo "Stock limit: " . $itemDetails['stock_limit'] . "\n";
+                            echo "----------\n";
+                        }
+                    } else {
+                        echo "No store available at this milestone.\n";
+                    }
+                }
+
+
+
+        
     } else {
 
         $playerState['log'][] = [
