@@ -23,7 +23,7 @@ if ($playerState) {
 
 
     // Call the function to display the store and handle the logic
-    displayStoreAndProcessPurchase($playerState, $milestoneStore);
+    displayStoreAndProcessPurchase($updatedPlayerState, $milestoneStore);
 
     
     // Show basic info
