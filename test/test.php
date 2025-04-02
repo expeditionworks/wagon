@@ -21,26 +21,17 @@ if ($playerState) {
     // Display the updated player state and milestones
     echo "<h3>Updated Game State for Player ID: $player_id</h3>";
 
-// Example data for milestone
-$milestone = [
-    'title' => 'Independence, Missouri',
-    'store' => true,
-    'items_for_sale' => [
-        'Oxen' => [
-            'description' => 'A sturdy animal used for pulling the wagon.',
-            'base_price' => 50,
-            'stock_limit' => 10
-        ],
-        'Food' => [
-            'description' => 'Basic rations to sustain your family.',
-            'base_price' => 5,
-            'stock_limit' => 100
-        ]
-    ]
-];
+// Assuming the $milestoneTodayID has been set
+$milestoneToday = null;
+foreach ($updatedPlayerState['milestones'] as $milestone) {
+    if ($milestone['id'] === $milestoneTodayID) {
+        $milestoneToday = $milestone;
+        break;
+    }
+}
 
 // Call the function to check and display store items
-checkMilestoneStore($milestone);
+checkMilestoneStore($milestoneToday);
 
 
     
