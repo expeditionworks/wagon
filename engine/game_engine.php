@@ -463,9 +463,32 @@ if (file_exists($conditionsPath)) {
 
 
 
+
     
+    // check if First day
+    if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
+        // Handle first day store logic
+        echo "Welcome to Independence, Missouri! Here's your first chance to stock up on supplies.\n";
+        $milestoneToday = null;
+        $milestoneTodayID = null;
+        $milestoneTodayTitle = null;
+        foreach ($playerState['milestones'] as $milestone) {
+            if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
+                $milestoneToday = $milestone;
+                $milestoneTodayID = $milestone['id'];
+                $milestoneTodayTitle = $milestone['title'];
+                $newMile = $milestone['mile'];
+                break;
+            }
+        }
+        // Call the function to display the store at Independence
+        $milestoneToday = $playerState['milestones'][0];  // Get the first milestone (Independence)
+        echo "<h3>" . $milestone['title'] . "</h3>";
+    //     checkMilestoneStore($milestoneToday);  // Display the store items
+    
+    } elseif ($playerState['delay_days'] > 0) {
     // Check if delay_days is greater than 0
-    if ($playerState['delay_days'] > 0) {
+
         // Decrease the delay_days and log the delay message
         $playerState['delay_days'] -= 1;
         $playerState['delay_status'] = 'active';
