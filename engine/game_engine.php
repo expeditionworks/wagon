@@ -739,6 +739,7 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
     $milestoneToday = null;
     $milestoneTodayID = null;
     $milestoneTodayTitle = null;
+    $milestoneTodayType = null;
     $milestoneTodayForceStop = null;
     $milestoneTodayDelayDay = 0;    
     foreach ($playerState['milestones'] as $milestone) {
@@ -747,6 +748,7 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
             $milestoneTodayID = $milestone['id'];
             $milestoneTodayTitle = $milestone['title'];
             $milestoneTodayForceStop = $milestone['force_stop'];
+            $milestoneTodayType = $milestone['type'];
             $milestoneTodayDelayDay = $milestone['delay_day'] ?? 0;
             $newMile = $milestone['mile'];
             break;
@@ -754,6 +756,50 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
     }
 
 
+
+
+        // Handle milestone logic based on its type
+switch ($milestoneTodayType) {
+    case 'fort':
+        // Do something at a fort
+        echo "You're at a fort!";
+        // Your logic for forts goes here
+        break;
+
+    case 'natural':
+        // Do something at a natural landmark
+        echo "You're at a natural landmark!";
+        // Your logic for natural landmarks goes here
+        break;
+
+    case 'river':
+        // Do something at a river
+        echo "You're at a river!";
+        // Your logic for rivers goes here
+        break;
+
+    case 'fork':
+        // Do something at a fork
+        echo "You're at a fork in the road!";
+        // Your logic for forks goes here
+        break;
+
+    case 'final':
+        // End of the game
+        echo "This is the final milestone!";
+        // Your logic for the final milestone goes here
+        break;
+
+    default:
+        // Handle unknown milestone types (if needed)
+        echo "Unknown milestone type: $milestoneTodayType";
+        break;
+}
+
+
+
+
+        
         // MILESTONE STORE
         // Check if the current milestone has a store
         $milestoneStore = null;  // Initialize the store variable
@@ -853,6 +899,9 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
             
         } else {
         // Handle the case where no force stop is applied, and movement is allowed
+
+
+            
         }
 
 
