@@ -637,7 +637,8 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
         return $playerState;  // Skip further movement and milestone checks
         
     } else {
-    // this bit if if we move
+        
+// this bit if if we move
 
     $baseMiles = 15;  // Default miles traveled without adjustments
     
@@ -738,11 +739,15 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
     $milestoneToday = null;
     $milestoneTodayID = null;
     $milestoneTodayTitle = null;
+    $milestoneTodayForceStop = null;
+    $milestoneTodayDelayDay = 0;    
     foreach ($playerState['milestones'] as $milestone) {
         if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
             $milestoneToday = $milestone;
             $milestoneTodayID = $milestone['id'];
             $milestoneTodayTitle = $milestone['title'];
+            $milestoneTodayForceStop = $milestone['force_stop'];
+            $milestoneTodayDelayDay = $milestone['delay_day'] ?? 0;
             $newMile = $milestone['mile'];
             break;
         }
@@ -832,6 +837,24 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
             ];
         }
 
+        if ($milestoneTodayForceStop === true) {
+        // Handle the case where the milestone requires a force stop (e.g., no movement allowed)
+            if (isset($playerState['delay_days']) && is_int($playerState['delay_days'])) {
+                // Add the milestone's delay days to the player's delay days
+                $playerState['delay_days'] += $milestoneTodayDelayDay;
+            
+                // Output the updated delay days
+               //  echo "Player delay days updated: " . $playerState['delay_days'];
+            } else {
+    
+            }
+
+
+            
+        } else {
+        // Handle the case where no force stop is applied, and movement is allowed
+        }
+
 
                 function checkMilestoneStore($milestone) {
                     // Check if the milestone has a store
@@ -852,11 +875,9 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
                     }
                 }
 
-
-
-        
     } else {
-
+//this is if there isn't a milestone
+        
         $playerState['log'][] = [
             'day' => $playerState['day'],
             'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
