@@ -749,11 +749,70 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
             $milestoneTodayTitle = $milestone['title'];
             $milestoneTodayForceStop = $milestone['force_stop'];
             $milestoneTodayType = $milestone['type'];
+            $milestoneMoraleMod = $milestoneToday['morale_mod'];
             $milestoneTodayDelayDay = $milestone['delay_day'] ?? 0;
             $newMile = $milestone['mile'];
             break;
         }
     }
+        // check if there is a force stop
+        if ($milestoneTodayForceStop === true) {
+        // Handle the case where the milestone requires a force stop (e.g., no movement allowed)
+            if (isset($playerState['delay_days']) && is_int($playerState['delay_days'])) {
+                // Add the milestone's delay days to the player's delay days
+                $playerState['delay_days'] += $milestoneTodayDelayDay;
+               //  echo "Player delay days updated: " . $playerState['delay_days'];
+            } else {
+                //in case we want to 
+            }          
+        } else {
+        // Handle the case where no force stop is applied, and movement is allowed            
+        }
+
+
+
+    // Log milestone if reached
+    if ($milestoneToday) {
+        
+       // Apply morale change if morale_mod exists in milestone
+        if (isset($milestoneToday['morale_mod'])) {
+            $milestoneMoraleMod = $milestoneToday['morale_mod'];
+    
+            // Loop through each family member and modify morale
+            // Check if family data exists and if it's a JSON-encoded string
+            if (isset($playerState['family']) && is_string($playerState['family'])) {
+                // Decode the family data from JSON to array
+                $playerState['family'] = json_decode($playerState['family'], true);
+                
+                // Check if decoding was successful
+                if ($playerState['family'] === null) {
+                    echo "Error: Failed to decode family data from JSON.";
+                    return;
+                }
+            }
+            
+            // Ensure family data is an array before looping through it
+            if (isset($playerState['family']) && is_array($playerState['family'])) {
+                // Loop through each family member and modify morale
+                foreach ($playerState['family'] as &$familyMember) {
+                    // Apply morale modification
+                    $familyMember['morale'] += $milestoneMoraleMod;
+            
+                    // Optional: Ensure morale is within the 0-100 range
+                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
+                }
+            
+                // After modifications, re-encode family data back to JSON before saving it
+                $playerState['family'] = json_encode($playerState['family']);
+            } else {
+                echo "Error: Family data is missing or corrupted.";
+            }
+    
+        } else {
+            // Log the milestone without morale modification
+
+        }
+
 
 
 
@@ -764,12 +823,27 @@ switch ($milestoneTodayType) {
         // Do something at a fort
         echo "You're at a fort!";
         // Your logic for forts goes here
+
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+            ];
         break;
 
     case 'natural':
         // Do something at a natural landmark
         echo "You're at a natural landmark!";
         // Your logic for natural landmarks goes here
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+            ];
         break;
 
     case 'river':
@@ -815,18 +889,23 @@ switch ($milestoneTodayType) {
             // You can check the player's choice here and apply the relevant delay, risk, cost, etc.
         } else {
             echo "No crossing data available for this river.<br>";
-        }
-
-  
-
-
-
-    
+        }   
         break;
 
     case 'fork':
         // Do something at a fork
         echo "You're at a fork in the road!";
+
+            // Log the morale modification
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+            ];
+
+    
         // Your logic for forks goes here
         break;
 
@@ -834,11 +913,34 @@ switch ($milestoneTodayType) {
         // End of the game
         echo "This is the final milestone!";
         // Your logic for the final milestone goes here
+
+            // Log the morale modification
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+            ];
+
+    
         break;
 
     default:
         // Handle unknown milestone types (if needed)
         // echo "Unknown milestone type: $milestoneTodayType";
+
+            // Log the morale modification
+            $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+            ];
+
+
+    
         break;
 }
 
@@ -873,82 +975,12 @@ switch ($milestoneTodayType) {
             }
         }
 
-    // Log milestone if reached
-    if ($milestoneToday) {
-       // Apply morale change if morale_mod exists in milestone
-        if (isset($milestoneToday['morale_mod'])) {
-            $milestoneMoraleMod = $milestoneToday['morale_mod'];
-    
-            // Loop through each family member and modify morale
-            // Check if family data exists and if it's a JSON-encoded string
-            if (isset($playerState['family']) && is_string($playerState['family'])) {
-                // Decode the family data from JSON to array
-                $playerState['family'] = json_decode($playerState['family'], true);
-                
-                // Check if decoding was successful
-                if ($playerState['family'] === null) {
-                    echo "Error: Failed to decode family data from JSON.";
-                    return;
-                }
-            }
-            
-            // Ensure family data is an array before looping through it
-            if (isset($playerState['family']) && is_array($playerState['family'])) {
-                // Loop through each family member and modify morale
-                foreach ($playerState['family'] as &$familyMember) {
-                    // Apply morale modification
-                    $familyMember['morale'] += $milestoneMoraleMod;
-            
-                    // Optional: Ensure morale is within the 0-100 range
-                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
-                }
-            
-                // After modifications, re-encode family data back to JSON before saving it
-                $playerState['family'] = json_encode($playerState['family']);
-            } else {
-                echo "Error: Family data is missing or corrupted.";
-            }
-
-    
-            // Log the morale modification
-            $playerState['log'][] = [
-                'day' => $playerState['day'],
-                'miles_traveled' => $milesTraveled,
-                'total_miles' => $newMile,
-                'milestone' => $milestoneToday['title'] ?? null,
-                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
-            ];
-        } else {
-            // Log the milestone without morale modification
-            $playerState['log'][] = [
-                'day' => $playerState['day'],
-                'miles_traveled' => $milesTraveled,
-                'total_miles' => $newMile,
-                'milestone' => $milestoneToday['title'] ?? null,
-                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description']
-            ];
-        }
-
-        if ($milestoneTodayForceStop === true) {
-        // Handle the case where the milestone requires a force stop (e.g., no movement allowed)
-            if (isset($playerState['delay_days']) && is_int($playerState['delay_days'])) {
-                // Add the milestone's delay days to the player's delay days
-                $playerState['delay_days'] += $milestoneTodayDelayDay;
-            
-                // Output the updated delay days
-               //  echo "Player delay days updated: " . $playerState['delay_days'];
-            } else {
-    
-            }
+        
 
 
-            
-        } else {
-        // Handle the case where no force stop is applied, and movement is allowed
 
+        
 
-            
-        }
 
 
                 function checkMilestoneStore($milestone) {
