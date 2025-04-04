@@ -792,7 +792,7 @@ switch ($milestoneTodayType) {
 
     default:
         // Handle unknown milestone types (if needed)
-        echo "Unknown milestone type: $milestoneTodayType";
+        // echo "Unknown milestone type: $milestoneTodayType";
         break;
 }
 
