@@ -798,12 +798,18 @@ switch ($milestoneTodayType) {
             $ferryDelay = $crossing['ferry_delay'] ?? 1;  // Delay for ferrying
 
             // Display the crossing options (just for debugging)
-            echo "Crossing options: " . implode(', ', $crossingOptions) . "<br>";
-            echo "Ferry base cost: $$ferryBaseCost<br>";
-            echo "Ford risk: " . ($fordRisk * 100) . "%<br>";
-            echo "Ford delay: $fordDelay days<br>";
-            echo "Float delay: $floatDelay days<br>";
-            echo "Ferry delay: $ferryDelay days<br>";
+            echo "<ul>";
+            echo "<li>Crossing options: " . implode(', ', $crossingOptions) . "</li>";
+            echo "<li>Ferry base cost: $$ferryBaseCost</li>";
+            echo "<li>Ford success chance: " . ($fordRisk * 100) . "%</li>";
+            echo "<li>Ford delay: $fordDelay days</li>";
+            echo "<li>Float delay: $floatDelay days</li>";
+            echo "<li>Ferry delay: $ferryDelay days</li>";
+            echo "</ul>";
+
+
+            // now do a switch for how to cross river
+
 
             // Now you can process these variables further, for example, prompting the player for a crossing choice.
             // You can check the player's choice here and apply the relevant delay, risk, cost, etc.
