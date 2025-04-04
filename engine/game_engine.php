@@ -821,6 +821,16 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
 switch ($milestoneTodayType) {
     case 'fort':
         // Do something at a fort
+            // delay days
+            if (isset($playerState['delay_days']) && is_int($playerState['delay_days'])) {
+                // Add the milestone's delay days to the player's delay days
+                $playerState['delay_days'] += $milestoneTodayDelayDay;
+               //  echo "Player delay days updated: " . $playerState['delay_days'];
+            } else {
+                //in case we want to 
+            }       
+
+    
         echo "You're at a fort!";
         // Your logic for forts goes here
 
@@ -829,7 +839,7 @@ switch ($milestoneTodayType) {
                 'miles_traveled' => $milesTraveled,
                 'total_miles' => $newMile,
                 'milestone' => $milestoneToday['title'] ?? null,
-                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+                'notes' => "You reached " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Your are overjoyed and your morale went up by " . $milestoneMoraleMod . " points. You decided to rest " . $milestoneTodayDelayDay . " days."
             ];
         break;
 
@@ -842,7 +852,7 @@ switch ($milestoneTodayType) {
                 'miles_traveled' => $milesTraveled,
                 'total_miles' => $newMile,
                 'milestone' => $milestoneToday['title'] ?? null,
-                'notes' => "You reached the milestone: " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " Morale adjusted by " . $milestoneMoraleMod . " points."
+                'notes' => "You reached the " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " You were moved by it's natural beauty and your morale improved by " . $milestoneMoraleMod . " points."
             ];
         break;
 
@@ -887,6 +897,15 @@ switch ($milestoneTodayType) {
 
             // Now you can process these variables further, for example, prompting the player for a crossing choice.
             // You can check the player's choice here and apply the relevant delay, risk, cost, etc.
+
+
+                $playerState['log'][] = [
+                'day' => $playerState['day'],
+                'miles_traveled' => $milesTraveled,
+                'total_miles' => $newMile,
+                'milestone' => $milestoneToday['title'] ?? null,
+                'notes' => "You reached the " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " You were moved by it's natural beauty and your morale improved by " . $milestoneMoraleMod . " points."
+            ];
         } else {
             echo "No crossing data available for this river.<br>";
         }   
