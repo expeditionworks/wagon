@@ -776,6 +776,39 @@ switch ($milestoneTodayType) {
         // Do something at a river
         echo "You're at a river!";
         // Your logic for rivers goes here
+
+        // Check if the 'crossing' key exists in the current milestone
+        if (isset($milestoneToday['crossing'])) {
+            $crossing = $milestoneToday['crossing'];  // Retrieve crossing data
+
+            // Store crossing options and related data in variables
+            $crossingOptions = $crossing['options'] ?? [];  // Array of crossing options: ["ford", "float", "ferry"]
+                // Set default crossing options if $crossingOptions is empty
+                if (empty($crossingOptions)) {
+                    // Failsafe if no crossing options are available in the JSON
+                    $crossingOptions = ['ford', 'float', 'ferry'];  // Default available crossing options
+                }
+            $ferryBaseCost = $crossing['ferry_base_cost'] ?? 5;  // Cost for ferry
+            $fordRisk = $crossing['ford_risk'] ?? .5;  // Risk associated with fording
+            $fordDelay = $crossing['ford_delay'] ?? 1;  // Delay for fording
+            $floatDelay = $crossing['float_delay'] ?? 2;  // Delay for floating
+            $ferryDelay = $crossing['ferry_delay'] ?? 1;  // Delay for ferrying
+
+            // Display the crossing options (just for debugging)
+            echo "Crossing options: " . implode(', ', $crossingOptions) . "<br>";
+            echo "Ferry base cost: $$ferryBaseCost<br>";
+            echo "Ford risk: " . ($fordRisk * 100) . "%<br>";
+            echo "Ford delay: $fordDelay days<br>";
+            echo "Float delay: $floatDelay days<br>";
+            echo "Ferry delay: $ferryDelay days<br>";
+
+            // Now you can process these variables further, for example, prompting the player for a crossing choice.
+            // You can check the player's choice here and apply the relevant delay, risk, cost, etc.
+  
+
+
+
+    
         break;
 
     case 'fork':
