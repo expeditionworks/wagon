@@ -1065,53 +1065,73 @@ switch ($milestoneTodayType) {
 
 function updatePlayerState($player_id, $playerState, $conn) {
     // Prepare the updated player state for storage
-    $inventoryJson = json_encode($playerState['inventory']);
-    $logJson = json_encode($playerState['log']);
-    $lastLogItem = !empty($playerState['log']) ? json_encode(end($playerState['log'])) : json_encode(['notes' => 'No log for this turn']); 
+    $inventoryJson     = json_encode($playerState['inventory']);
+    $logJson           = json_encode($playerState['log']);
+    $lastLogItem       = !empty($playerState['log'])
+                        ? json_encode(end($playerState['log']))
+                        : json_encode(['notes' => 'No log for this turn']);
+    $currentTrail      = $playerState['current_trail'];
+    $delayDays         = $playerState['delay_days'];
+    $milesTraveled     = $playerState['miles_traveled'] ?? 0;
+    $weatherJson       = json_encode($playerState['weatherThisTurn']);
+    $newDelayState     = $playerState['delay_status'];
+    $newFamilyUpdate   = json_encode($playerState['family']);
+    // Encode pending_action or null
+    $pendingActionJson = $playerState['pending_action'] !== null
+                        ? json_encode($playerState['pending_action'])
+                        : null;
 
-    $currentTrail = $playerState['current_trail'];
-    $delayDays = $playerState['delay_days']; // Ensure the delay_days is passed
-    $milesTraveled = $playerState['miles_traveled'] ?? 0;  // Get miles_traveled from playerState
-    $weatherJson = json_encode($playerState['weatherThisTurn']);  // Convert weather to JSON string
-    $newDelayState = $playerState['delay_status'];  // Pull delay_status from the database (default to completed)
-    $newFamilyUpdate = json_encode($playerState['family']);  // Convert the family data into JSON
-
-   // Query to update the player state in the database
+    // Build the SQL, now including pending_action
     $query = "UPDATE player_state SET 
-              day = ?, mile = ?, morale = ?, inventory = ?, log = ?, current_trail = ?, last_log_item = ?, delay_days = ?, miles_traveled = ?, weather = ?, delay_status = ?, family = ? 
-              WHERE player_id = ?";
+                day             = ?,
+                mile            = ?,
+                morale          = ?,
+                inventory       = ?,
+                log             = ?,
+                current_trail   = ?,
+                last_log_item   = ?,
+                delay_days      = ?,
+                miles_traveled  = ?,
+                weather         = ?,
+                delay_status    = ?,
+                family          = ?,
+                pending_action  = ?
+              WHERE player_id      = ?";
 
     $stmt = $conn->prepare($query);
     if ($stmt === false) {
-        echo "<p>Error preparing statement: " . $conn->error . "</p>";
+        echo "<p>Error preparing statement: " . htmlspecialchars($conn->error) . "</p>";
         return;
     }
-    
-    // Bind the parameters to the statement
+
+    // Bind parameters (14 total: day, mile, morale, inventory, log,
+    // current_trail, last_log_item, delay_days, miles_traveled,
+    // weather, delay_status, family, pending_action, player_id)
     $stmt->bind_param(
-        'iissssssssssi', // Added 'i' for the final player_id (integer)
-        $playerState['day'], 
-        $playerState['mile'], 
-        $playerState['morale'], 
-        $inventoryJson,  
-        $logJson,        
-        $currentTrail,   
-        $lastLogItem,    
-        $delayDays,      // Pass the delay_days value
-        $milesTraveled,  // Pass the miles_traveled value
-        $weatherJson,    // Pass the weather as JSON string
-        $newDelayState,  // Pass the delay_status value
-        $newFamilyUpdate, // Pass the updated family data as JSON
-        $player_id       // Pass the player_id to update the correct row
+        'iissssssssssis',
+        $playerState['day'],          // i
+        $playerState['mile'],         // i
+        $playerState['morale'],       // s (or i if you prefer)
+        $inventoryJson,               // s
+        $logJson,                     // s
+        $currentTrail,                // s
+        $lastLogItem,                 // s
+        $delayDays,                   // s (or i)
+        $milesTraveled,               // s (or i)
+        $weatherJson,                 // s
+        $newDelayState,               // s
+        $newFamilyUpdate,             // s
+        $pendingActionJson,           // s
+        $player_id                    // i
     );
 
-    // Execute the query to update the player state in the database
     if ($stmt->execute()) {
-        echo "<p>Player state updated successfully!</p>";
+        // Successful—no need to echo every time
     } else {
-        echo "<p>Error executing query: " . $stmt->error . "</p>";
+        echo "<p>Error executing query: " . htmlspecialchars($stmt->error) . "</p>";
     }
 }
+
 
 
 
