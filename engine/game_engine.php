@@ -171,8 +171,11 @@ if (file_exists($terrainPath)) {
             'weatherLastTurn' => $weatherLastTurn,  // Initialize weatherLastTurn
             'weatherThisTurn' => $weatherLastTurn,  // Initialize weatherThisTurn
             'start_date' => $playerRow['start_date'] ?? null,  // Adding start_date from the database
-            'month' => $month // Adding month to player state
-        ];
+            'month' => $month, // Adding month to player state
+            'pending_action' => ! empty($playerRow['pending_action'])
+                ? json_decode($playerRow['pending_action'], true)
+                : null        
+            ];
 
         return $playerState;  // Return the populated player state
 
