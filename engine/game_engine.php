@@ -496,6 +496,18 @@ if (file_exists($conditionsPath)) {
               renderPrompt($action);
             }
 
+        function renderPrompt($action) {
+          echo "<p>{$action['prompt']}</p><ol>";
+          foreach ($action['options'] as $i => $opt) {
+            echo "<li>" . ($i + 1) . ") $opt</li>";
+          }
+          echo "</ol>
+                <form method='POST'>
+                  <label>Enter choice (1–" . count($action['options']) . "):</label>
+                  <input name='choice' type='number' min='1' max='" . count($action['options']) . "' required>
+                  <button type='submit'>Submit</button>
+                </form>";
+        }
 
 
         
