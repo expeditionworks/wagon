@@ -461,10 +461,12 @@ if (file_exists($conditionsPath)) {
 
    
 
+    // check if there's any actions need to be taken 
+    if (!empty($playerState['pending_action'])) {
 
-    
+        
     // check if First day
-    if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
+    } elseif ($playerState['mile'] == 0 && $playerState['day'] == 1) {
         // Handle first day store logic
         echo "Welcome to Independence, Missouri! Here's your first chance to stock up on supplies.\n";
         $milestoneToday = null;
