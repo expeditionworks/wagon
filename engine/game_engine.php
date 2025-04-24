@@ -464,6 +464,41 @@ if (file_exists($conditionsPath)) {
     // check if there's any actions need to be taken 
     if (!empty($playerState['pending_action'])) {
 
+        function processPendingAction(&$playerState, $player_id, $conn) {
+              $action = $playerState['pending_action'];
+              // Have they sent a reply?
+              if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choice'])) {
+                $choice = (int)$_POST['choice'];
+                $options = $action['options'];
+                if ($choice < 1 || $choice > count($options)) {
+                  echo "Invalid choice. Please pick a number between 1 and " . count($options);
+                  renderPrompt($action); return;
+                }
+                $selected = $options[$choice - 1];
+                // Dispatch based on action type
+                switch ($action['type']) {
+                  case 'river_crossing':
+                    // Apply crossing logic with $selected
+                    break;
+                  case 'store_purchase':
+                    // Apply store logic with $selected
+                    break;
+                  // … other cases …
+                }
+                // After handling:
+                $playerState['pending_action'] = null;
+                updatePlayerState($player_id, $playerState, $conn);
+                // Then continue with the rest of the turn
+                moveAndCheckMilestones($playerState, $player_id, $conn);
+                return;
+              }
+              // No reply yet → render the prompt
+              renderPrompt($action);
+            }
+
+
+
+        
         
     // check if First day
     } elseif ($playerState['mile'] == 0 && $playerState['day'] == 1) {
