@@ -6,6 +6,7 @@ include_once(__DIR__ . '/db_connection.php'); // Database connection
 include_once(__DIR__ . '/game_functions.php'); // Shared helper functions
 include_once(__DIR__ . '/modules/getPlayerState.php'); // Load player state from DB
 include_once(__DIR__ . '/modules/updatePlayerState.php'); // DB write — end of turn only
+include_once(__DIR__ . '/modules/applyWeather.php'); // Weather calculation
 
 
 
@@ -187,90 +188,11 @@ if (file_exists($conditionsPath)) {
          }
 
 
-    // WEATHER SYSTEM
-            // Load weather_months.json
-        $weatherMonthsPath = __DIR__ . '/../config/weather_months.json';
-        if (file_exists($weatherMonthsPath)) {
-            $weatherMonthsContent = file_get_contents($weatherMonthsPath);
-            $weatherMonths = $weatherMonthsContent !== false ? json_decode($weatherMonthsContent, true) : [];
-        } else {
-            debugLog($playerState, "Error: Weather Months file not found or not accessible.");
-            // Default fallback to May if the file doesn't exist
-            $weatherMonths = [
-                "May" => [
-                    "weather_types" => ["sunny", "cloudy", "snowy"],
-                    "temperature_range" => [
-                        "sunny" => [25, 45],
-                        "cloudy" => [20, 40],
-                        "snowy" => [15, 30]
-                    ],
-                    "chance_of_snow" => 45,
-                    "chance_of_rain" => 15,
-                    "wind_speed_range" => ["min" => 5, "max" => 25],
-                    "description" => "Spring is in full swing with mild temperatures and occasional rain showers. Snow is rare during this period."
-                ]
-            ];
-        }
-    // Get weather data for the current month based on the player's month
-    $monthData = $weatherMonths[$playerState['month']] ?? $weatherMonths['May'];  // Use $playerState['month'] directly
-    // Define the default value for wind speed if something goes wrong
-    $defaultWindSpeed = 20;  // You can set your default value here
-    // Initialize wind speed range and randomly selected wind speed
-    $windSpeedRange = null;
-    $randomWindSpeed = $defaultWindSpeed;  // Default value in case we can't find a valid range    
-    // Check if the current month exists in the JSON data
-    if (isset($monthData['wind_speed_range'])) {
-        $windSpeedRange = $monthData['wind_speed_range'];
-    
-        // Check if min and max values exist and are valid numbers
-        if (isset($windSpeedRange['min'], $windSpeedRange['max']) &&
-            is_numeric($windSpeedRange['min']) && is_numeric($windSpeedRange['max'])) {
-            // Pick a random wind speed within the specified range
-            $randomWindSpeed = rand($windSpeedRange['min'], $windSpeedRange['max']); // the random wind speed
-        }
-    }
-    $wind_modifier = 1.0;  // Default to no effect (tailwind)
-    $wind_speed = 5; // set default for wind
-    $wind_types = ["headwind", "tailwind", "crosswind"];  // Define an array of possible wind types
-    $random_index = array_rand($wind_types); // Randomly select a wind type get the index
-    $wind_type = $wind_types[$random_index]; // Select the wind type based on the random index
-    // Determine wind effect based on type
-    if ($wind_type == "headwind") {
-        $wind_modifier = 1 - ($wind_speed / 50);  // Example: max 40% reduction for very strong headwinds
-    } elseif ($wind_type == "tailwind") {
-        $wind_modifier = 1 + ($wind_speed / 100);  // Example: max 30% increase for very strong tailwinds
-    } elseif ($wind_type == "crosswind") {
-        $wind_modifier = 1 - ($wind_speed / 200);  // Minimal effect for crosswinds
-    }
-   // Determine the weather type for the day
-    $weatherTypes = $monthData['weather_types'];
-    $weatherType = $weatherTypes[array_rand($weatherTypes)];  // Randomly select a weather type from the available types
-    // Get the temperature range for the chosen weather type
-    $temperatureRange = $monthData['temperature_range'][$weatherType];
-    $temperature = rand($temperatureRange[0], $temperatureRange[1]);
-    // Chance of snow and rain (based on weather month data)
-    $chanceOfSnow = $monthData['chance_of_snow'];
-    $chanceOfRain = $monthData['chance_of_rain'];
-   // Determine precipitation (snow or rain) based on weather type and probabilities
-    $precipitationPenalty = 1.0; // make base percipitation penalty 1
-    $precipitation = 'none';
-    if ($weatherType == 'snowy' && rand(0, 100) <= $chanceOfSnow) {
-        $precipitation = 'snow';
-        $precipitationPenalty = 0.8;
-    } elseif ($weatherType == 'cloudy' && rand(0, 100) <= $chanceOfRain) {
-        $precipitation = 'rain';
-        $precipitationPenalty = 1.0;
-    }   
-    // Construct the weather data to return
-    $weatherData = [
-        'weather_type' => $weatherType,
-        'temperature' => $temperature,
-        'precipitation' => $precipitation,
-        'wind_speed' => $randomWindSpeed,
-        'date' => date('Y-m-d'), // Store the current date of the weather
-    ];    
-    // Optionally, add the weather to playerState directly
-    $playerState['weatherThisTurn'] = $weatherData;  // Store the weather data in playerState
+// WEATHER SYSTEM
+applyWeather($playerState);
+$wind_modifier = $playerState['windModifier'];
+$wind_type = $playerState['weatherThisTurn']['wind_type'];
+$precipitationPenalty = $playerState['precipitationPenalty'];
 
 
 
