@@ -5,6 +5,18 @@
 
 function updatePlayerState($player_id, $playerState, $conn) {
     $inventoryJson     = json_encode($playerState['inventory']);
+    // Sync morale from average family member morale
+    $family = $playerState['family'];
+    if (is_string($family)) {
+        $family = json_decode($family, true) ?? [];
+    }
+    if (is_array($family) && count($family) > 0) {
+        $livingMembers = array_filter($family, fn($m) => !($m['deceased'] ?? false));
+        if (count($livingMembers) > 0) {
+            $totalMorale = array_sum(array_column($livingMembers, 'morale'));
+            $playerState['morale'] = round($totalMorale / count($livingMembers));
+        }
+    }
     // Keep only the last 30 log entries to prevent DB bloat
     $recentLog = array_slice($playerState['log'], -30);
     $logJson   = json_encode($recentLog);    
