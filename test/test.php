@@ -12,6 +12,16 @@ $playerState = getPlayerState($player_id, $conn);
 
 // Handle pending action response if submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pending_action_type'])) {
+    // Handle store purchase
+    if (isset($_POST['store_buy']) && !empty($_POST['store_item'])) {
+        $storeItems = $playerState['pending_action']['items'] ?? [];
+        $result = processPurchase($playerState, $_POST['store_item'], (int)$_POST['store_qty'], $storeItems);
+        updatePlayerState($player_id, $playerState, $conn);
+        // Pass message back to store display
+        header('Location: test.php?store_message=' . urlencode($result['message']) . '&store_success=' . ($result['success'] ? '1' : '0'));
+        exit;
+    }
+    // Handle other decisions
     $playerState['pending_action']['chosen_option'] = $_POST['chosen_option'] ?? null;
     handlePendingAction($playerState, $player_id, $conn);
     updatePlayerState($player_id, $playerState, $conn);
@@ -19,20 +29,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pending_action_type']
     exit;
 }
 
-// If there's a pending action, show it and stop
 if (!empty($playerState['pending_action'])) {
     $action = $playerState['pending_action'];
+    $actionType = $action['type'] ?? '';
+
     echo "<h2>Decision Required</h2>";
     echo "<p><strong>" . htmlspecialchars($action['milestone'] ?? '') . "</strong></p>";
-    echo "<form method='POST'>";
-    echo "<input type='hidden' name='pending_action_type' value='" . htmlspecialchars($action['type']) . "'>";
-    echo "<p>Choose an option:</p><ul>";
-    foreach (($action['options'] ?? []) as $option) {
-        echo "<li><label><input type='radio' name='chosen_option' value='" . htmlspecialchars($option) . "'> " . htmlspecialchars($option) . "</label></li>";
+
+    if ($actionType === 'store') {
+        // Show store UI
+        echo "<h3>Store</h3>";
+        echo "<p>Dollars: $" . $playerState['dollars'] . "</p>";
+        // Show purchase result message if any
+        if (!empty($_GET['store_message'])) {
+            $msgColor = isset($_GET['store_success']) && $_GET['store_success'] === '1' ? 'green' : 'red';
+            echo "<p style='color:$msgColor'>" . htmlspecialchars($_GET['store_message']) . "</p>";
+        }
+        echo "<form method='POST'>";
+        echo "<input type='hidden' name='pending_action_type' value='store'>";
+        echo "<input type='hidden' name='chosen_option' value='done'>";
+        echo "<h4>Items for Sale</h4><ul>";
+        foreach (($action['items'] ?? []) as $itemName => $itemDetails) {
+            echo "<li><strong>$itemName</strong> — " . $itemDetails['description'] . " Price: \$" . $itemDetails['base_price'] . "</li>";
+        }
+        echo "</ul>";
+        echo "<h4>Buy Something</h4>";
+        echo "<select name='store_item'>";
+        foreach (($action['items'] ?? []) as $itemName => $itemDetails) {
+            echo "<option value='$itemName'>$itemName (\$" . $itemDetails['base_price'] . " each)</option>";
+        }
+        echo "</select>";
+        echo "<input type='number' name='store_qty' value='1' min='1'>";
+        echo "<button type='submit' name='store_buy' value='1'>Buy</button>";
+        echo "<br><br><button type='submit'>Done Shopping</button>";
+        echo "</form>";
+    } else {
+        // Show choice UI for rivers, forks etc
+        echo "<form method='POST'>";
+        echo "<input type='hidden' name='pending_action_type' value='" . htmlspecialchars($actionType) . "'>";
+        echo "<p>Choose an option:</p><ul>";
+        foreach (($action['options'] ?? []) as $option) {
+            echo "<li><label><input type='radio' name='chosen_option' value='" . htmlspecialchars($option) . "'> " . htmlspecialchars($option) . "</label></li>";
+        }
+        echo "</ul>";
+        echo "<button type='submit'>Submit Decision</button>";
+        echo "</form>";
     }
-    echo "</ul>";
-    echo "<button type='submit'>Submit Decision</button>";
-    echo "</form>";
     exit;
 }
 

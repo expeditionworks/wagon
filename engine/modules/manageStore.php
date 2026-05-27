@@ -27,7 +27,18 @@ function processPurchase(&$playerState, $itemName, $quantity, $storeItems) {
 
     // Complete the purchase
     $playerState['dollars'] -= $totalCost;
-    addToInventory($playerState, $itemName, $quantity);
+
+    // Check if item is a bundle with sub-items
+    if (isset($itemDetails['items']) && is_array($itemDetails['items'])) {
+        // Unpack bundle contents
+        foreach ($itemDetails['items'] as $bundleItem => $bundleQty) {
+            addToInventory($playerState, $bundleItem, $bundleQty * $quantity);
+            debugLog($playerState, "Bundle unpacked: added " . ($bundleQty * $quantity) . " $bundleItem");
+        }
+    } else {
+        // Regular item
+        addToInventory($playerState, $itemName, $quantity);
+    }
 
     debugLog($playerState, "Purchased $quantity $itemName for \$$totalCost. Dollars remaining: " . $playerState['dollars']);
     return ['success' => true, 'message' => "Purchased $quantity $itemName for \$$totalCost. You have \$" . $playerState['dollars'] . " left."];
