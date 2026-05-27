@@ -60,15 +60,23 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
         debugLog($playerState, "Morale adjusted by " . $milestoneMoraleMod . " at " . $milestoneTodayTitle);
     }
 
-    // Check for store at milestone — flag as pending_action for delivery layer
-    if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
-        $playerState['pending_action'] = [
-            'type'    => 'store',
-            'milestone' => $milestoneTodayTitle,
-            'items'   => $milestoneToday['items_for_sale'] ?? []
-        ];
-        debugLog($playerState, "Store available at " . $milestoneTodayTitle . " — pending_action set.");
-    }
+    // Check for store at milestone — load from store_config.json
+        if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
+            $storeConfigPath = __DIR__ . '/../../config/store_config.json';
+            $storeConfig = file_exists($storeConfigPath)
+                ? json_decode(file_get_contents($storeConfigPath), true) ?? []
+                : [];
+            $milestoneId = $milestoneToday['id'] ?? '';
+            $storeItems = $storeConfig[$milestoneId]['items_for_sale'] ?? $milestoneToday['items_for_sale'] ?? [];
+            $storeMessage = $milestoneToday['extended_description'] ?? '';
+            $playerState['pending_action'] = [
+                'type'      => 'store',
+                'milestone' => $milestoneTodayTitle,
+                'message'   => $storeMessage,
+                'items'     => $storeItems
+            ];
+            debugLog($playerState, "Store loaded from store_config for " . $milestoneId);
+        }
 
     // Handle milestone type
     switch ($milestoneTodayType) {

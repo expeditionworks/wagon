@@ -83,11 +83,16 @@ $precipitationPenalty = $playerState['precipitationPenalty'];
   // check if First day — set up Independence store via pending_action
     if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
         $milestoneToday = $playerState['milestones'][0]; // Independence, MO
+        $storeConfigPath = __DIR__ . '/../config/store_config.json';
+        $storeConfig = file_exists($storeConfigPath)
+            ? json_decode(file_get_contents($storeConfigPath), true) ?? []
+            : [];
+        $storeItems = $storeConfig['independence']['items_for_sale'] ?? $milestoneToday['items_for_sale'] ?? [];
         $playerState['pending_action'] = [
             'type'      => 'store',
             'milestone' => $milestoneToday['title'],
             'message'   => $milestoneToday['extended_description'] ?? '',
-            'items'     => $milestoneToday['items_for_sale'] ?? []
+            'items'     => $storeItems
         ];
         $playerState['log'][] = [
             'day'            => $playerState['day'],

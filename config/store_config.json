@@ -1,412 +1,366 @@
 {
   "independence": {
-    "location_name": "Independence, MO",
-    "store_type": "initial_outfitting",
-    "items": [
-      {
-        "id": "food_bundle_s",
-        "name": "Small Food Bundle (200 lbs)",
-        "description": "Basic rations for a small group. Recommended if you're traveling light.",
-        "price": 40,
-        "adds": {
-          "food_lbs": 200
+    "location_name": "Independence, Missouri",
+    "store_type": "outfitter",
+    "items_for_sale": {
+      "Oxen": {
+        "description": "A sturdy pair of oxen for pulling your wagon.",
+        "base_price": 25,
+        "stock_limit": 10
+      },
+      "Food": {
+        "description": "Provisions for the trail. 1 lb per unit.",
+        "base_price": 1,
+        "stock_limit": 500
+      },
+      "Ammunition": {
+        "description": "For hunting and protection.",
+        "base_price": 1,
+        "stock_limit": 200
+      },
+      "Clothes": {
+        "description": "Spare clothing for the journey.",
+        "base_price": 10,
+        "stock_limit": 10
+      },
+      "Tools": {
+        "description": "Essential tools for repairs.",
+        "base_price": 15,
+        "stock_limit": 5
+      },
+      "WagonRepairKit": {
+        "description": "Keeps your wagon rolling.",
+        "base_price": 20,
+        "stock_limit": 5
+      },
+      "Small Bundle": {
+        "description": "A small bundle to get you started.",
+        "base_price": 150,
+        "stock_limit": 5,
+        "items": {
+          "Oxen": 2,
+          "Food": 100,
+          "Ammunition": 20,
+          "Tools": 1
         }
       },
-      {
-        "id": "food_bundle_m",
-        "name": "Medium Food Bundle (400 lbs)",
-        "description": "A balanced supply for a typical family.",
-        "price": 75,
-        "adds": {
-          "food_lbs": 400
+      "Medium Bundle": {
+        "description": "A medium bundle for the long haul.",
+        "base_price": 300,
+        "stock_limit": 5,
+        "items": {
+          "Oxen": 4,
+          "Food": 200,
+          "Ammunition": 50,
+          "Clothes": 2,
+          "Tools": 2,
+          "WagonRepairKit": 1
         }
       },
-      {
-        "id": "food_bundle_l",
-        "name": "Large Food Bundle (600 lbs)",
-        "description": "Enough food for a big group or a longer journey.",
-        "price": 100,
-        "adds": {
-          "food_lbs": 600
-        }
-      },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (20 rounds)",
-        "description": "Used for hunting and emergencies.",
-        "price": 10,
-        "adds": {
-          "ammo": 20
-        }
-      },
-      {
-        "id": "clothing",
-        "name": "Clothing Set",
-        "description": "Spare clothing for your group.",
-        "price": 15,
-        "adds": {
-          "clothing": 1
-        }
-      },
-      {
-        "id": "oxen",
-        "name": "Oxen Pair",
-        "description": "Two oxen strong enough to pull your wagon.",
-        "price": 50,
-        "adds": {
-          "oxen": 2
+      "Large Bundle": {
+        "description": "A large bundle to fully outfit your wagon.",
+        "base_price": 500,
+        "stock_limit": 3,
+        "items": {
+          "Oxen": 6,
+          "Food": 400,
+          "Ammunition": 100,
+          "Clothes": 4,
+          "Tools": 5,
+          "WagonRepairKit": 2
         }
       }
-    ]
-  }
-},
-{
+    }
+  },
   "fort_kearny": {
     "location_name": "Fort Kearny",
     "store_type": "fort",
-    "store_inflation": 1.1,
-    "items": [
-      {
-        "id": "food_bundle_m",
-        "name": "Medium Food Bundle (400 lbs)",
-        "price": 90,
-        "adds": {
-          "food_lbs": 400
+    "items_for_sale": {
+      "Oxen": {
+        "description": "Trail-hardened oxen.",
+        "base_price": 35,
+        "stock_limit": 6
+      },
+      "Food": {
+        "description": "Army rations. Not fancy but filling.",
+        "base_price": 2,
+        "stock_limit": 300
+      },
+      "Ammunition": {
+        "description": "Military grade ammunition.",
+        "base_price": 2,
+        "stock_limit": 100
+      },
+      "Clothes": {
+        "description": "Spare clothing.",
+        "base_price": 15,
+        "stock_limit": 6
+      },
+      "WagonRepairKit": {
+        "description": "Wagon repair supplies.",
+        "base_price": 30,
+        "stock_limit": 3
+      },
+      "Small Bundle": {
+        "description": "A basic resupply bundle.",
+        "base_price": 200,
+        "stock_limit": 3,
+        "items": {
+          "Food": 100,
+          "Ammunition": 20,
+          "Clothes": 1
         }
       },
-      {
-        "id": "food_bundle_l",
-        "name": "Large Food Bundle (600 lbs)",
-        "price": 120,
-        "adds": {
-          "food_lbs": 600
-        }
-      },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (50 rounds)",
-        "price": 15,
-        "adds": {
-          "ammo": 50
-        }
-      },
-      {
-        "id": "clothing",
-        "name": "Clothing Set",
-        "price": 25,
-        "adds": {
-          "clothing": 1
-        }
-      },
-      {
-        "id": "oxen",
-        "name": "Oxen Pair",
-        "price": 60,
-        "adds": {
-          "oxen": 2
-        }
-      },
-      {
-        "id": "wagon_parts",
-        "name": "Wagon Repair Kit",
-        "price": 30,
-        "adds": {
-          "wagon_parts": 1
+      "Medium Bundle": {
+        "description": "A solid resupply for the trail ahead.",
+        "base_price": 400,
+        "stock_limit": 3,
+        "items": {
+          "Oxen": 2,
+          "Food": 200,
+          "Ammunition": 50,
+          "Clothes": 2,
+          "WagonRepairKit": 1
         }
       }
-    ]
+    }
   },
   "fort_laramie": {
     "location_name": "Fort Laramie",
     "store_type": "fort",
-    "store_inflation": 1.2,
-    "items": [
-      {
-        "id": "food_bundle_m",
-        "name": "Medium Food Bundle (400 lbs)",
-        "price": 120,
-        "adds": {
-          "food_lbs": 400
+    "items_for_sale": {
+      "Oxen": {
+        "description": "Strong mountain oxen.",
+        "base_price": 50,
+        "stock_limit": 4
+      },
+      "Food": {
+        "description": "Trail provisions. Prices rising as supplies thin.",
+        "base_price": 3,
+        "stock_limit": 200
+      },
+      "Ammunition": {
+        "description": "Essential for the mountains ahead.",
+        "base_price": 2,
+        "stock_limit": 100
+      },
+      "Clothes": {
+        "description": "Warm clothes for mountain weather.",
+        "base_price": 20,
+        "stock_limit": 6
+      },
+      "WagonRepairKit": {
+        "description": "Critical for the rocky terrain ahead.",
+        "base_price": 40,
+        "stock_limit": 3
+      },
+      "Small Bundle": {
+        "description": "Basic mountain supplies.",
+        "base_price": 250,
+        "stock_limit": 3,
+        "items": {
+          "Food": 100,
+          "Ammunition": 30,
+          "Clothes": 2
         }
       },
-      {
-        "id": "food_bundle_l",
-        "name": "Large Food Bundle (600 lbs)",
-        "price": 150,
-        "adds": {
-          "food_lbs": 600
-        }
-      },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (50 rounds)",
-        "price": 18,
-        "adds": {
-          "ammo": 50
-        }
-      },
-      {
-        "id": "clothing",
-        "name": "Clothing Set",
-        "price": 30,
-        "adds": {
-          "clothing": 1
-        }
-      },
-      {
-        "id": "oxen",
-        "name": "Oxen Pair",
-        "price": 70,
-        "adds": {
-          "oxen": 2
-        }
-      },
-      {
-        "id": "wagon_parts",
-        "name": "Wagon Repair Kit",
-        "price": 35,
-        "adds": {
-          "wagon_parts": 1
-        }
-      },
-      {
-        "id": "medicine",
-        "name": "Basic Medicine Kit",
-        "price": 50,
-        "adds": {
-          "medicine": 1
-        }
-      },
-      {
-        "id": "coffee",
-        "name": "Coffee",
-        "price": 25,
-        "adds": {
-          "food_lbs": 2,
-          "morale": 2
+      "Medium Bundle": {
+        "description": "Full resupply for the mountain crossing.",
+        "base_price": 500,
+        "stock_limit": 2,
+        "items": {
+          "Oxen": 2,
+          "Food": 150,
+          "Ammunition": 50,
+          "Clothes": 2,
+          "WagonRepairKit": 1
         }
       }
-    ]
+    }
   },
   "fort_bridger": {
     "location_name": "Fort Bridger",
-    "store_type": "fort",
-    "store_inflation": 1.3,
-    "items": [
-      {
-        "id": "food_bundle_s",
-        "name": "Small Food Bundle (200 lbs)",
-        "price": 65,
-        "adds": {
-          "food_lbs": 200
-        }
+    "store_type": "trading_post",
+    "items_for_sale": {
+      "Oxen": {
+        "description": "Expensive but worth it this deep in the trail.",
+        "base_price": 70,
+        "stock_limit": 4
       },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (20 rounds)",
-        "price": 18,
-        "adds": {
-          "ammo": 20
-        }
+      "Food": {
+        "description": "Scarce provisions. Buy what you can.",
+        "base_price": 4,
+        "stock_limit": 150
       },
-      {
-        "id": "clothing",
-        "name": "Clothing Set",
-        "price": 35,
-        "adds": {
-          "clothing": 1
-        }
+      "Ammunition": {
+        "description": "Hunting will be critical from here on.",
+        "base_price": 3,
+        "stock_limit": 60
       },
-      {
-        "id": "oxen",
-        "name": "Oxen Pair",
-        "price": 90,
-        "adds": {
-          "oxen": 2
-        }
+      "WagonRepairKit": {
+        "description": "The terrain ahead is brutal on wagons.",
+        "base_price": 50,
+        "stock_limit": 2
       },
-      {
-        "id": "wagon_parts",
-        "name": "Wagon Repair Kit",
-        "price": 45,
-        "adds": {
-          "wagon_parts": 1
+      "Small Bundle": {
+        "description": "Last chance resupply before the desert.",
+        "base_price": 300,
+        "stock_limit": 2,
+        "items": {
+          "Food": 80,
+          "Ammunition": 20,
+          "WagonRepairKit": 1
         }
       }
-    ]
+    }
   },
   "fort_hall": {
     "location_name": "Fort Hall",
     "store_type": "fort",
-    "store_inflation": 1.4,
-    "items": [
-      {
-        "id": "food_bundle_s",
-        "name": "Small Food Bundle (200 lbs)",
-        "price": 70,
-        "adds": {
-          "food_lbs": 200
-        }
+    "items_for_sale": {
+      "Food": {
+        "description": "Last major resupply before the trails diverge.",
+        "base_price": 4,
+        "stock_limit": 150
       },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (20 rounds)",
-        "price": 20,
-        "adds": {
-          "ammo": 20
-        }
+      "Ammunition": {
+        "description": "Stock up — hunting opportunities ahead.",
+        "base_price": 3,
+        "stock_limit": 60
       },
-      {
-        "id": "clothing",
-        "name": "Clothing Set",
-        "price": 40,
-        "adds": {
-          "clothing": 1
+      "Clothes": {
+        "description": "Warm clothes for mountain passes.",
+        "base_price": 25,
+        "stock_limit": 4
+      },
+      "Small Bundle": {
+        "description": "Essential supplies for the trail ahead.",
+        "base_price": 300,
+        "stock_limit": 2,
+        "items": {
+          "Food": 100,
+          "Ammunition": 30,
+          "Clothes": 1
         }
       }
-    ]
-  },
-  "fort_churchill": {
-    "location_name": "Fort Churchill",
-    "store_type": "fort",
-    "store_inflation": 1.5,
-    "items": [
-      {
-        "id": "food_bundle_s",
-        "name": "Small Food Bundle (200 lbs)",
-        "price": 60,
-        "adds": {
-          "food_lbs": 200
-        }
-      },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (20 rounds)",
-        "price": 16,
-        "adds": {
-          "ammo": 20
-        }
-      }
-    ]
+    }
   },
   "fort_boise": {
     "location_name": "Fort Boise",
     "store_type": "outpost",
-    "store_inflation": 1.2,
-    "items": [
-      {
-        "id": "food_bundle_s",
-        "name": "Small Food Bundle (200 lbs)",
-        "price": 55,
-        "adds": {
-          "food_lbs": 200
-        }
+    "items_for_sale": {
+      "Food": {
+        "description": "Desert provisions. Limited stock.",
+        "base_price": 5,
+        "stock_limit": 100
       },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (20 rounds)",
-        "price": 12,
-        "adds": {
-          "ammo": 20
+      "Ammunition": {
+        "description": "For the desert crossing.",
+        "base_price": 3,
+        "stock_limit": 40
+      },
+      "Small Bundle": {
+        "description": "Basic desert survival supplies.",
+        "base_price": 250,
+        "stock_limit": 2,
+        "items": {
+          "Food": 60,
+          "Ammunition": 20
         }
       }
-    ]
+    }
+  },
+  "fort_churchill": {
+    "location_name": "Fort Churchill",
+    "store_type": "outpost",
+    "items_for_sale": {
+      "Food": {
+        "description": "Last supplies before the Sierra Nevada.",
+        "base_price": 6,
+        "stock_limit": 80
+      },
+      "Ammunition": {
+        "description": "For mountain hunting.",
+        "base_price": 4,
+        "stock_limit": 30
+      },
+      "WagonRepairKit": {
+        "description": "The mountains will test your wagon.",
+        "base_price": 60,
+        "stock_limit": 2
+      },
+      "Small Bundle": {
+        "description": "Sierra Nevada survival pack.",
+        "base_price": 300,
+        "stock_limit": 2,
+        "items": {
+          "Food": 60,
+          "Ammunition": 20,
+          "WagonRepairKit": 1
+        }
+      }
+    }
   },
   "sutters_fort": {
     "location_name": "Sutter's Fort",
     "store_type": "fort",
-    "store_inflation": 1.6,
-    "items": [
-      {
-        "id": "food_bundle_m",
-        "name": "Medium Food Bundle (400 lbs)",
-        "price": 150,
-        "adds": {
-          "food_lbs": 400
-        }
+    "items_for_sale": {
+      "Food": {
+        "description": "California provisions.",
+        "base_price": 5,
+        "stock_limit": 200
       },
-      {
-        "id": "food_bundle_l",
-        "name": "Large Food Bundle (600 lbs)",
-        "price": 180,
-        "adds": {
-          "food_lbs": 600
-        }
+      "Ammunition": {
+        "description": "For California hunting.",
+        "base_price": 3,
+        "stock_limit": 100
       },
-      {
-        "id": "ammo",
-        "name": "Ammunition Box (50 rounds)",
-        "price": 30,
-        "adds": {
-          "ammo": 50
-        }
+      "Clothes": {
+        "description": "California fashion.",
+        "base_price": 30,
+        "stock_limit": 6
       },
-      {
-        "id": "clothing",
-        "name": "Clothing Set",
-        "price": 60,
-        "adds": {
-          "clothing": 1
-        }
-      },
-      {
-        "id": "oxen",
-        "name": "Oxen Pair",
-        "price": 100,
-        "adds": {
-          "oxen": 2
-        }
-      },
-      {
-        "id": "wagon_parts",
-        "name": "Wagon Repair Kit",
-        "price": 60,
-        "adds": {
-          "wagon_parts": 1
-        }
-      },
-      {
-        "id": "gold_dust",
-        "name": "Gold Dust",
-        "price": 150,
-        "adds": {
-          "gold_dust": 1
+      "Small Bundle": {
+        "description": "A fresh start bundle.",
+        "base_price": 200,
+        "stock_limit": 3,
+        "items": {
+          "Food": 100,
+          "Ammunition": 30,
+          "Clothes": 1
         }
       }
-    ]
+    }
   },
   "fort_vancouver": {
     "location_name": "Fort Vancouver",
-    "store_type": "trader",
-    "store_inflation": 1.3,
-    "items": [
-      {
-        "id": "dried_apples",
-        "name": "Dried Apples",
-        "price": 20,
-        "adds": {
-          "food_lbs": 5,
-          "morale": 1
-        }
+    "store_type": "trading_post",
+    "items_for_sale": {
+      "Food": {
+        "description": "Pacific Northwest provisions.",
+        "base_price": 4,
+        "stock_limit": 200
       },
-      {
-        "id": "coffee",
-        "name": "Coffee",
-        "price": 35,
-        "adds": {
-          "food_lbs": 2,
-          "morale": 2
-        }
+      "Ammunition": {
+        "description": "For Oregon hunting.",
+        "base_price": 2,
+        "stock_limit": 100
       },
-      {
-        "id": "hunting_kit",
-        "name": "Hunting Kit",
-        "price": 40,
-        "adds": {
-          "traps": 1,
-          "ammo": 10
+      "Clothes": {
+        "description": "Rain gear for Oregon weather.",
+        "base_price": 25,
+        "stock_limit": 6
+      },
+      "Small Bundle": {
+        "description": "Oregon Trail survivor bundle.",
+        "base_price": 150,
+        "stock_limit": 3,
+        "items": {
+          "Food": 100,
+          "Ammunition": 30,
+          "Clothes": 2
         }
       }
-    ]
+    }
   }
 }
