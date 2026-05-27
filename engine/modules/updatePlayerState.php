@@ -15,14 +15,25 @@ function updatePlayerState($player_id, $playerState, $conn) {
     $weatherJson       = json_encode($playerState['weatherThisTurn']);
     $newDelayState     = $playerState['delay_status'];
     $newFamilyUpdate   = json_encode($playerState['family']);
-    $pendingActionJson = $playerState['pending_action'] !== null
-                        ? json_encode($playerState['pending_action'])
-                        : null;
+    $pendingActionJson = null;
+if (!empty($playerState['pending_action'])) {
+    if (is_array($playerState['pending_action'])) {
+        $pendingActionJson = json_encode($playerState['pending_action']);
+    } elseif (is_string($playerState['pending_action'])) {
+        // Verify it's valid JSON before saving
+        $test = json_decode($playerState['pending_action']);
+        $pendingActionJson = (json_last_error() === JSON_ERROR_NONE)
+            ? $playerState['pending_action']
+            : null;
+    }
+}
+
 
     $query = "UPDATE player_state SET 
                 day             = ?,
                 mile            = ?,
                 morale          = ?,
+                dollars         = ?,
                 inventory       = ?,
                 log             = ?,
                 current_trail   = ?,
@@ -41,11 +52,12 @@ function updatePlayerState($player_id, $playerState, $conn) {
         return;
     }
 
-    $stmt->bind_param(
-        'iissssssssssis',
+$stmt->bind_param(
+        'iissssssssssssi',
         $playerState['day'],
         $playerState['mile'],
         $playerState['morale'],
+        $playerState['dollars'],
         $inventoryJson,
         $logJson,
         $currentTrail,

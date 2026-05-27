@@ -10,6 +10,32 @@ $player_id = 1;  // Make sure this player exists in your database
 // Step 1: Run the game engine for the player (simulating one turn)
 $playerState = getPlayerState($player_id, $conn);
 
+// Handle pending action response if submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pending_action_type'])) {
+    $playerState['pending_action']['chosen_option'] = $_POST['chosen_option'] ?? null;
+    handlePendingAction($playerState, $player_id, $conn);
+    updatePlayerState($player_id, $playerState, $conn);
+    header('Location: test.php');
+    exit;
+}
+
+// If there's a pending action, show it and stop
+if (!empty($playerState['pending_action'])) {
+    $action = $playerState['pending_action'];
+    echo "<h2>Decision Required</h2>";
+    echo "<p><strong>" . htmlspecialchars($action['milestone'] ?? '') . "</strong></p>";
+    echo "<form method='POST'>";
+    echo "<input type='hidden' name='pending_action_type' value='" . htmlspecialchars($action['type']) . "'>";
+    echo "<p>Choose an option:</p><ul>";
+    foreach (($action['options'] ?? []) as $option) {
+        echo "<li><label><input type='radio' name='chosen_option' value='" . htmlspecialchars($option) . "'> " . htmlspecialchars($option) . "</label></li>";
+    }
+    echo "</ul>";
+    echo "<button type='submit'>Submit Decision</button>";
+    echo "</form>";
+    exit;
+}
+
 // If player state is retrieved successfully
 if ($playerState) {
     // Step 2: Process the player's movement and check milestones

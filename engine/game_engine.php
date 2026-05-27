@@ -13,7 +13,7 @@ include_once(__DIR__ . '/modules/movePlayer.php'); // Movement calculation
 include_once(__DIR__ . '/modules/handleMilestones.php'); // Milestone detection and effects
 include_once(__DIR__ . '/modules/manageInventory.php'); // Inventory helpers
 include_once(__DIR__ . '/modules/manageStore.php'); // Store purchase processing
-
+include_once(__DIR__ . '/modules/handlePendingAction.php'); // Pending action resolution
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Check if game is already over from a previous turn
@@ -69,59 +69,18 @@ $precipitationPenalty = $playerState['precipitationPenalty'];
 
    
 
-    // check if there's any actions need to be taken 
+ // If there's a pending action, save state and return — 
+    // the delivery layer handles presenting the choice to the player
     if (!empty($playerState['pending_action'])) {
-
-        function processPendingAction(&$playerState, $player_id, $conn) {
-              $action = $playerState['pending_action'];
-              // Have they sent a reply?
-              if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choice'])) {
-                $choice = (int)$_POST['choice'];
-                $options = $action['options'];
-                if ($choice < 1 || $choice > count($options)) {
-                  echo "Invalid choice. Please pick a number between 1 and " . count($options);
-                  renderPrompt($action); return;
-                }
-                $selected = $options[$choice - 1];
-                // Dispatch based on action type
-                switch ($action['type']) {
-                  case 'river_crossing':
-                    // Apply crossing logic with $selected
-                    break;
-                  case 'store_purchase':
-                    // Apply store logic with $selected
-                    break;
-                  // … other cases …
-                }
-                // After handling:
-                $playerState['pending_action'] = null;
-                updatePlayerState($player_id, $playerState, $conn);
-                // Then continue with the rest of the turn
-                moveAndCheckMilestones($playerState, $player_id, $conn);
-                return;
-              }
-              // No reply yet → render the prompt
-              renderPrompt($action);
-            }
-
-        function renderPrompt($action) {
-          echo "<p>{$action['prompt']}</p><ol>";
-          foreach ($action['options'] as $i => $opt) {
-            echo "<li>" . ($i + 1) . ") $opt</li>";
-          }
-          echo "</ol>
-                <form method='POST'>
-                  <label>Enter choice (1–" . count($action['options']) . "):</label>
-                  <input name='choice' type='number' min='1' max='" . count($action['options']) . "' required>
-                  <button type='submit'>Submit</button>
-                </form>";
-        }
+        updatePlayerState($player_id, $playerState, $conn);
+        return $playerState;
+    }
 
 
         
         
-    // check if First day
-    } elseif ($playerState['mile'] == 0 && $playerState['day'] == 1) {
+// check if First day
+    if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
         // Handle first day store logic
 
         // TODO: delivery layer — move all store/UI HTML below this line to templates
