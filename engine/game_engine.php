@@ -7,7 +7,7 @@ include_once(__DIR__ . '/game_functions.php'); // Shared helper functions
 include_once(__DIR__ . '/modules/getPlayerState.php'); // Load player state from DB
 include_once(__DIR__ . '/modules/updatePlayerState.php'); // DB write — end of turn only
 include_once(__DIR__ . '/modules/applyWeather.php'); // Weather calculation
-
+include_once(__DIR__ . '/modules/applyRations.php'); // Food consumption
 
 
 
@@ -20,32 +20,12 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     // Retrieve the current mile
     $currentMile = $playerState['mile'];
 
-    // Example: Decrementing food based on party size and rations
-    $itemName = "Food";  // We're working with the 'Food' item
-    $foodPerPerson = 2;  // Example: 2 lbs of food per person per day
-    // Initialize $familyCount to ensure it always has a value
-    $familyCount = 2;  // Default to 2 in case of error or missing data
-    $foodMoraleMod = 0; // No change in morale as basic
-    // Check if 'family' exists and is an array
-    if (isset($playerState['family']) && is_array($playerState['family'])) {
-        $familyCount = count($playerState['family']);  // Get the number of family members
-    } else {
-        // Handle the case where 'family' is not set or is not an array
-        $familyCount = 2;  // Set the family count to 2 to not penalize the player for our bad coding
-    }
-    // Define the food per person based on the ration type
-    switch ($playerState['ration']) {
-        case 'generous':
-            $foodPerPerson = 3;  // Generous ration
-            break;
-        case 'half':
-            $foodPerPerson = 1;  // Half ration
-            break;
-        case 'full':
-        default:
-            $foodPerPerson = 2;  // Full ration (default)
-            break;
-    }
+
+
+
+
+
+    applyRations($playerState);
 
 
 // family conditions code
@@ -161,31 +141,6 @@ if (file_exists($conditionsPath)) {
     // Handle the case where conditions file is missing or inaccessible
     debugLog($playerState, "Error: Conditions file not found or not accessible.");
 }
-
-    // Get the party size (e.g., number of family members in $playerState)
-    // $partySize = count($playerState['family']);  // Assuming you have a family array in playerState
-    $partySize = $familyCount;
-    // Calculate total food consumption for the day
-    $totalFoodConsumed = $foodPerPerson * $partySize;
-    
-    // Check if the player has enough food
-    if (isset($playerState['inventory'][$itemName])) {
-        $foodItem = $playerState['inventory'][$itemName];
-        
-        // If the player has enough food, decrease the quantity
-        if ($foodItem['quantity'] >= $totalFoodConsumed) {
-            $foodItem['quantity'] -= $totalFoodConsumed;
-        } else {
-            // Not enough food, handle accordingly (e.g., set quantity to 0)
-            $foodItem['quantity'] = 0;
-            // You could also handle consequences of food shortage (e.g., morale impact)
-        }
-    
-        // Update the inventory in playerState
-        $playerState['inventory'][$itemName] = $foodItem;
-        
-
-         }
 
 
 // WEATHER SYSTEM
@@ -817,8 +772,7 @@ switch ($milestoneTodayType) {
             'miles_traveled' => $milesTraveled,  // Record the miles_traveled here
             'total_miles' => $newMile,
             'milestone' => $milestoneToday['title'] ?? null,
-            'notes' => "Today you kept on rolling without a milesone. You travelled " . $milesTraveled . " miles, and ate " . $totalFoodConsumed . "lbs of food."
-        ];
+            'notes' => "Today you kept on rolling without a milestone. You travelled " . $milesTraveled . " miles, and ate " . $playerState['foodConsumedToday'] . " lbs of food."        ];
     }
 
     // Update player state
