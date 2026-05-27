@@ -1,18 +1,13 @@
 <?php
-// game_engine.php
+// game_functions.php
+// Shared helper functions used across the engine.
+// These functions only modify $playerState — no DB writes, no HTML output.
 
-// Assuming you're using $playerRow in game_engine.php
-if (isset($playerRow['player_state'])) {
-    // Access player_state fields safely now
-    $playerState = $playerRow['player_state'];
-    // Example:
-    $day = $playerState['day'];
-    $mile = $playerState['mile'];
-    // Further logic can follow
-} else {
-    echo "Error: player_state is not defined.";
-    // You might want to handle this situation or set a default value
+// ---------------------------------------------------------------------------
+// debugLog
+// Adds a debug message to $playerState['debug']
+// In production, stop rendering this array. The engine code stays the same.
+// ---------------------------------------------------------------------------
+function debugLog(&$playerState, $message) {
+    $playerState['debug'][] = $message;
 }
-
-
-?>
