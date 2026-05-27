@@ -70,17 +70,17 @@ if (file_exists($terrainPath)) {
                 if (is_string($section['terrain'])) {
                     $terrainType = $section['terrain'];
                 } else {
-                    echo "Error: Terrain type for mile $currentMile is not a valid string.\n";
+                    debugLog($playerState, "Error: Terrain type for mile $currentMile is not a valid string.");
                 }
                 $altitude = $section['altitude'] ?? 'low'; 
                 break;  // Exit the loop once the correct terrain is found
             }
         }
     } else {
-        echo "Invalid terrain data or empty terrain array.\n";
+        debugLog($playerState, "Error: Invalid terrain data or empty terrain array.");
     }
 } else {
-    echo "Terrain file not found or not accessible.\n";
+    debugLog($playerState, "Error: Terrain file not found or not accessible.");
     $terrain = []; // Default empty array
 }
 
@@ -93,7 +93,7 @@ if (file_exists($terrainPath)) {
             $milestonesContent = file_get_contents($milestonesPath);
             $milestones = $milestonesContent !== false ? json_decode($milestonesContent, true) : [];
         } else {
-            echo "Milestones file not found or not accessible.";
+            debugLog($playerState, "Error: Milestones file not found or not accessible.");
             $milestones = []; // Default empty array
         }
 
@@ -114,7 +114,7 @@ if (file_exists($terrainPath)) {
             $weatherTypesContent = file_get_contents($weatherTypesPath);
             $weatherTypes = $weatherTypesContent !== false ? json_decode($weatherTypesContent, true) : [];
         } else {
-            echo "Weather Types file not found or not accessible.";
+            debugLog($playerState, "Error: Weather Types file not found or not accessible.");
             // Default fallback if the file doesn't exist
             $weatherTypes = [
                 "sunny" => [
@@ -186,7 +186,7 @@ if (file_exists($terrainPath)) {
     $newDelayState = $playerRow['delay_status'];
 
         
-echo "{$playerState['terrainCurrent']}";
+debugLog($playerState, "Current terrain: " . $playerState['terrainCurrent']);
        
     }
    
@@ -247,7 +247,7 @@ if (file_exists($conditionsPath)) {
 
     // If decoding fails, handle it
     if ($conditionsList === null) {
-        echo "Error: Failed to decode conditions.json.";
+        debugLog($playerState, "Error: Failed to decode conditions.json.");
         $conditionsList = []; // Default to an empty array if decoding fails
     }
 
@@ -258,7 +258,7 @@ if (file_exists($conditionsPath)) {
         
         // Check if decoding was successful
         if ($playerState['family'] === null) {
-            echo "Error: Failed to decode family data from JSON.";
+            debugLog($playerState, "Error: Failed to decode family data from JSON.");
             return;
         }
     }
@@ -339,11 +339,11 @@ if (file_exists($conditionsPath)) {
         $playerState['family'] = json_encode($playerState['family']);  // Convert array back to JSON
 
     } else {
-        echo "Error: Family data is missing or not properly formatted.";
+        debugLog($playerState, "Error: Family data is missing or not properly formatted.");
     }
 } else {
     // Handle the case where conditions file is missing or inaccessible
-    echo "Conditions file not found or not accessible.";
+    debugLog($playerState, "Error: Conditions file not found or not accessible.");
 }
 
     // Get the party size (e.g., number of family members in $playerState)
@@ -379,7 +379,7 @@ if (file_exists($conditionsPath)) {
             $weatherMonthsContent = file_get_contents($weatherMonthsPath);
             $weatherMonths = $weatherMonthsContent !== false ? json_decode($weatherMonthsContent, true) : [];
         } else {
-            echo "Weather Months file not found or not accessible.";
+            debugLog($playerState, "Error: Weather Months file not found or not accessible.");
             // Default fallback to May if the file doesn't exist
             $weatherMonths = [
                 "May" => [
@@ -516,6 +516,8 @@ if (file_exists($conditionsPath)) {
     // check if First day
     } elseif ($playerState['mile'] == 0 && $playerState['day'] == 1) {
         // Handle first day store logic
+
+        // TODO: delivery layer — move all store/UI HTML below this line to templates
         echo "Welcome to Independence, Missouri! Here's your first chance to stock up on supplies.\n";
         $milestoneToday = null;
         $milestoneTodayID = null;
@@ -652,9 +654,9 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
         if (is_array($milestones) && !empty($milestones)) {
         foreach ($milestones as $milestone) {
         if ($milestone['mile'] === $playerState['mile']) {
-            echo "You are at: " . $milestone['title'] . "<br>";
-            echo "Description: " . $milestone['description'] . "<br>";
-            echo "Extended Description: " . $milestone['extended_description'] . "<br>";
+            debugLog($playerState, "Delay stop at: " . $milestone['title']);
+            debugLog($playerState, "Description: " . $milestone['description']);
+            debugLog($playerState, "Extended description: " . $milestone['extended_description']);
 
 
 
@@ -674,7 +676,7 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
                 }
             }
         } else {
-            echo "Milestones data is missing or invalid.";
+            debugLog($playerState, "Error: Milestones data is missing or invalid.");
 
              $playerState['log'][] = [
                 'day' => $playerState['day'],
@@ -837,7 +839,7 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
                 
                 // Check if decoding was successful
                 if ($playerState['family'] === null) {
-                    echo "Error: Failed to decode family data from JSON.";
+                    debugLog($playerState, "Error: Failed to decode family data from JSON.");
                     return;
                 }
             }
@@ -856,7 +858,7 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
                 // After modifications, re-encode family data back to JSON before saving it
                 $playerState['family'] = json_encode($playerState['family']);
             } else {
-                echo "Error: Family data is missing or corrupted.";
+                debugLog($playerState, "Error: Family data is missing or corrupted.");
             }
     
         } else {
@@ -933,14 +935,12 @@ switch ($milestoneTodayType) {
             $ferryDelay = $crossing['ferry_delay'] ?? 1;  // Delay for ferrying
 
             // Display the crossing options (just for debugging)
-            echo "<ul>";
-            echo "<li>Crossing options: " . implode(', ', $crossingOptions) . "</li>";
-            echo "<li>Ferry base cost: $$ferryBaseCost</li>";
-            echo "<li>Ford success chance: " . ($fordRisk * 100) . "%</li>";
-            echo "<li>Ford delay: $fordDelay days</li>";
-            echo "<li>Float delay: $floatDelay days</li>";
-            echo "<li>Ferry delay: $ferryDelay days</li>";
-            echo "</ul>";
+            debugLog($playerState, "River crossing options: " . implode(', ', $crossingOptions));
+            debugLog($playerState, "Ferry base cost: $ferryBaseCost");
+            debugLog($playerState, "Ford success chance: " . ($fordRisk * 100) . "%");
+            debugLog($playerState, "Ford delay: $fordDelay days");
+            debugLog($playerState, "Float delay: $floatDelay days");
+            debugLog($playerState, "Ferry delay: $ferryDelay days");
 
 
             // now do a switch for how to cross river
@@ -958,7 +958,7 @@ switch ($milestoneTodayType) {
                 'notes' => "You reached the " . $milestoneToday['title'] . ". " . $milestoneToday['extended_description'] . " You were moved by it's natural beauty and your morale improved by " . $milestoneMoraleMod . " points."
             ];
         } else {
-            echo "No crossing data available for this river.<br>";
+            debugLog($playerState, "Error: No crossing data available for this river.");
         }   
         break;
 
@@ -1148,7 +1148,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
 
     $stmt = $conn->prepare($query);
     if ($stmt === false) {
-        echo "<p>Error preparing statement: " . htmlspecialchars($conn->error) . "</p>";
+        debugLog($playerState, "Error preparing statement: " . $conn->error);
         return;
     }
 
@@ -1176,7 +1176,7 @@ function updatePlayerState($player_id, $playerState, $conn) {
     if ($stmt->execute()) {
         // Successful—no need to echo every time
     } else {
-        echo "<p>Error executing query: " . htmlspecialchars($stmt->error) . "</p>";
+        debugLog($playerState, "Error executing query: " . $stmt->error);
     }
 }
 
