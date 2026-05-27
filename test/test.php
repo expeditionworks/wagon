@@ -5,7 +5,7 @@
 include_once(__DIR__ . '/../engine/game_engine.php'); // Main game engine (which already includes the necessary modules)
 
 // Test with a specific player ID (for testing purposes)
-$player_id = 1;  // Make sure this player exists in your database
+$player_id = isset($_GET['player_id']) ? (int)$_GET['player_id'] : 1;
 
 // Step 1: Run the game engine for the player (simulating one turn)
 $playerState = getPlayerState($player_id, $conn);
@@ -18,14 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pending_action_type']
         $result = processPurchase($playerState, $_POST['store_item'], (int)$_POST['store_qty'], $storeItems);
         updatePlayerState($player_id, $playerState, $conn);
         // Pass message back to store display
-        header('Location: test.php?store_message=' . urlencode($result['message']) . '&store_success=' . ($result['success'] ? '1' : '0'));
-        exit;
+        header('Location: /test/test.php?player_id=' . $player_id . '&store_message=' . urlencode($result['message']) . '&store_success=' . ($result['success'] ? '1' : '0'));        exit;
     }
     // Handle other decisions
     $playerState['pending_action']['chosen_option'] = $_POST['chosen_option'] ?? null;
     handlePendingAction($playerState, $player_id, $conn);
     updatePlayerState($player_id, $playerState, $conn);
-    header('Location: test.php');
+    header('Location: /test/test.php?player_id=' . $player_id);
     exit;
 }
 
@@ -38,7 +37,7 @@ if (isset($_POST['change_ration'])) {
         $stmt->bind_param('si', $newRation, $player_id);
         $stmt->execute();
     }
-    header('Location: test.php');
+    header('Location: /test/test.php?player_id=' . $player_id);
     exit;
 }
 
@@ -107,7 +106,7 @@ if (isset($_GET['admin_reset'])) {
     $stmt = $conn->prepare('UPDATE player_state SET day=?, mile=?, morale=100, dollars=?, log="[]", last_log_item=NULL, delay_days=0, delay_status="completed", miles_traveled=0, weather=NULL, pending_action=NULL, game_over=0, current_trail=?, family=?, inventory=? WHERE player_id=1');
     $stmt->bind_param('iiisss', $resetDay, $resetMile, $resetDollars, $resetTrail, $family, $inventory);
     $stmt->execute();
-    header('Location: test.php');
+    header('Location: /test/test.php?player_id=' . $player_id);
     exit;
 }
 
