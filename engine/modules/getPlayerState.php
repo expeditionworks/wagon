@@ -103,6 +103,7 @@ function getPlayerState($player_id, $conn) {
         'pending_action' => !empty($playerRow['pending_action'])
                             ? json_decode($playerRow['pending_action'], true)
                             : null,
+        'game_over'      => $playerRow['game_over'] ?? 0, 
         'debug'          => []
     ];
 }

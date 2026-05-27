@@ -14,8 +14,13 @@ function handleMilestones(&$playerState, $previousMile) {
     $milestoneTodayDelayDay = 0;
     $milestoneMoraleMod = 0;
 
-    // Find milestone crossed today
+ // Find milestone crossed today — only check milestones on current trail
+    $currentTrail = $playerState['current_trail'] ?? 'oregon';
     foreach ($playerState['milestones'] as $milestone) {
+        $milestoneTrails = $milestone['trail'] ?? ['oregon'];
+        if (!in_array($currentTrail, $milestoneTrails)) {
+            continue; // Skip milestones not on current trail
+        }
         if ($milestone['mile'] > $previousMile && $milestone['mile'] <= $newMile) {
             $milestoneToday = $milestone;
             $milestoneTodayTitle = $milestone['title'];
@@ -135,6 +140,8 @@ function handleMilestones(&$playerState, $previousMile) {
                 'milestone'     => $milestoneTodayTitle,
                 'notes'         => "You reached " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " You made it!"
             ];
+            $playerState['game_over'] = true;
+            debugLog($playerState, "Game complete — reached " . $milestoneTodayTitle);
             break;
 
         default:

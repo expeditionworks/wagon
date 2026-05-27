@@ -43,7 +43,8 @@ if (!empty($playerState['pending_action'])) {
                 weather         = ?,
                 delay_status    = ?,
                 family          = ?,
-                pending_action  = ?
+                pending_action  = ?,
+                game_over       = ?
               WHERE player_id   = ?";
 
     $stmt = $conn->prepare($query);
@@ -51,9 +52,10 @@ if (!empty($playerState['pending_action'])) {
         debugLog($playerState, "Error preparing statement: " . $conn->error);
         return;
     }
+    $gameOver = $playerState['game_over'] ?? 0;
 
-$stmt->bind_param(
-        'iissssssssssssi',
+    $stmt->bind_param(
+        'iissssssssssssii',
         $playerState['day'],
         $playerState['mile'],
         $playerState['morale'],
@@ -68,6 +70,7 @@ $stmt->bind_param(
         $newDelayState,
         $newFamilyUpdate,
         $pendingActionJson,
+        $gameOver,
         $player_id
     );
 
