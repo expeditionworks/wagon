@@ -28,7 +28,12 @@ function applyRations(&$playerState) {
     }
 
     // Count family members
-    $familyCount = is_array($playerState['family']) ? count($playerState['family']) : 2;
+    // Ensure family is an array before counting
+    $family = $playerState['family'];
+    if (is_string($family)) {
+        $family = json_decode($family, true) ?? [];
+    }
+    $familyCount = is_array($family) && count($family) > 0 ? count($family) : 2;
     $totalFoodConsumed = $foodPerPerson * $familyCount;
 
     // Deduct food from inventory
