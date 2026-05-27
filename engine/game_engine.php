@@ -9,7 +9,7 @@ include_once(__DIR__ . '/modules/updatePlayerState.php'); // DB write — end of
 include_once(__DIR__ . '/modules/applyWeather.php'); // Weather calculation
 include_once(__DIR__ . '/modules/applyRations.php'); // Food consumption
 include_once(__DIR__ . '/modules/applyConditions.php'); // Family conditions
-
+include_once(__DIR__ . '/modules/movePlayer.php'); // Movement calculation
 
 
 
@@ -276,92 +276,12 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
     } else {
         
 // this bit if if we move
-
-    $baseMiles = 15;  // Default miles traveled without adjustments
-    
-    // Define altitude wind modifiers (can be adjusted as needed)
-    $altitudeModifiers = [
-        'low' => 0.9,
-        'medium' => 1.0,
-        'high' => 1.2
-    ];
-   
-    // Adjust based on terrain type
-    $terrainModifiers = [
-        '' => 1.0,
-        'plains' => 1.2,
-        'rolling hills' => 1.0,
-        'mountains' => 0.8,
-        'valleys' => 1.0,
-        'river valley' => 1.0,
-        'desert' => 0.7
-    ];
-
-
-    // Get the wind modifier for the terrain type (default to 1.0 if terrain type not found)
-    $terrainWindModifier = $terrainModifiers[$playerState['terrainCurrent']] ?? 1; // Default to 1.0 if not found
-
-    // Get the wind modifier for altitude (default to 1.0 if altitude type not found)
-    $altitudeWindModifier = $altitudeModifiers[$playerState['altitude']] ?? 1.0;
-    
-    // Introduce some randomness (e.g., between 0.95 and 1.05)
-    $randomFactor = mt_rand(95, 105) / 100;  // Random value between 0.95 and 1.05
-
-    // Get the modifier based on the terrain type
-    $terrainMod = ($terrainModifiers[$playerState['terrainCurrent']] ?? 1.0) * $randomFactor;  // Default to 1 if terrain is unknown
+    movePlayer($playerState);
+    $milesTraveled = $playerState['miles_traveled'];
+    $newMile = $playerState['mile'];
 
     
-    // Adjust based on difficulty setting
-    $difficultyMod = [
-        'easy' => 1.1,
-        'medium' => 1.0,
-        'hard' => 0.9
-    ];
-    $difficultyMultiplier = $difficultyMod[$playerState['difficulty']] ?? 1.0;  // Default to 1 if difficulty is unknown
-    // Adjust the morale modifier based on morale value
-    $morale = $playerRow['morale'] ?? 100;
-    $moraleMod = 1.0;
-    if ($morale >= 90) {
-        $moraleMod *= 1.1;  // Increase speed by 10% if morale is between 90-100
-    } elseif ($morale >= 50) {
-        $moraleMod *= 1.0;  // No effect on speed if morale is between 50-89
-    } else {
-        $moraleMod *= 0.8;  // Reduce speed by 20% if morale is below 50
-    }
 
-    // oxen
-    $oxenNumber = $playerState['inventory']['Oxen']['quantity'] ?? 6;  // Default to 6 if 'oxen' is not set
-    
-    // Initialize oxen modifier
-    $oxenMod = 1.0;  // Default: no change in distance
-    
-    // Adjust oxen modifier based on the number of oxen
-    if ($oxenNumber >= 8) {
-        $oxenMod *= 1.2;  // More than enough oxen, no reduction, possibly increase speed
-    } elseif ($oxenNumber >= 6) {
-        $oxenMod *= 1.0;  // Adequate number of oxen, no change
-    } elseif ($oxenNumber >= 3) {
-        $oxenMod *= 0.8;  // Less than enough, some reduction in speed
-    } elseif ($oxenNumber >= 1) {
-        $oxenMod *= 0.5;  // Very few oxen, significant reduction in speed
-    } else {
-        $oxenMod *= 0.0;  // No oxen, no movement possible
-    }
-
-    // Calculate initial miles traveled with adjustments
-    $adjusted_distance = round($baseMiles * $difficultyMultiplier * $terrainMod * $conditionTravelMod * $precipitationPenalty * $moraleMod * $oxenMod);
-    $milesTraveled = round(max( $adjusted_distance * $wind_modifier, 0)); //add wind modifier
-
-    
-    // Debug: Output the miles traveled calculation
-    debugLog($playerState, "Base Miles: $baseMiles");
-    debugLog($playerState, "Terrain Modifier: $terrainMod");
-    debugLog($playerState, "Difficulty Modifier: $difficultyMultiplier");
-    debugLog($playerState, "Morale Modifier: $moraleMod");
-    debugLog($playerState, "Oxen Modifier: $oxenMod");
-    debugLog($playerState, "Miles Traveled (adjusted): $adjusted_distance");
-    debugLog($playerState, "Miles Traveled (with wind): $milesTraveled");
-    debugLog($playerState, "Wind type: $wind_type");
 
 
     // Store miles traveled in playerState
