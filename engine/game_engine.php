@@ -4,6 +4,7 @@
 // Include the necessary files for database connection and game logic
 include_once(__DIR__ . '/db_connection.php'); // Database connection
 include_once(__DIR__ . '/game_functions.php'); // Shared helper functions
+include_once(__DIR__ . '/modules/updatePlayerState.php'); // DB write — end of turn only
 
 function getPlayerState($player_id, $conn) {
     // Modify the query to fetch start_date from the players table
@@ -1111,74 +1112,7 @@ switch ($milestoneTodayType) {
 
 
 
-function updatePlayerState($player_id, $playerState, $conn) {
-    // Prepare the updated player state for storage
-    $inventoryJson     = json_encode($playerState['inventory']);
-    $logJson           = json_encode($playerState['log']);
-    $lastLogItem       = !empty($playerState['log'])
-                        ? json_encode(end($playerState['log']))
-                        : json_encode(['notes' => 'No log for this turn']);
-    $currentTrail      = $playerState['current_trail'];
-    $delayDays         = $playerState['delay_days'];
-    $milesTraveled     = $playerState['miles_traveled'] ?? 0;
-    $weatherJson       = json_encode($playerState['weatherThisTurn']);
-    $newDelayState     = $playerState['delay_status'];
-    $newFamilyUpdate   = json_encode($playerState['family']);
-    // Encode pending_action or null
-    $pendingActionJson = $playerState['pending_action'] !== null
-                        ? json_encode($playerState['pending_action'])
-                        : null;
 
-    // Build the SQL, now including pending_action
-    $query = "UPDATE player_state SET 
-                day             = ?,
-                mile            = ?,
-                morale          = ?,
-                inventory       = ?,
-                log             = ?,
-                current_trail   = ?,
-                last_log_item   = ?,
-                delay_days      = ?,
-                miles_traveled  = ?,
-                weather         = ?,
-                delay_status    = ?,
-                family          = ?,
-                pending_action  = ?
-              WHERE player_id      = ?";
-
-    $stmt = $conn->prepare($query);
-    if ($stmt === false) {
-        debugLog($playerState, "Error preparing statement: " . $conn->error);
-        return;
-    }
-
-    // Bind parameters (14 total: day, mile, morale, inventory, log,
-    // current_trail, last_log_item, delay_days, miles_traveled,
-    // weather, delay_status, family, pending_action, player_id)
-    $stmt->bind_param(
-        'iissssssssssis',
-        $playerState['day'],          // i
-        $playerState['mile'],         // i
-        $playerState['morale'],       // s (or i if you prefer)
-        $inventoryJson,               // s
-        $logJson,                     // s
-        $currentTrail,                // s
-        $lastLogItem,                 // s
-        $delayDays,                   // s (or i)
-        $milesTraveled,               // s (or i)
-        $weatherJson,                 // s
-        $newDelayState,               // s
-        $newFamilyUpdate,             // s
-        $pendingActionJson,           // s
-        $player_id                    // i
-    );
-
-    if ($stmt->execute()) {
-        // Successful—no need to echo every time
-    } else {
-        debugLog($playerState, "Error executing query: " . $stmt->error);
-    }
-}
 
 
 
