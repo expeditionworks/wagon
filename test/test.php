@@ -78,6 +78,48 @@ if (!empty($playerState['pending_action'])) {
     exit;
 }
 
+// Handle admin reset
+if (isset($_GET['admin_reset'])) {
+    $resetMile = (int)($_GET['mile'] ?? 0);
+    $resetDay = (int)($_GET['day'] ?? 1);
+    $resetDollars = (int)($_GET['dollars'] ?? 800);
+    $resetTrail = $_GET['trail'] ?? 'oregon';
+    $resetFood = (int)($_GET['food'] ?? 200);
+    $family = json_encode([
+        ['first_name'=>'John','role'=>'leader','condition'=>'healthy','health'=>100,'morale'=>100,'skills'=>['hunting','farming'],'deceased'=>false],
+        ['first_name'=>'Mary','role'=>'spouse','condition'=>'healthy','health'=>100,'morale'=>100,'skills'=>['cooking','medicine'],'deceased'=>false],
+        ['first_name'=>'Billy','role'=>'child','condition'=>'healthy','health'=>100,'morale'=>100,'skills'=>[],'deceased'=>false]
+    ]);
+    $inventory = json_encode(['Oxen'=>['quantity'=>6,'durability'=>100],'Food'=>['quantity'=>$resetFood,'durability'=>null],'Ammunition'=>['quantity'=>100,'durability'=>null],'Clothes'=>['quantity'=>4,'durability'=>100],'Tools'=>['quantity'=>1,'durability'=>100],'WagonRepairKit'=>['quantity'=>1,'durability'=>100]]);
+    $stmt = $conn->prepare('UPDATE player_state SET day=?, mile=?, morale=100, dollars=?, log="[]", last_log_item=NULL, delay_days=0, delay_status="completed", miles_traveled=0, weather=NULL, pending_action=NULL, game_over=0, current_trail=?, family=?, inventory=? WHERE player_id=1');
+    $stmt->bind_param('iiisss', $resetDay, $resetMile, $resetDollars, $resetTrail, $family, $inventory);
+    $stmt->execute();
+    header('Location: test.php');
+    exit;
+}
+
+
+// Admin panel DELETE LATER
+echo "<div style='background:#f0f0f0;padding:10px;margin-bottom:20px;font-size:12px;'>";
+echo "<strong>Admin Controls</strong> | ";
+echo "<a href='test.php?admin_reset=1&mile=0&day=1&dollars=800&food=200&trail=oregon'>Reset Day 1</a> | ";
+echo "<a href='test.php?admin_reset=1&mile=270&day=20&dollars=800&food=200&trail=oregon'>Fort Kearny</a> | ";
+echo "<a href='test.php?admin_reset=1&mile=1100&day=70&dollars=400&food=500&trail=oregon'>Parting of Ways</a> | ";
+echo "<a href='test.php?admin_reset=1&mile=1300&day=50&dollars=400&food=500&trail=oregon'>Fort Hall</a> | ";
+echo "<a href='test.php?admin_reset=1&mile=1900&day=100&dollars=400&food=500&trail=california'>SF Bay</a> | ";
+echo "<form style='display:inline' method='GET'>";
+echo "<input type='hidden' name='admin_reset' value='1'>";
+echo "Mile:<input type='number' name='mile' value='0' style='width:60px'> ";
+echo "Day:<input type='number' name='day' value='1' style='width:40px'> ";
+echo "Food:<input type='number' name='food' value='200' style='width:60px'> ";
+echo "Dollars:<input type='number' name='dollars' value='800' style='width:60px'> ";
+echo "Trail:<select name='trail'><option value='oregon'>Oregon</option><option value='california'>California</option></select> ";
+echo "<button type='submit'>Jump To</button>";
+echo "</form>";
+echo "</div>";
+
+
+
 // If player state is retrieved successfully
 if ($playerState) {
     // Step 2: Process the player's movement and check milestones

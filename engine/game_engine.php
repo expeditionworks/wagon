@@ -80,109 +80,27 @@ $precipitationPenalty = $playerState['precipitationPenalty'];
 
         
         
-// check if First day
+  // check if First day — set up Independence store via pending_action
     if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
-        // Handle first day store logic
-
-        // TODO: delivery layer — move all store/UI HTML below this line to templates
-        echo "Welcome to Independence, Missouri! Here's your first chance to stock up on supplies.\n";
-        $milestoneToday = null;
-        $milestoneTodayID = null;
-        $milestoneTodayTitle = null;
-        $milestoneToday = $playerState['milestones'][0];  // Get the first milestone (Independence)
-
-        // Set the first milestone to Independence, MO (first entry in the milestones array)
-        if ($playerState['mile'] == 0 && $playerState['day'] == 1) {
-            $milestoneToday = $playerState['milestones'][0];  // Independence, MO is the first milestone
-            $milestoneTodayTitle = $milestoneToday['title'];  // Correctly access the 'title' field of the milestone
-
-// we should see if we can modularize this code since it shows up in a few places
-            
-            // Check if this milestone has a store
-            if (isset($milestoneToday['store']) && $milestoneToday['store'] === true) {
-                // Display the store items from Independence, MO
-                $milestoneStore = $milestoneToday['items_for_sale'];
-        
-                // Loop through the items for sale and display them
-                echo "<h4>" . $milestoneTodayTitle . " Store</h4>\r<ul>";      
-                foreach ($milestoneStore as $itemName => $itemDetails) {
-                    echo "<li>" . $itemName . "</li>";
-                    echo "<ul>";
-                    echo "<li>Description: " . $itemDetails['description'] . "</li>";
-                    echo "<li>Price: $" . $itemDetails['base_price'] . "</li>";
-                    echo "<li>Stock limit: " . $itemDetails['stock_limit'] . "</li>";
-                    echo "</ul>";
-                }
-                echo "</ul>";
-
-
-                
-
-
-
-// Display the store items and handle the purchase form
-function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
-    // Assuming $milestoneStore is already set with items for sale (and $playerState contains the player's data)
+        $milestoneToday = $playerState['milestones'][0]; // Independence, MO
+        $playerState['pending_action'] = [
+            'type'      => 'store',
+            'milestone' => $milestoneToday['title'],
+            'message'   => $milestoneToday['extended_description'] ?? '',
+            'items'     => $milestoneToday['items_for_sale'] ?? []
+        ];
+        $playerState['log'][] = [
+            'day'            => $playerState['day'],
+            'miles_traveled' => 0,
+            'total_miles'    => 0,
+            'milestone'      => $milestoneToday['title'],
+            'notes'          => "You arrived at " . $milestoneToday['title'] . ". Stock up on supplies before heading west."
+        ];
+        $playerState['day'] += 1;
+        updatePlayerState($player_id, $playerState, $conn);
+        return $playerState;
     
-    // Check if the milestone has a store
-    if (isset($milestoneStore) && !empty($milestoneStore)) {
-        echo "<h3>Store Items</h3><ul>";
 
-        // Display the store items
-        foreach ($milestoneStore as $itemName => $itemDetails) {
-            echo "<li><strong>{$itemName}</strong><br>{$itemDetails['description']}<br>Price: \${$itemDetails['base_price']}<br>Stock: {$itemDetails['stock_limit']}</li>";
-        }
-        echo "</ul>";
-
-        // Process purchase if form is submitted
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $itemName = $_POST['itemName'];  // Item selected by the player
-            $quantity = $_POST['quantity'];  // Quantity the player wants to buy
-
-            // Call the purchase function to process the transaction
-            $purchaseMessage = processPurchase($itemName, $quantity, $playerState, $milestoneStore);
-
-            // Display the result message
-            echo "<p>$purchaseMessage</p>";
-        }
-
-        // Display the purchase form
-        echo '<h4>Make a Purchase</h4>';
-        echo '<form method="POST" action="test.php">
-            <label for="itemName">Select Item:</label>
-            <select name="itemName" id="itemName">';
-        foreach ($milestoneStore as $itemName => $itemDetails) {
-            echo "<option value=\"$itemName\">$itemName</option>";
-        }
-        echo '</select><br>';
-
-        echo '<label for="quantity">Quantity:</label>
-            <input type="number" name="quantity" id="quantity" min="1" value="1" required><br>
-            <input type="submit" value="Buy Item">
-        </form>';
-    } else {
-        echo "<p>No store available at this milestone.</p>";
-    }
-}            
-
-
-                
-            } else {
-                echo "No store available at this milestone.\n";
-            }
-        }
-
-            $playerState['log'][] = [
-                'day' => $playerState['day'],
-                'miles_traveled' => 0,
-                'total_miles' => $playerState['mile'],
-                'notes' => "You started your day at " . $milestoneTodayTitle . " with nothing, and now you are ready to go on the trail. Today was a good day purchasing"
-            ];
-        
-            $playerState['day'] += 1; // Increment the day even when paused
-            updatePlayerState($player_id, $playerState, $conn);  // Update player state in DB with the new delay_days value
-            return $playerState;  // Skip further movement and milestone checks       
-    
     } elseif ($playerState['delay_days'] > 0) {
     // Check if delay_days is greater than 0
 
