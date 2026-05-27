@@ -27,15 +27,17 @@ function applyRations(&$playerState) {
             break;
     }
 
-    // Count family members
+    // Count living family members only
     $family = $playerState['family'];
     if (is_string($family)) {
         $family = json_decode($family, true) ?? [];
     }
-    $familyCount = is_array($family) && count($family) > 0 ? count($family) : 2;
+    $livingMembers = array_filter($family, fn($m) => !($m['deceased'] ?? false));
+    $familyCount = count($livingMembers) > 0 ? count($livingMembers) : 0;
     $totalFoodConsumed = $foodPerPerson * $familyCount;
 
     // Deduct food from inventory
+    $starving = false;
     if (isset($playerState['inventory'][$itemName])) {
         if ($playerState['inventory'][$itemName]['quantity'] >= $totalFoodConsumed) {
             // Enough food
@@ -45,31 +47,39 @@ function applyRations(&$playerState) {
             $totalFoodConsumed = $playerState['inventory'][$itemName]['quantity'];
             $playerState['inventory'][$itemName]['quantity'] = 0;
             $foodMoraleMod = -5;
+            $starving = true;
             debugLog($playerState, "Warning: Not enough food. Party goes hungry.");
         }
     }
 
-    // Starvation check — runs every turn when food is zero
-    if (($playerState['inventory'][$itemName]['quantity'] ?? 0) == 0 && $totalFoodConsumed == 0) {
-        $foodMoraleMod = -5;
-        $family = is_string($playerState['family'])
-            ? json_decode($playerState['family'], true) ?? []
-            : $playerState['family'];
-        if (is_array($family)) {
-            foreach ($family as &$familyMember) {
-                if (!($familyMember['deceased'] ?? false)) {
-                    $familyMember['health'] -= 10;
-                    $familyMember['condition'] = 'malnourished';
-                    if ($familyMember['health'] <= 0) {
-                        $familyMember['health'] = 0;
-                        $familyMember['deceased'] = true;
-                        debugLog($playerState, $familyMember['first_name'] . " has died of starvation.");
-                    }
+    // Mark starving if food is zero
+    if (($playerState['inventory'][$itemName]['quantity'] ?? 1) == 0) {
+        $starving = true;
+    }
+
+    // Apply starvation effects to living family members
+    if ($starving && $familyCount > 0) {
+        foreach ($family as &$familyMember) {
+            if (!($familyMember['deceased'] ?? false)) {
+                $familyMember['health'] -= 10;
+                $familyMember['condition'] = 'malnourished';
+                if ($familyMember['health'] <= 0) {
+                    $familyMember['health'] = 0;
+                    $familyMember['deceased'] = true;
+                    $playerState['log'][] = [
+                        'day'            => $playerState['day'],
+                        'miles_traveled' => 0,
+                        'total_miles'    => $playerState['mile'],
+                        'milestone'      => null,
+                        'notes'          => $familyMember['first_name'] . " has died of starvation. The loss weighs heavily on everyone."
+                    ];
+                    $playerState['morale'] = max(0, ($playerState['morale'] ?? 100) - 20);
+                    debugLog($playerState, $familyMember['first_name'] . " has died of starvation.");
                 }
             }
-            $playerState['family'] = $family;
         }
-        debugLog($playerState, "Warning: No food. Party starving.");
+        $playerState['family'] = $family;
+        debugLog($playerState, "Warning: Party starving.");
     }
 
     // Store for other modules to use
@@ -77,6 +87,6 @@ function applyRations(&$playerState) {
     $playerState['foodMoraleMod'] = $foodMoraleMod;
     $playerState['familyCount'] = $familyCount;
 
-    debugLog($playerState, "Rations: " . $playerState['ration'] . ", Food consumed: " . $totalFoodConsumed . " lbs, Family: " . $familyCount);
+    debugLog($playerState, "Rations: " . $playerState['ration'] . ", Food consumed: " . $totalFoodConsumed . " lbs, Living family: " . $familyCount);
 }
 ?>

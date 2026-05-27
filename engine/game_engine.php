@@ -15,6 +15,10 @@ include_once(__DIR__ . '/modules/handleMilestones.php'); // Milestone detection 
 
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
+    // Check if game is already over from a previous turn
+    if (!empty($playerState['game_over'])) {
+        return $playerState;
+    }
     // Player movement: increment miles and days
     $previousMile = $playerState['mile'];
     // Retrieve the current mile
@@ -26,6 +30,26 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
 
 
     applyRations($playerState);
+    // Check if leader is deceased — game over
+    $family = $playerState['family'];
+    if (is_string($family)) {
+        $family = json_decode($family, true) ?? [];
+    }
+    $leader = array_filter($family, fn($m) => $m['role'] === 'leader');
+    $leader = reset($leader);
+    if ($leader && ($leader['deceased'] ?? false)) {
+        $playerState['log'][] = [
+            'day'            => $playerState['day'],
+            'miles_traveled' => 0,
+            'total_miles'    => $playerState['mile'],
+            'milestone'      => null,
+            'notes'          => "Your party has perished on the trail. The journey ends here at mile " . $playerState['mile'] . "."
+        ];
+        $playerState['game_over'] = true;
+        $playerState['day'] += 1;
+        updatePlayerState($player_id, $playerState, $conn);
+        return $playerState;
+    }
 
 
 // CONDITIONS SYSTEM
