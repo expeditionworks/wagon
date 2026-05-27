@@ -3,6 +3,7 @@
 
 // Include the necessary files for database connection and game logic
 include_once(__DIR__ . '/db_connection.php'); // Database connection
+include_once(__DIR__ . '/game_functions.php'); // Shared helper functions
 
 function getPlayerState($player_id, $conn) {
     // Modify the query to fetch start_date from the players table
