@@ -66,5 +66,49 @@ function applyWeather(&$playerState) {
     $playerState['precipitationPenalty']  = $precipitationPenalty;
 
     debugLog($playerState, "Weather: " . $weatherType . ", Temp: " . $temperature . "F, Wind: " . $windType . " at " . $randomWindSpeed . " mph, Precip: " . $precipitation);
-}
+
+// Apply weather health effects to living family members
+    $family = $playerState['family'];
+    if (is_string($family)) {
+        $family = json_decode($family, true) ?? [];
+    }
+    if (is_array($family)) {
+        foreach ($family as &$familyMember) {
+            if ($familyMember['deceased'] ?? false) continue;
+
+            // Cold and wet weather causes health risk
+            $healthRisk = 0;
+            if ($temperature < 30 && $precipitation === 'snow') {
+                $healthRisk = 5; // Blizzard conditions
+                $familyMember['condition'] = 'frostbitten';
+                debugLog($playerState, $familyMember['first_name'] . " is suffering in blizzard conditions.");
+            } elseif ($temperature < 40 && $precipitation === 'snow') {
+                $healthRisk = 3; // Cold and snowy
+                $familyMember['condition'] = 'ill';
+            } elseif ($temperature < 32) {
+                $healthRisk = 2; // Freezing
+                $familyMember['condition'] = 'ill';
+            } elseif ($precipitation === 'rain' && $temperature < 50) {
+                $healthRisk = 1; // Cold rain
+            }
+
+            if ($healthRisk > 0) {
+                $familyMember['health'] = max(0, $familyMember['health'] - $healthRisk);
+                if ($familyMember['health'] <= 0) {
+                    $familyMember['deceased'] = true;
+                    $playerState['log'][] = [
+                        'day'            => $playerState['day'],
+                        'miles_traveled' => 0,
+                        'total_miles'    => $playerState['mile'],
+                        'milestone'      => null,
+                        'notes'          => $familyMember['first_name'] . " has died from exposure to the elements."
+                    ];
+                    $playerState['morale'] = max(0, ($playerState['morale'] ?? 100) - 20);
+                    debugLog($playerState, $familyMember['first_name'] . " died from exposure.");
+                }
+            }
+        }
+        $playerState['family'] = $family;
+    }
+    }
 ?>
