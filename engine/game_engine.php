@@ -187,7 +187,15 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
 
         // Decrease the delay_days and log the delay message
         $playerState['delay_days'] -= 1;
-        $playerState['delay_status'] = 'active';
+            if ($playerState['delay_days'] <= 0) {
+                $playerState['delay_days'] = 0;
+                $playerState['delay_status'] = 'completed';
+            } else {
+                $playerState['delay_status'] = 'active';
+            }
+
+
+
         $milestones = $playerState['milestones'];
         if (is_array($milestones) && !empty($milestones)) {
         foreach ($milestones as $milestone) {

@@ -94,7 +94,6 @@ function getPlayerState($player_id, $conn) {
         'delay_days'     => $playerRow['delay_days'] ?? 0,
         'delay_status'   => $playerRow['delay_status'] ?? 'completed',
         'difficulty'     => $playerRow['difficulty'] ?? 'medium',
-        'oxen'           => $playerRow['oxen'] ?? 2,
         'miles_traveled' => $playerRow['miles_traveled'] ?? 0,
         'weatherLastTurn'=> $weatherLastTurn,
         'weatherThisTurn'=> $weatherLastTurn,
@@ -103,7 +102,7 @@ function getPlayerState($player_id, $conn) {
         'pending_action' => !empty($playerRow['pending_action'])
                             ? json_decode($playerRow['pending_action'], true)
                             : null,
-        'game_over'      => $playerRow['game_over'] ?? 0, 
+        'game_over'      => $playerRow['game_over'] ?? 0,    
         'debug'          => []
     ];
 }

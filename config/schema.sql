@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS player_state (
     morale INT DEFAULT 100,
     dollars DECIMAL(10,2) DEFAULT 800.00,
     ration_size VARCHAR(20) DEFAULT "full",
-    oxen INT DEFAULT 6,
     inventory JSON,
     family JSON,
     log JSON,
