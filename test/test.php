@@ -99,7 +99,7 @@ if (isset($_GET['admin_reset'])) {
 }
 
 
-// Admin panel DELETE LATER
+// Admin panel DELETE LATER 
 echo "<div style='background:#f0f0f0;padding:10px;margin-bottom:20px;font-size:12px;'>";
 echo "<strong>Admin Controls</strong> | ";
 echo "<a href='test.php?admin_reset=1&mile=0&day=1&dollars=800&food=200&trail=oregon'>Reset Day 1</a> | ";
@@ -303,7 +303,11 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 
     // Display log if any milestones are reached
     if (!empty($updatedPlayerState['log'])) {
-        echo "<p><strong>Log:</strong><br>" . implode("<br>", array_map(fn($log) => $log['notes'], $updatedPlayerState['log'])) . "</p>"; // Convert array to string for display
+        echo "<p><strong>Log:</strong></p><ul>";
+        foreach ($updatedPlayerState['log'] as $logEntry) {
+            echo "<li>" . htmlspecialchars($logEntry['notes'] ?? '') . "</li>";
+        }
+        echo "</ul>";    
     }
 
     // Display milestone-specific information

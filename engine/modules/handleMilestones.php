@@ -41,8 +41,9 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
             'miles_traveled'=> $milesTraveled,
             'total_miles'   => $playerState['mile'],
             'milestone'     => null,
-            'notes'         => "Today you kept on rolling without a milestone. You travelled " . $milesTraveled . " miles, and ate " . $playerState['foodConsumedToday'] . " lbs of food."
+            'notes'         => "Today you kept on rolling without a milestone. You travelled " . $milesTraveled . " miles, and ate " . $playerState['foodConsumedToday'] . " lbs of food." . (!empty($playerState['todayEventNarrative']) ? " " . $playerState['todayEventNarrative'] : "")
         ];
+        $playerState['todayEventNarrative'] = null;
         return;
     }
 
@@ -78,17 +79,24 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
             debugLog($playerState, "Store loaded from store_config for " . $milestoneId);
         }
 
+    $eventNote = !empty($playerState['todayEventNarrative']) ? " " . $playerState['todayEventNarrative'] : "";
+    $playerState['todayEventNarrative'] = null;
     // Handle milestone type
     switch ($milestoneTodayType) {
         case 'fort':
             $playerState['delay_days'] += $milestoneTodayDelayDay;
-            $playerState['log'][] = [
-                'day'           => $playerState['day'],
-                'miles_traveled'=> $milesTraveled,
-                'total_miles'   => $playerState['mile'],
-                'milestone'     => $milestoneTodayTitle,
-                'notes'         => "You reached " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " Your morale went up by " . $milestoneMoraleMod . " points. You decided to rest " . $milestoneTodayDelayDay . " days."
-            ];
+            $eventNote = !empty($playerState['todayEventNarrative']) 
+                        ? " " . $playerState['todayEventNarrative'] 
+                        : "";
+                    $playerState['log'][] = [
+                        'day'           => $playerState['day'],
+                        'miles_traveled'=> $milesTraveled,
+                        'total_miles'   => $playerState['mile'],
+                        'milestone'     => null,
+                        'notes'         => "Today you kept on rolling without a milestone. You travelled " . $milesTraveled . " miles, and ate " . $playerState['foodConsumedToday'] . " lbs of food." . $eventNote
+                    ];
+        // Clear event narrative
+        $playerState['todayEventNarrative'] = null;
             break;
 
         case 'river':
@@ -111,8 +119,8 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
                 'miles_traveled'=> $milesTraveled,
                 'total_miles'   => $playerState['mile'],
                 'milestone'     => $milestoneTodayTitle,
-                'notes'         => "You reached the " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " Your morale improved by " . $milestoneMoraleMod . " points."
-            ];
+                'notes' => "You reached the " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " Your morale improved by " . $milestoneMoraleMod . " points." . $eventNote            
+                ];
             break;
 
         case 'natural':
@@ -121,7 +129,7 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
                 'miles_traveled'=> $milesTraveled,
                 'total_miles'   => $playerState['mile'],
                 'milestone'     => $milestoneTodayTitle,
-                'notes'         => "You reached the " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " You were moved by its natural beauty and your morale improved by " . $milestoneMoraleMod . " points."
+                'notes' => "You reached the " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " Your morale improved by " . $milestoneMoraleMod . " points." . $eventNote
             ];
             break;
 
@@ -136,7 +144,7 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
                 'miles_traveled'=> $milesTraveled,
                 'total_miles'   => $playerState['mile'],
                 'milestone'     => $milestoneTodayTitle,
-                'notes'         => "You reached " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " You must choose your path."
+                'notes' => "You reached the " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " Your morale improved by " . $milestoneMoraleMod . " points." . $eventNote 
             ];
             break;
 
@@ -159,7 +167,7 @@ function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
                 'miles_traveled'=> $milesTraveled,
                 'total_miles'   => $playerState['mile'],
                 'milestone'     => $milestoneTodayTitle,
-                'notes'         => "You reached " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description']
+                'notes' => "You reached the " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " Your morale improved by " . $milestoneMoraleMod . " points." . $eventNote
             ];
             break;
     }
