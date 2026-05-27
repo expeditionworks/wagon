@@ -28,7 +28,6 @@ function applyRations(&$playerState) {
     }
 
     // Count family members
-    // Ensure family is an array before counting
     $family = $playerState['family'];
     if (is_string($family)) {
         $family = json_decode($family, true) ?? [];
@@ -39,14 +38,38 @@ function applyRations(&$playerState) {
     // Deduct food from inventory
     if (isset($playerState['inventory'][$itemName])) {
         if ($playerState['inventory'][$itemName]['quantity'] >= $totalFoodConsumed) {
+            // Enough food
             $playerState['inventory'][$itemName]['quantity'] -= $totalFoodConsumed;
         } else {
-            // Not enough food
+            // Not enough food — take what's left
             $totalFoodConsumed = $playerState['inventory'][$itemName]['quantity'];
             $playerState['inventory'][$itemName]['quantity'] = 0;
-            $foodMoraleMod = -5; // Morale hit for no food
+            $foodMoraleMod = -5;
             debugLog($playerState, "Warning: Not enough food. Party goes hungry.");
         }
+    }
+
+    // Starvation check — runs every turn when food is zero
+    if (($playerState['inventory'][$itemName]['quantity'] ?? 0) == 0 && $totalFoodConsumed == 0) {
+        $foodMoraleMod = -5;
+        $family = is_string($playerState['family'])
+            ? json_decode($playerState['family'], true) ?? []
+            : $playerState['family'];
+        if (is_array($family)) {
+            foreach ($family as &$familyMember) {
+                if (!($familyMember['deceased'] ?? false)) {
+                    $familyMember['health'] -= 10;
+                    $familyMember['condition'] = 'malnourished';
+                    if ($familyMember['health'] <= 0) {
+                        $familyMember['health'] = 0;
+                        $familyMember['deceased'] = true;
+                        debugLog($playerState, $familyMember['first_name'] . " has died of starvation.");
+                    }
+                }
+            }
+            $playerState['family'] = $family;
+        }
+        debugLog($playerState, "Warning: No food. Party starving.");
     }
 
     // Store for other modules to use
