@@ -37,5 +37,19 @@ CREATE TABLE IF NOT EXISTS player_state (
     FOREIGN KEY (player_id) REFERENCES players(id)
 );
 
+-- Game history table — records completed runs
+CREATE TABLE IF NOT EXISTS game_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    player_id INT NOT NULL,
+    outcome ENUM('success','death','abandoned') DEFAULT 'abandoned',
+    trail VARCHAR(50),
+    days_traveled INT DEFAULT 0,
+    miles_reached INT DEFAULT 0,
+    cause VARCHAR(100),
+    final_dollars DECIMAL(10,2) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (player_id) REFERENCES players(id)
+);
+
 INSERT IGNORE INTO players (id, name, email, delivery_method)
 VALUES (1, "Test Player", "test@test.com", "console");

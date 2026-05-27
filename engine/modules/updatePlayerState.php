@@ -5,7 +5,9 @@
 
 function updatePlayerState($player_id, $playerState, $conn) {
     $inventoryJson     = json_encode($playerState['inventory']);
-    $logJson           = json_encode($playerState['log']);
+    // Keep only the last 30 log entries to prevent DB bloat
+    $recentLog = array_slice($playerState['log'], -30);
+    $logJson   = json_encode($recentLog);    
     $lastLogItem       = !empty($playerState['log'])
                         ? json_encode(end($playerState['log']))
                         : json_encode(['notes' => 'No log for this turn']);
@@ -27,6 +29,7 @@ if (!empty($playerState['pending_action'])) {
             : null;
     }
 }
+
 
 
     $query = "UPDATE player_state SET 
@@ -78,4 +81,27 @@ if (!empty($playerState['pending_action'])) {
         debugLog($playerState, "Error executing query: " . $stmt->error);
     }
 }
+
+
+function recordGameHistory($player_id, $playerState, $outcome, $cause, $conn) {
+    $stmt = $conn->prepare(
+        "INSERT INTO game_history (player_id, outcome, trail, days_traveled, miles_reached, cause, final_dollars)
+         VALUES (?, ?, ?, ?, ?, ?, ?)"
+    );
+    if ($stmt === false) {
+        debugLog($playerState, "Error preparing game history statement: " . $conn->error);
+        return;
+    }
+    $trail        = $playerState['current_trail'] ?? 'oregon';
+    $days         = $playerState['day'] ?? 0;
+    $miles        = $playerState['mile'] ?? 0;
+    $dollars      = $playerState['dollars'] ?? 0;
+    $stmt->bind_param('issiisd', $player_id, $outcome, $trail, $days, $miles, $cause, $dollars);
+    if ($stmt->execute()) {
+        debugLog($playerState, "Game history recorded: $outcome — $cause");
+    } else {
+        debugLog($playerState, "Error recording game history: " . $stmt->error);
+    }
+}
+
 ?>

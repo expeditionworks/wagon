@@ -4,7 +4,7 @@
 // Modifies ONLY $playerState — no DB writes, no HTML output.
 // Store UI is flagged as pending_action for the delivery layer to handle.
 
-function handleMilestones(&$playerState, $previousMile) {
+function handleMilestones(&$playerState, $previousMile, $player_id, $conn) {
     $newMile = $playerState['mile'];
     $milesTraveled = $playerState['miles_traveled'];
     $milestoneToday = null;
@@ -141,6 +141,7 @@ function handleMilestones(&$playerState, $previousMile) {
                 'notes'         => "You reached " . $milestoneTodayTitle . ". " . $milestoneToday['extended_description'] . " You made it!"
             ];
             $playerState['game_over'] = true;
+            recordGameHistory($player_id, $playerState, 'success', $milestoneTodayTitle, $conn);
             debugLog($playerState, "Game complete — reached " . $milestoneTodayTitle);
             break;
 

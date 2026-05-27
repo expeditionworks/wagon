@@ -46,8 +46,9 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
             'milestone'      => null,
             'notes'          => "Your party has perished on the trail. The journey ends here at mile " . $playerState['mile'] . "."
         ];
-        $playerState['game_over'] = true;
+    $playerState['game_over'] = true;
         $playerState['day'] += 1;
+        recordGameHistory($player_id, $playerState, 'death', 'starvation', $conn);
         updatePlayerState($player_id, $playerState, $conn);
         return $playerState;
     }
@@ -254,7 +255,7 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
     // Calculate new mile
     $newMile = $previousMile + $milesTraveled;
 
- handleMilestones($playerState, $previousMile);
+handleMilestones($playerState, $previousMile, $player_id, $conn);
 
     // Update player state
     $playerState['mile'] = $newMile;

@@ -92,17 +92,27 @@ function handlePendingAction(&$playerState, $player_id, $conn) {
             $playerState['pending_action'] = null;
             break;
 
-        case 'fork':
+            case 'fork':
             $choice = $action['chosen_option'] ?? null;
             if ($choice) {
-                $playerState['current_trail'] = $choice;
+                // Map route choices back to valid trail identifiers
+                $trailMap = [
+                    'oregon'          => 'oregon',
+                    'california'      => 'california',
+                    'oregon_sublette' => 'oregon',
+                    'fort_bridger'    => 'oregon',
+                    'barlow_road'     => 'oregon',
+                    'columbia_river'  => 'oregon',
+                ];
+                $playerState['current_trail'] = $trailMap[$choice] ?? 'oregon';
                 $playerState['log'][] = [
                     'day'            => $playerState['day'],
                     'miles_traveled' => 0,
                     'total_miles'    => $playerState['mile'],
                     'milestone'      => $action['milestone'] ?? 'fork',
-                    'notes'          => "You chose to take the " . $choice . " route."
+                    'notes'          => "You chose to take the " . ucfirst($choice) . " route. The wagon train turns and a new chapter begins."
                 ];
+                debugLog($playerState, "Trail changed to: " . $playerState['current_trail'] . " via $choice at " . ($action['milestone'] ?? 'fork'));
             }
             $playerState['pending_action'] = null;
             break;
