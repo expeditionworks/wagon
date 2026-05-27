@@ -882,7 +882,7 @@ switch ($milestoneTodayType) {
             }       
 
     
-        echo "You're at a fort!";
+        debugLog($playerState, "Milestone type: fort - " . $milestoneTodayTitle);
         // Your logic for forts goes here
 
             $playerState['log'][] = [
@@ -896,7 +896,7 @@ switch ($milestoneTodayType) {
 
     case 'natural':
         // Do something at a natural landmark
-        echo "You're at a natural landmark!";
+        debugLog($playerState, "Milestone type: natural - " . $milestoneTodayTitle);
         // Your logic for natural landmarks goes here
             $playerState['log'][] = [
                 'day' => $playerState['day'],
@@ -910,7 +910,7 @@ switch ($milestoneTodayType) {
     case 'river':
 
             // Do something at a river
-        echo "You're at a river! Let's check the crossing options.<br>";
+        debugLog($playerState, "Milestone type: river - " . $milestoneTodayTitle);
 
         // Check if the 'crossing' key exists in the current milestone
         if (isset($milestoneToday['crossing'])) {
@@ -964,7 +964,7 @@ switch ($milestoneTodayType) {
 
     case 'fork':
         // Do something at a fork
-        echo "You're at a fork in the road!";
+        debugLog($playerState, "Milestone type: fork - " . $milestoneTodayTitle);
 
             // Log the morale modification
             $playerState['log'][] = [
@@ -981,7 +981,7 @@ switch ($milestoneTodayType) {
 
     case 'final':
         // End of the game
-        echo "This is the final milestone!";
+        debugLog($playerState, "Milestone type: final - " . $milestoneTodayTitle);
         // Your logic for the final milestone goes here
 
             // Log the morale modification
