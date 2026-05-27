@@ -59,7 +59,8 @@ if (!empty($playerState['pending_action'])) {
                 delay_status    = ?,
                 family          = ?,
                 pending_action  = ?,
-                game_over       = ?
+                game_over       = ?,
+                ration_size     = ?
               WHERE player_id   = ?";
 
     $stmt = $conn->prepare($query);
@@ -70,7 +71,7 @@ if (!empty($playerState['pending_action'])) {
     $gameOver = $playerState['game_over'] ?? 0;
 
     $stmt->bind_param(
-        'iissssssssssssii',
+        'iissssssssssssisi',
         $playerState['day'],
         $playerState['mile'],
         $playerState['morale'],
@@ -86,6 +87,7 @@ if (!empty($playerState['pending_action'])) {
         $newFamilyUpdate,
         $pendingActionJson,
         $gameOver,
+        $playerState['ration'],
         $player_id
     );
 

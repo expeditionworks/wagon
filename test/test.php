@@ -29,6 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pending_action_type']
     exit;
 }
 
+// Handle ration change — save directly to DB, skip turn processing
+if (isset($_POST['change_ration'])) {
+    $newRation = $_POST['ration_size'];
+    $validRations = ['meager', 'half', 'full', 'generous'];
+    if (in_array($newRation, $validRations)) {
+        $stmt = $conn->prepare("UPDATE player_state SET ration_size=? WHERE player_id=?");
+        $stmt->bind_param('si', $newRation, $player_id);
+        $stmt->execute();
+    }
+    header('Location: test.php');
+    exit;
+}
+
 if (!empty($playerState['pending_action'])) {
     $action = $playerState['pending_action'];
     $actionType = $action['type'] ?? '';
@@ -90,7 +103,7 @@ if (isset($_GET['admin_reset'])) {
         ['first_name'=>'Mary','role'=>'spouse','condition'=>'healthy','health'=>100,'morale'=>100,'skills'=>['cooking','medicine'],'deceased'=>false],
         ['first_name'=>'Billy','role'=>'child','condition'=>'healthy','health'=>100,'morale'=>100,'skills'=>[],'deceased'=>false]
     ]);
-    $inventory = json_encode(['Oxen'=>['quantity'=>6,'durability'=>100],'Food'=>['quantity'=>$resetFood,'durability'=>null],'Ammunition'=>['quantity'=>100,'durability'=>null],'Clothes'=>['quantity'=>4,'durability'=>100],'Tools'=>['quantity'=>1,'durability'=>100],'WagonRepairKit'=>['quantity'=>1,'durability'=>100]]);
+    $inventory = json_encode(['Oxen'=>['quantity'=>0,'durability'=>100],'Food'=>['quantity'=>$resetFood,'durability'=>null],'Ammunition'=>['quantity'=>100,'durability'=>null],'Clothes'=>['quantity'=>4,'durability'=>100],'Tools'=>['quantity'=>1,'durability'=>100],'WagonRepairKit'=>['quantity'=>1,'durability'=>100]]);
     $stmt = $conn->prepare('UPDATE player_state SET day=?, mile=?, morale=100, dollars=?, log="[]", last_log_item=NULL, delay_days=0, delay_status="completed", miles_traveled=0, weather=NULL, pending_action=NULL, game_over=0, current_trail=?, family=?, inventory=? WHERE player_id=1');
     $stmt->bind_param('iiisss', $resetDay, $resetMile, $resetDollars, $resetTrail, $family, $inventory);
     $stmt->execute();
@@ -295,7 +308,18 @@ if (isset($updatedPlayerState['weatherThisTurn'])) {
 
     // Display morale only if it exists
     echo "<p><strong>Morale:</strong> " . $updatedPlayerState['morale'] . "</p>";
-    
+    // Ration change form
+    echo "<form method='POST' style='margin:10px 0'>";
+    echo "<strong>Change Rations:</strong> ";
+    echo "<select name='ration_size'>";
+    $rations = ['meager' => 'Meager (0.5 lbs/person)', 'half' => 'Half (1 lb/person)', 'full' => 'Full (2 lbs/person)', 'generous' => 'Generous (3 lbs/person)'];
+    foreach ($rations as $value => $label) {
+        $selected = $updatedPlayerState['ration'] === $value ? 'selected' : '';
+        echo "<option value='$value' $selected>$label</option>";
+    }
+    echo "</select> ";
+    echo "<button type='submit' name='change_ration' value='1'>Change</button>";
+    echo "</form>";
 
     
 
