@@ -770,16 +770,14 @@ function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
 
     
     // Debug: Output the miles traveled calculation
-    echo "<ul>";
-    echo "<li>Base Miles: $baseMiles</li>";
-    echo "<li>Terrain Modifier: $terrainMod</li>";
-    echo "<li>Difficulty Modifier: $difficultyMultiplier</li>";
-    echo "<li>MoraleMod: $moraleMod</li>";
-    echo "<li>Oxen Modifier: $oxenMod</li>";   
-    echo "<li>Miles Traveled (base + difficult + terrain): $adjusted_distance</li>";
-    echo "<li>Miles Traveled (Before Adjustments): $milesTraveled</li>";
-    echo "<li>Wind type: $wind_type</li>";
-    echo "</ul>";
+    debugLog($playerState, "Base Miles: $baseMiles");
+    debugLog($playerState, "Terrain Modifier: $terrainMod");
+    debugLog($playerState, "Difficulty Modifier: $difficultyMultiplier");
+    debugLog($playerState, "Morale Modifier: $moraleMod");
+    debugLog($playerState, "Oxen Modifier: $oxenMod");
+    debugLog($playerState, "Miles Traveled (adjusted): $adjusted_distance");
+    debugLog($playerState, "Miles Traveled (with wind): $milesTraveled");
+    debugLog($playerState, "Wind type: $wind_type");
 
 
     // Store miles traveled in playerState
