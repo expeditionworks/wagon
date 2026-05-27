@@ -1,47 +1,86 @@
 <?php
-// Include the necessary files for database connection and game logic
-include_once(__DIR__ . '/../engine/game_engine.php'); // Include game engine
-include_once(__DIR__ . '/db_connection.php'); // Include database connection
+include_once(__DIR__ . '/../engine/game_engine.php');
 
-// Set up player ID
-$player_id = 1;  // Example player ID
-// Ensure $milestone_id is set to a valid milestone ID
-$milestone_id = 'independence';  // This should match a milestone in your $milestones array
+$player_id = 1;
+$playerState = getPlayerState($player_id, $conn);
 
-// Call getPlayerState with both the player ID and the database connection
-$playerState = getPlayerState($player_id, $conn);  // Pass both $player_id and $conn
+// Bypass pending actions from previous turns
+$playerState['pending_action'] = null;
 
-// Print the loaded milestones for debugging
-$milestones = $playerState['milestones'] ?? null;  // Access milestones from playerState
-
-// Debug: Print $milestones
-echo "<pre>";
-print_r($milestones);  // Print the loaded milestones
-echo "</pre>";
-
-
-
-// Set player ID and milestone ID for testing
-$playerState = [
-    'id' => 1,  // Example player ID
-    'dollars' => 200,  // Example: Player has 200 dollars
-    'inventory' => [
-        'Oxen' => [
-            'quantity' => 2,
-            'durability' => 100
-        ],
-        'Food' => [
-            'quantity' => 50,
-            'durability' => null
-        ]
-        // Add other inventory items here for testing
+// Set up a test store
+$testStore = [
+    'Food' => [
+        'description' => 'Provisions for the trail.',
+        'base_price' => 1,
+        'stock_limit' => 200
+    ],
+    'Oxen' => [
+        'description' => 'Strong draft animals.',
+        'base_price' => 50,
+        'stock_limit' => 10
+    ],
+    'Ammunition' => [
+        'description' => 'For hunting and protection.',
+        'base_price' => 1,
+        'stock_limit' => 200
+    ],
+    'Clothes' => [
+        'description' => 'Extra clothes for the journey.',
+        'base_price' => 10,
+        'stock_limit' => 10
     ]
 ];
 
-
-// Test the store purchase function
-handleStorePurchase($playerState, $milestone_id);
-
-// Close the connection once done
-closeConnection();
+// Process purchase if form submitted
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item'], $_POST['quantity'])) {
+    $itemName = $_POST['item'];
+    $quantity = (int)$_POST['quantity'];
+    $result = processPurchase($playerState, $itemName, $quantity, $testStore);
+    $message = $result['message'];
+    // Save state after purchase
+    updatePlayerState($player_id, $playerState, $conn);
+}
 ?>
+<!DOCTYPE html>
+<html>
+<head><title>Store Test</title></head>
+<body>
+<h2>Store</h2>
+<p><strong>Dollars:</strong> $<?= $playerState['dollars'] ?></p>
+
+<?php if ($message): ?>
+    <p style="color:green"><?= htmlspecialchars($message) ?></p>
+<?php endif; ?>
+
+<h3>Items for Sale</h3>
+<ul>
+<?php foreach ($testStore as $itemName => $itemDetails): ?>
+    <li>
+        <strong><?= $itemName ?></strong> — <?= $itemDetails['description'] ?> 
+        Price: $<?= $itemDetails['base_price'] ?> each
+    </li>
+<?php endforeach; ?>
+</ul>
+
+<h3>Make a Purchase</h3>
+<form method="POST">
+    <label>Item:
+        <select name="item">
+            <?php foreach ($testStore as $itemName => $itemDetails): ?>
+                <option value="<?= $itemName ?>"><?= $itemName ?></option>
+            <?php endforeach; ?>
+        </select>
+    </label>
+    <label>Quantity: <input type="number" name="quantity" value="1" min="1"></label>
+    <button type="submit">Buy</button>
+</form>
+
+<h3>Current Inventory</h3>
+<ul>
+<?php foreach ($playerState['inventory'] as $itemName => $itemData): ?>
+    <li><?= $itemName ?>: <?= $itemData['quantity'] ?></li>
+<?php endforeach; ?>
+</ul>
+</body>
+</html>

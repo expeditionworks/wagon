@@ -11,7 +11,8 @@ include_once(__DIR__ . '/modules/applyRations.php'); // Food consumption
 include_once(__DIR__ . '/modules/applyConditions.php'); // Family conditions
 include_once(__DIR__ . '/modules/movePlayer.php'); // Movement calculation
 include_once(__DIR__ . '/modules/handleMilestones.php'); // Milestone detection and effects
-
+include_once(__DIR__ . '/modules/manageInventory.php'); // Inventory helpers
+include_once(__DIR__ . '/modules/manageStore.php'); // Store purchase processing
 
 
 function moveAndCheckMilestones($playerState, $player_id, $conn) {
@@ -157,35 +158,7 @@ $precipitationPenalty = $playerState['precipitationPenalty'];
 
                 
 
- // BUY LOGIC                
-function processPurchase($itemName, $quantity, &$playerState, &$milestoneStore) {
-    // Check if the item exists in the store
-    if (isset($milestoneStore[$itemName])) {
-        $itemDetails = $milestoneStore[$itemName];
-        $totalCost = $itemDetails['base_price'] * $quantity;
 
-        // Check if the player can afford the purchase
-        if ($playerState['dollars'] >= $totalCost) {
-            // Check if enough stock is available
-            if ($itemDetails['stock_limit'] >= $quantity) {
-                // Complete the transaction: deduct money and add items to inventory
-                $playerState['dollars'] -= $totalCost;  // Deduct money
-                $playerState['inventory'][$itemName] += $quantity;  // Add to inventory
-
-                // Update the stock in the store
-                $milestoneStore[$itemName]['stock_limit'] -= $quantity;
-
-                return "Purchase successful! You bought $quantity $itemName(s) for $$totalCost. You have $" . $playerState['dollars'] . " left.";
-            } else {
-                return "Sorry, not enough stock for $itemName.";
-            }
-        } else {
-            return "You don't have enough money to buy $quantity $itemName(s).";
-        }
-    } else {
-        return "Item not found.";
-    }
-}
 
 // Display the store items and handle the purchase form
 function displayStoreAndProcessPurchase(&$playerState, &$milestoneStore) {
