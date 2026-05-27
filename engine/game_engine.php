@@ -8,7 +8,7 @@ include_once(__DIR__ . '/modules/getPlayerState.php'); // Load player state from
 include_once(__DIR__ . '/modules/updatePlayerState.php'); // DB write — end of turn only
 include_once(__DIR__ . '/modules/applyWeather.php'); // Weather calculation
 include_once(__DIR__ . '/modules/applyRations.php'); // Food consumption
-
+include_once(__DIR__ . '/modules/applyConditions.php'); // Family conditions
 
 
 
@@ -28,119 +28,9 @@ function moveAndCheckMilestones($playerState, $player_id, $conn) {
     applyRations($playerState);
 
 
-// family conditions code
-$conditionsPath = __DIR__ . '/../config/conditions.json';
-// Default empty array if conditions can't be loaded
-$conditionsList = [];
-$conditionTravelMod = 1;
-// Check if the conditions file exists
-if (file_exists($conditionsPath)) {
-    // Read the contents of the file
-    $conditionsContent = file_get_contents($conditionsPath);
-
-    // Decode the JSON content into an associative array
-    $conditionsList = json_decode($conditionsContent, true);
-
-    // If decoding fails, handle it
-    if ($conditionsList === null) {
-        debugLog($playerState, "Error: Failed to decode conditions.json.");
-        $conditionsList = []; // Default to an empty array if decoding fails
-    }
-
-    // Check if 'family' data exists and if it needs to be decoded
-    if (isset($playerState['family']) && is_string($playerState['family'])) {
-        // Decode the family data from JSON to array
-        $playerState['family'] = json_decode($playerState['family'], true);
-        
-        // Check if decoding was successful
-        if ($playerState['family'] === null) {
-            debugLog($playerState, "Error: Failed to decode family data from JSON.");
-            return;
-        }
-    }
-
-    // Now, ensure family data is an array before processing
-    if (isset($playerState['family']) && is_array($playerState['family'])) {
-        // Loop through each family member
-        foreach ($playerState['family'] as &$familyMember) {
-
-                        // Apply food morale modification (based on ration choice)
-                   switch ($playerState['ration']) {
-                        case 'generous':
-                            $foodMoraleMod = 1;      // Positive morale bonus for generous ration
-                            break;
-                        case 'half':
-                            $foodMoraleMod = -1;     // Negative morale penalty for half ration
-                            break;
-                        case 'full':
-                        default:
-                            $foodMoraleMod = 0;      // No change in morale for full ration
-                            break;
-                    }
-                    // Apply food morale modification (based on ration choice)
-                    if (isset($foodMoraleMod)) {
-                        $familyMember['morale'] += $foodMoraleMod;  // Apply food morale modification
-                    }                
-                     // Ensure morale stays within the 0-100 range
-                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
-
-            
-            // Ensure necessary fields are present for each family member
-            if (isset($familyMember['condition']) && isset($conditionsList[$familyMember['condition']])) {
-                // Get the condition data from conditions.json
-                $conditionData = $conditionsList[$familyMember['condition']];
-                
-                // Apply health risk if it exists
-                if (isset($conditionData['health_risk'])) {
-                    $healthRisk = $conditionData['health_risk'];
-                    $familyMember['health'] -= $healthRisk;  // Apply health risk
-                } else {
-                    $healthRisk = 0;  // Default to 0 if health_risk is not set
-                }
-
-                // Apply morale penalty if it exists
-                if (isset($conditionData['morale_penalty'])) {
-                    $moralePenalty = $conditionData['morale_penalty'];
-                    $familyMember['morale'] -= $moralePenalty;  // Apply morale penalty
-
-                    // Ensure morale stays within the 0-100 range
-                    $familyMember['morale'] = max(0, min(100, $familyMember['morale']));
-                } else {
-                    $moralePenalty = 0;  // Default to 0 if morale_penalty is not set
-                }
-               
-                // Apply travel penalty if applicable
-                $conditionTravelMod = 1; // Initialize with no penalty
-                if (isset($conditionData['slows_travel']) && $conditionData['slows_travel']) {
-                    $conditionTravelMod = 0.9; // Example: 90% of the original travel distance
-                }
-
-                // Track the remaining duration of the condition (decrease each day)
-                if (isset($familyMember['condition_duration']) && $familyMember['condition_duration'] > 0) {
-                    $familyMember['condition_duration']--;
-                } else {
-                    // If duration reaches 0, remove the condition
-                    $familyMember['condition'] = 'healthy';  // Set condition to 'healthy' (or remove it entirely)
-                }
-
-                // Optionally log the effects of the condition
-              //  $playerState['log'][] = [
-              //      'day' => $playerState['day'],
-              //      'notes' => "{$familyMember['first_name']} is suffering from {$conditionData['label']}, losing {$healthRisk} health and {$moralePenalty} morale."
-              //  ];
-            }
-        }
-
-        // Convert the family array back to JSON before saving it to the database
-        $playerState['family'] = json_encode($playerState['family']);  // Convert array back to JSON
-
-    } else {
-        debugLog($playerState, "Error: Family data is missing or not properly formatted.");
-    }
-} else {
-    // Handle the case where conditions file is missing or inaccessible
-    debugLog($playerState, "Error: Conditions file not found or not accessible.");
-}
+// CONDITIONS SYSTEM
+    applyConditions($playerState);
+    $conditionTravelMod = $playerState['conditionTravelMod'];
 
 
 // WEATHER SYSTEM
